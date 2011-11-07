@@ -6164,7 +6164,7 @@ jQuery(document).ready(function ($) {
 </body>
 </html>
 ;T;	I"Hi, I'm a new item!;T;
-I"Hi, I'm a new item!;T;@J"/about/{;{	;I"[	<!DOCTYPE html>
+I"Hi, I'm a new item!;T;@J"/about/{;{	;I"Ü	<!DOCTYPE html>
 
 <!-- paulirish.com/2008/conditional-stylesheets-vs-css-hacks-answer-neither/ -->
 <!--[if lt IE 7]> <html class="no-js lt-ie9 lt-ie8 lt-ie7" lang="en"> <![endif]-->
@@ -6215,6 +6215,8 @@ I"Hi, I'm a new item!;T;@J"/about/{;{	;I"[	<!DOCTYPE html>
 <p>This website will be constantly tweaked and updated while maintaining a simplistic, minimal layout. You may follow the source code on <a href="http://github.com/indrode/meatspace">GitHub</a>.
   
 <p>Built using <a href="http://www.ruby-lang.org/">Ruby</a>, <a href="http://foundation.zurb.com/">Foundation</a>, and <a href="http://nanoc.stoneship.org/">nanoc</a>. Powered by <a href="http://www.nginx.com/">nginx</a> on a <a href="http://www.linode.com/">Linode VPS</a>.</p>
+
+<p>This site is <a href="http://validator.w3.org/check?uri=ms.indrode.com">valid HTML5</a> and enhanced for mobile devices.</p>
       </div>
     </div>
   </div>
@@ -6230,13 +6232,17 @@ I"Hi, I'm a new item!;T;@J"/about/{;{	;I"[	<!DOCTYPE html>
 </body>
 </html>
 
-;T;	I"<p><strong>Meatspace</strong> is a personal project of <a href="http://indrode.com/">Indro De</a>. It will grow to contain pages for personal reference, picture galleries, and writings on other nonspecific topics. You may call it a hybrid between a blog, photo gallery, reference manual, and personal shoutbox.</p>
+;T;	I"™<p><strong>Meatspace</strong> is a personal project of <a href="http://indrode.com/">Indro De</a>. It will grow to contain pages for personal reference, picture galleries, and writings on other nonspecific topics. You may call it a hybrid between a blog, photo gallery, reference manual, and personal shoutbox.</p>
 
 <p>This website will be constantly tweaked and updated while maintaining a simplistic, minimal layout. You may follow the source code on <a href="http://github.com/indrode/meatspace">GitHub</a>.
   
-<p>Built using <a href="http://www.ruby-lang.org/">Ruby</a>, <a href="http://foundation.zurb.com/">Foundation</a>, and <a href="http://nanoc.stoneship.org/">nanoc</a>. Powered by <a href="http://www.nginx.com/">nginx</a> on a <a href="http://www.linode.com/">Linode VPS</a>.</p>;T;
-I"<p><strong>Meatspace</strong> is a personal project of <a href="http://indrode.com/">Indro De</a>. It will grow to contain pages for personal reference, picture galleries, and writings on other nonspecific topics. You may call it a hybrid between a blog, photo gallery, reference manual, and personal shoutbox.</p>
+<p>Built using <a href="http://www.ruby-lang.org/">Ruby</a>, <a href="http://foundation.zurb.com/">Foundation</a>, and <a href="http://nanoc.stoneship.org/">nanoc</a>. Powered by <a href="http://www.nginx.com/">nginx</a> on a <a href="http://www.linode.com/">Linode VPS</a>.</p>
+
+<p>This site is <a href="http://validator.w3.org/check?uri=ms.indrode.com">valid HTML5</a> and enhanced for mobile devices.</p>;T;
+I"™<p><strong>Meatspace</strong> is a personal project of <a href="http://indrode.com/">Indro De</a>. It will grow to contain pages for personal reference, picture galleries, and writings on other nonspecific topics. You may call it a hybrid between a blog, photo gallery, reference manual, and personal shoutbox.</p>
 
 <p>This website will be constantly tweaked and updated while maintaining a simplistic, minimal layout. You may follow the source code on <a href="http://github.com/indrode/meatspace">GitHub</a>.
   
-<p>Built using <a href="http://www.ruby-lang.org/">Ruby</a>, <a href="http://foundation.zurb.com/">Foundation</a>, and <a href="http://nanoc.stoneship.org/">nanoc</a>. Powered by <a href="http://www.nginx.com/">nginx</a> on a <a href="http://www.linode.com/">Linode VPS</a>.</p>;T;@P:versioni
+<p>Built using <a href="http://www.ruby-lang.org/">Ruby</a>, <a href="http://foundation.zurb.com/">Foundation</a>, and <a href="http://nanoc.stoneship.org/">nanoc</a>. Powered by <a href="http://www.nginx.com/">nginx</a> on a <a href="http://www.linode.com/">Linode VPS</a>.</p>
+
+<p>This site is <a href="http://validator.w3.org/check?uri=ms.indrode.com">valid HTML5</a> and enhanced for mobile devices.</p>;T;@P:versioni
