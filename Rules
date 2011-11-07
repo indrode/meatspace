@@ -22,6 +22,7 @@ compile '/javascripts/*' do
 end
 
 compile '/' do
+  filter :erb
   filter :kramdown
   layout 'default'
 end
@@ -30,7 +31,7 @@ compile '/i/*' do
   filter :kramdown
   filter :colorize_syntax,
          :colorizers => { :ruby => :coderay, :sql => :coderay }
-  layout 'default'
+  layout 'article'
 end
 
 compile '*' do

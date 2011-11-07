@@ -9,8 +9,9 @@
   <meta charset="utf-8" />
   
   <!-- Set the viewport width to device width for mobile -->
-  <meta name="viewport" content="width=device-width" />
-  <title>nanoc-test</title>
+  <meta name="viewport" content="width=device-width,max-scale=1" />
+  
+  <title>meatspace</title>
   
   <!-- Included CSS Files -->
   <link rel="stylesheet" href="/stylesheets/foundation.css">
@@ -29,18 +30,101 @@
 </head>
 <body>
 
+  <div id="navigation">
+    <div class="container">
+      <div class="row">
+        <div class="twelve columns">
+          <span class="active" title="You're here.">meatspace</span> (<a href="/about">about</a>)
+        </div>
+      </div>
+    </div>
+  </div>
+  
   <!-- container -->
   <div class="container">
-    <h1 id="nanoc">Nanoc</h1>
+    <div class="row">
+      <div class="twelve columns">
+        
+<h1 id="creating-static-sites-with-nanoc">Creating static sites with nanoc</h1>
 
-<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
+<p>Meatspace is a nanoc-powered static website that displays Markdown- and CodeRay-formatted content. The following is a quick tutorial and reference on the nanoc installation process and usage workflow.</p>
 
+<h2 id="install">Install</h2>
+
+<p>All important nanoc generators and commands can be triggered via the command line, so we launch our favorite terminal emulator and start off by installing some required gems for our implementation of nanoc.</p>
+
+<pre><code class="language-sql">gem install nanoc
+gem instal asdf
+gem install kramdown
+gem install coderay</code></pre>
+
+<p>Next up, we will set up a basic scaffold of the nanoc site.</p>
+
+<pre><code class="language-sql">nanoc create_site meatspace</code></pre>
+
+<p>If you wish, you could create a new GitHub repository for the nanoc site. Although, unlike Jekyll sites, which can be updated via a simple <code>git push</code> if used as GitHub page, this would be just for general version control. If you do, initialize the git repository in the <code>meatspace</code> folder, add the generated files and folders, commit, and push this first commit to master.</p>
+
+<pre><code class="language-sql">cd meatspace
+nanoc compile</code></pre>
+
+<p>The last command compiles the site. Repeat this step after you made changes and are ready to deploy or if you want to view the current state of your site in your browser. For the latter, we start a WEBrick server in order to view the site under <code>http://localhost:3000/</code>:</p>
+
+<pre><code class="language-sql">nanoc <span class="type">view</span></code></pre>
+
+<p>Your most basic nanoc setup is now complete! Before we continue to hack around with nanoc items, layouts, and rules, we want to deploy what we have to a remote web server. The nanoc way to do this is via a rake task that calls rsync for lightning-fast deploys.</p>
+
+<h2 id="deploy">Deploy</h2>
+
+<p>Just add this block to the config.yml in the root of your site, where <code>dst</code> is the location on your remote web server:</p>
+
+<pre><code class="language-ruby">deploy:
+  default:
+    dst: <span class="string"><span class="delimiter">"</span><span class="content">indrode.com:/home/bandito/meatspace</span><span class="delimiter">"</span></span></code></pre>
+
+<p>ss64’s rsync page <a href="http://ss64.com/bash/rsync.html">http://ss64.com/bash/rsync.html</a> tells you all the different options to set up the rsync connection, and much more. The rake task to deploy is:</p>
+
+<pre><code class="language-sql">rake deploy:rsync</code></pre>
+
+<p>For Meatspace, I am using a different approach because of some customized server security configurations. Also, I want to deploy to different environments (staging, production) so instead of rsync, a simple secure copy triggered by a <a href="https://github.com/wycats/thor">Thor script</a> gets the nanoc deployed just as fast:</p>
+
+<pre><code class="language-sql">thor nanoc:deploy staging</code></pre>
+
+<p>I do keep the Thor script outside of revision control as it includes some server specific configurations. Now that we know how to locally view our site and how to quickly deploy any changes to production, we can start configuring and customizing.</p>
+
+<h2 id="customize">Customize</h2>
+
+<p>The nanoc documenation is pretty good (<a href="http://nanoc.stoneship.org/docs/3-getting-started/">http://nanoc.stoneship.org/docs/3-getting-started/</a>), so this will just cover some reminders and notes.</p>
+
+<pre><code class="language-sql"><span class="comment"># creating a new static page</span>
+nanoc create_item about</code></pre>
+
+<p>I want to use Markdown to write my pages (at least the articles), so nanoc will have to know that certain item types should go through the <code>kramdown</code> filter. On top of that, I want to be able to highlight any source code that I may include in an article using <code>coderay</code>. All these configurations are called rules and exist in the <code>Rules</code> file.</p>
+
+<pre><code class="language-ruby">compile <span class="string"><span class="delimiter">'</span><span class="content">/i/*</span><span class="delimiter">'</span></span> <span class="keyword">do</span>
+  filter <span class="symbol">:kramdown</span>
+  filter <span class="symbol">:colorize_syntax</span>,
+    <span class="symbol">:colorizers</span> =&gt; { <span class="symbol">:ruby</span> =&gt; <span class="symbol">:coderay</span> }
+  layout <span class="string"><span class="delimiter">'</span><span class="content">default</span><span class="delimiter">'</span></span>
+<span class="keyword">end</span></code></pre>
+
+<p>The <code>compile</code> blocks specify how items are processed. The <code>route</code> blocks set all the necessary routing settings. All in all, a lot of the concepts and implementations look familiar if you know your way around Ruby and some Ruby-based frameworks.</p>
+
+<p>Meatspace uses <a href="http://foundation.zurb.com/">Foundation</a>, a boilerplate framework, so I replaced the existing layout and styles. I also added a coderay-specific stylesheet. I will cut this short by, once again, referring to the very nice write-up on the <a href="http://nanoc.stoneship.org/docs/1-introduction/">nanoc homepage</a>. You can also view the <a href="https://github.com/indrode/meatspace">entire source of Meatspace on GitHub</a>.</p>
+<div class="infoline"><a href="/i/nanoc/">Permalink</a> &middot; Written on 11.07.2011
+</div>
+
+      </div>
+    </div>
   </div>
   <!-- container -->
 
+
+  <hr />
+  
   <!-- Included JS Files -->
   <script src="/javascripts/foundation.js"></script>
   <script src="/javascripts/app.js"></script>
 
 </body>
 </html>
+
