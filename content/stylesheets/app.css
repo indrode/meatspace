@@ -1,0 +1,25 @@
+body {
+  background-color:#C6C8C6;
+}
+
+pre {
+  font: 14px Monaco, monospace;
+  line-height: 1.4em;
+  display: block;
+  color: #fff;
+  background: #2B2B2B;
+  border-radius:10px;
+  -moz-border-radius: 10px;
+  -webkit-border-radius: 10px;
+  padding: 10px;
+  margin: -5px 0 15px 0;
+}
+
+.container p {
+  font-family: Helvetica, sans-serif;
+  color:#000;
+  font-size:15px;
+  line-height:22px;
+  text-shadow:none;
+  margin: 0 0 20px 0;
+}
