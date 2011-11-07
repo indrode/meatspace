@@ -15,11 +15,15 @@ pre {
   margin: -5px 0 15px 0;
 }
 
+.container {
+  padding:1em;
+}
+
 .container p {
   font-family: Helvetica, sans-serif;
-  font-size: 16px;
   color:#000;
+  font-size:15px;
   line-height:22px;
-  text-shadow: 0px 1px 0px #fff;
+  text-shadow:none;
   margin: 0 0 20px 0;
 }

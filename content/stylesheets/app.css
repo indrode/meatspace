@@ -15,6 +15,10 @@ pre {
   margin: -5px 0 15px 0;
 }
 
+.container {
+  padding:1em;
+}
+
 .container p {
   font-family: Helvetica, sans-serif;
   color:#000;
