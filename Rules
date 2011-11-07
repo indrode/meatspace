@@ -17,6 +17,10 @@ compile '/stylesheets/*' do
   # don’t filter or layout
 end
 
+compile '/javascripts/*' do
+  # don’t filter or layout
+end
+
 compile '/' do
   filter :kramdown
   layout 'default'
@@ -40,6 +44,10 @@ end
 
 route '/stylesheets/*' do
   item.identifier.chop + '.css' 
+end
+
+route '/javascripts/*' do
+  item.identifier.chop + '.js' 
 end
 
 route '/i/*' do
