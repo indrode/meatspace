@@ -67,7 +67,7 @@
     <link rel="alternate" href="http://ms.indrode.com/i/nanoc/"/>
     <content type="html">&lt;h1 id="creating-static-sites-with-nanoc"&gt;Creating static sites with nanoc&lt;/h1&gt;
 
-&lt;p&gt;Meatspace is a nanoc-powered static website that displays Markdown- and CodeRay-formatted content. The following is a quick tutorial and reference on the nanoc installation process and usage workflow. Nanoc is light-weight, flexible, and completely written in Ruby, which we all love. To find out more, check out (the nanoc website)[http://nanoc.stoneship.org/].&lt;/p&gt;
+&lt;p&gt;Meatspace is a nanoc-powered static website that displays Markdown- and CodeRay-formatted content. The following is a quick tutorial and reference on the nanoc installation process and usage workflow. Nanoc is light-weight, flexible, and completely written in Ruby, which we all love. To find out more, check out &lt;a href="http://nanoc.stoneship.org/"&gt;the nanoc website&lt;/a&gt;.&lt;/p&gt;
 
 &lt;h2 id="install"&gt;Install&lt;/h2&gt;
 

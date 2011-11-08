@@ -1,4 +1,4 @@
-{:	data{"/{:default{	:	lastI"Å"<!DOCTYPE html>
+{:	data{"/{:default{	:	lastI"å"<!DOCTYPE html>
 
 <!-- paulirish.com/2008/conditional-stylesheets-vs-css-hacks-answer-neither/ -->
 <!--[if lt IE 7]> <html class="no-js lt-ie9 lt-ie8 lt-ie7" lang="en"> <![endif]-->
@@ -51,7 +51,7 @@
         
 <h1 id="creating-static-sites-with-nanoc">Creating static sites with nanoc</h1>
 
-<p>Meatspace is a nanoc-powered static website that displays Markdown- and CodeRay-formatted content. The following is a quick tutorial and reference on the nanoc installation process and usage workflow. Nanoc is light-weight, flexible, and completely written in Ruby, which we all love. To find out more, check out (the nanoc website)[http://nanoc.stoneship.org/].</p>
+<p>Meatspace is a nanoc-powered static website that displays Markdown- and CodeRay-formatted content. The following is a quick tutorial and reference on the nanoc installation process and usage workflow. Nanoc is light-weight, flexible, and completely written in Ruby, which we all love. To find out more, check out <a href="http://nanoc.stoneship.org/">the nanoc website</a>.</p>
 
 <h2 id="install">Install</h2>
 
@@ -146,10 +146,10 @@ nanoc create_item about</code></pre>
 :ET:rawI"‰<% article = @site.sorted_articles.first %>
 <%= article.compiled_content %>
 <div class="infoline"><a href="<%= article.path %>">Permalink</a> &middot; Written on <%= Date.strptime("#{article[:created_at]}", "%d.%m.%Y") %></div>
-;T:preI"
+;T:preI"˚
 <h1 id="creating-static-sites-with-nanoc">Creating static sites with nanoc</h1>
 
-<p>Meatspace is a nanoc-powered static website that displays Markdown- and CodeRay-formatted content. The following is a quick tutorial and reference on the nanoc installation process and usage workflow. Nanoc is light-weight, flexible, and completely written in Ruby, which we all love. To find out more, check out (the nanoc website)[http://nanoc.stoneship.org/].</p>
+<p>Meatspace is a nanoc-powered static website that displays Markdown- and CodeRay-formatted content. The following is a quick tutorial and reference on the nanoc installation process and usage workflow. Nanoc is light-weight, flexible, and completely written in Ruby, which we all love. To find out more, check out <a href="http://nanoc.stoneship.org/">the nanoc website</a>.</p>
 
 <h2 id="install">Install</h2>
 
@@ -241,7 +241,7 @@ pre {
   margin: -5px 0 15px 0;
 }
 ;T;	@;
-@"/i/nanoc/{;{	;I""<!DOCTYPE html>
+@"/i/nanoc/{;{	;I"ä"<!DOCTYPE html>
 
 <!-- paulirish.com/2008/conditional-stylesheets-vs-css-hacks-answer-neither/ -->
 <!--[if lt IE 7]> <html class="no-js lt-ie9 lt-ie8 lt-ie7" lang="en"> <![endif]-->
@@ -293,7 +293,7 @@ pre {
       <div class="twelve columns">
         <h1 id="creating-static-sites-with-nanoc">Creating static sites with nanoc</h1>
 
-<p>Meatspace is a nanoc-powered static website that displays Markdown- and CodeRay-formatted content. The following is a quick tutorial and reference on the nanoc installation process and usage workflow. Nanoc is light-weight, flexible, and completely written in Ruby, which we all love. To find out more, check out (the nanoc website)[http://nanoc.stoneship.org/].</p>
+<p>Meatspace is a nanoc-powered static website that displays Markdown- and CodeRay-formatted content. The following is a quick tutorial and reference on the nanoc installation process and usage workflow. Nanoc is light-weight, flexible, and completely written in Ruby, which we all love. To find out more, check out <a href="http://nanoc.stoneship.org/">the nanoc website</a>.</p>
 
 <h2 id="install">Install</h2>
 
@@ -386,7 +386,7 @@ nanoc create_item about</code></pre>
 
 ;T;	I"#Creating static sites with nanoc
 
-Meatspace is a nanoc-powered static website that displays Markdown- and CodeRay-formatted content. The following is a quick tutorial and reference on the nanoc installation process and usage workflow. Nanoc is light-weight, flexible, and completely written in Ruby, which we all love. To find out more, check out (the nanoc website)[http://nanoc.stoneship.org/].
+Meatspace is a nanoc-powered static website that displays Markdown- and CodeRay-formatted content. The following is a quick tutorial and reference on the nanoc installation process and usage workflow. Nanoc is light-weight, flexible, and completely written in Ruby, which we all love. To find out more, check out [the nanoc website](http://nanoc.stoneship.org/).
 
 ##Install
 
@@ -491,9 +491,9 @@ Meatspace uses [Foundation](http://foundation.zurb.com/), a boilerplate framewor
 The above code snippet is in Haml, but you can easily use ERB instead. Just specify in the compile filters of the `Rules` file, how you want to process your code.
 
 I will cut this short by, once again, referring to the very nice write-up on the [nanoc homepage](http://nanoc.stoneship.org/docs/1-introduction/). You can also view the [entire source of Meatspace on GitHub](https://github.com/indrode/meatspace).;T;
-I"ë<h1 id="creating-static-sites-with-nanoc">Creating static sites with nanoc</h1>
+I"ú<h1 id="creating-static-sites-with-nanoc">Creating static sites with nanoc</h1>
 
-<p>Meatspace is a nanoc-powered static website that displays Markdown- and CodeRay-formatted content. The following is a quick tutorial and reference on the nanoc installation process and usage workflow. Nanoc is light-weight, flexible, and completely written in Ruby, which we all love. To find out more, check out (the nanoc website)[http://nanoc.stoneship.org/].</p>
+<p>Meatspace is a nanoc-powered static website that displays Markdown- and CodeRay-formatted content. The following is a quick tutorial and reference on the nanoc installation process and usage workflow. Nanoc is light-weight, flexible, and completely written in Ruby, which we all love. To find out more, check out <a href="http://nanoc.stoneship.org/">the nanoc website</a>.</p>
 
 <h2 id="install">Install</h2>
 
@@ -6987,7 +6987,7 @@ git push origin master&lt;/code&gt;&lt;/pre&gt;
 &lt;p&gt;This is all that is needed to have GitHub serve your Jekyll implementation. This space may be updated in future to add some more worthwhile Jekyll / GitHub goodness.&lt;/p&gt;</content>
   </entry>
 </feed>
-;T;@\"/feed/feed/{;{	;I"A<!DOCTYPE html>
+;T;@\"/feed/feed/{;{	;I"3A<!DOCTYPE html>
 
 <!-- paulirish.com/2008/conditional-stylesheets-vs-css-hacks-answer-neither/ -->
 <!--[if lt IE 7]> <html class="no-js lt-ie9 lt-ie8 lt-ie7" lang="en"> <![endif]-->
@@ -7056,7 +7056,7 @@ git push origin master&lt;/code&gt;&lt;/pre&gt;
     <link rel="alternate" href="http://ms.indrode.com/i/nanoc/"/>
     <content type="html">&lt;h1 id="creating-static-sites-with-nanoc"&gt;Creating static sites with nanoc&lt;/h1&gt;
 
-&lt;p&gt;Meatspace is a nanoc-powered static website that displays Markdown- and CodeRay-formatted content. The following is a quick tutorial and reference on the nanoc installation process and usage workflow. Nanoc is light-weight, flexible, and completely written in Ruby, which we all love. To find out more, check out (the nanoc website)[http://nanoc.stoneship.org/].&lt;/p&gt;
+&lt;p&gt;Meatspace is a nanoc-powered static website that displays Markdown- and CodeRay-formatted content. The following is a quick tutorial and reference on the nanoc installation process and usage workflow. Nanoc is light-weight, flexible, and completely written in Ruby, which we all love. To find out more, check out &lt;a href="http://nanoc.stoneship.org/"&gt;the nanoc website&lt;/a&gt;.&lt;/p&gt;
 
 &lt;h2 id="install"&gt;Install&lt;/h2&gt;
 
@@ -7210,7 +7210,7 @@ git push origin master&lt;/code&gt;&lt;/pre&gt;
 </html>
 
 ;T;	I"<%= atom_feed %>;T;
-I"®9<?xml version="1.0" encoding="UTF-8"?>
+I"ø9<?xml version="1.0" encoding="UTF-8"?>
 <feed xmlns="http://www.w3.org/2005/Atom">
   <id>http://ms.indrode.com/</id>
   <title>meatspace RSS</title>
@@ -7229,7 +7229,7 @@ I"®9<?xml version="1.0" encoding="UTF-8"?>
     <link rel="alternate" href="http://ms.indrode.com/i/nanoc/"/>
     <content type="html">&lt;h1 id="creating-static-sites-with-nanoc"&gt;Creating static sites with nanoc&lt;/h1&gt;
 
-&lt;p&gt;Meatspace is a nanoc-powered static website that displays Markdown- and CodeRay-formatted content. The following is a quick tutorial and reference on the nanoc installation process and usage workflow. Nanoc is light-weight, flexible, and completely written in Ruby, which we all love. To find out more, check out (the nanoc website)[http://nanoc.stoneship.org/].&lt;/p&gt;
+&lt;p&gt;Meatspace is a nanoc-powered static website that displays Markdown- and CodeRay-formatted content. The following is a quick tutorial and reference on the nanoc installation process and usage workflow. Nanoc is light-weight, flexible, and completely written in Ruby, which we all love. To find out more, check out &lt;a href="http://nanoc.stoneship.org/"&gt;the nanoc website&lt;/a&gt;.&lt;/p&gt;
 
 &lt;h2 id="install"&gt;Install&lt;/h2&gt;
 
