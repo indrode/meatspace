@@ -6,7 +6,7 @@ kind: article
 
 # Short Markdown, Liquid, and Jekyll reference
 
-<div class="alert"><strong>Note:</strong> this is an older post from an even older website that has since vanished from the internets. Meatspace does not run on Jekyll, nor does it use Pygments for syntax highlighting anymore.</div>
+<div class="alertbox"><strong>Note:</strong> this is an older post from an even older website that has since vanished from the internets. Meatspace does not run on Jekyll, nor does it use Pygments for syntax highlighting anymore.</div>
 
 This is a sample Bandito page highlighting some Markdown techniques, primarily regarding syntax highlighting in my Jekyll-built Markdown/Pygments environment. To add some value to this reference, this document is [available in raw text](http://github.com/indrode/indrode.github.com/raw/master/_posts/2010-09-10-markdown-jekyll.markdown), which will make it easier to figure out how certain Markdown syntax is used to get the desired output. As a more thorough reference, check out John Gruber's official [Markdown Syntax Documentation](http://daringfireball.net/projects/markdown/syntax).
 

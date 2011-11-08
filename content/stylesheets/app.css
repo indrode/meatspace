@@ -29,17 +29,17 @@ body {
   margin:35px 0;
 }
 
-.alert {
+.alertbox {
   width:100%;
   background-color:#FFC66D;
   -moz-border-radius: 10px;
   -webkit-border-radius: 10px;
   padding:6px;
-  margin:15px 0;
+  margin:35px 0;
   color:#222;
-  text-shadow: 0;
-  -moz-text-shadow: 0;
-  -webkit-text-shadow: 0;
+  text-shadow: none;
+  -moz-text-shadow: none;
+  -webkit-text-shadow: none;
   font-weight:normal;
 }
 

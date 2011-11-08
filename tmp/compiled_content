@@ -3927,7 +3927,7 @@ div.slider-nav span.left {
 	div.panel { border: 1px solid #ccc; };T;
 I"p/* This is for all IE specfific style less than IE9. We hate IE. */
 
-	div.panel { border: 1px solid #ccc; };T;@,"/stylesheets/app/{;{;I"Fbody {
+	div.panel { border: 1px solid #ccc; };T;@,"/stylesheets/app/{;{;I"Rbody {
   background-color:#C6C8C6;
 }
 
@@ -3958,17 +3958,17 @@ I"p/* This is for all IE specfific style less than IE9. We hate IE. */
   margin:35px 0;
 }
 
-.alert {
+.alertbox {
   width:100%;
   background-color:#FFC66D;
   -moz-border-radius: 10px;
   -webkit-border-radius: 10px;
   padding:6px;
-  margin:15px 0;
+  margin:35px 0;
   color:#222;
-  text-shadow: 0;
-  -moz-text-shadow: 0;
-  -webkit-text-shadow: 0;
+  text-shadow: none;
+  -moz-text-shadow: none;
+  -webkit-text-shadow: none;
   font-weight:normal;
 }
 
@@ -6288,7 +6288,7 @@ I"¹<h2>About</h2>
 <p><a href="http://ms.indrode.com//i/nanoc/">Creating static sites with nanoc</a></p>
 
 <p><a href="http://ms.indrode.com//i/markdown/">Short Markdown, Pygments, and Jekyll reference</a></p>
-;T;@P"/i/markdown/{;{	;I"<!DOCTYPE html>
+;T;@P"/i/markdown/{;{	;I"<!DOCTYPE html>
 
 <!-- paulirish.com/2008/conditional-stylesheets-vs-css-hacks-answer-neither/ -->
 <!--[if lt IE 7]> <html class="no-js lt-ie9 lt-ie8 lt-ie7" lang="en"> <![endif]-->
@@ -6336,7 +6336,7 @@ I"¹<h2>About</h2>
       <div class="twelve columns">
         <h1 id="short-markdown-liquid-and-jekyll-reference">Short Markdown, Liquid, and Jekyll reference</h1>
 
-<div class="alert">
+<div class="alertbox">
 <strong>Note:</strong> this is an older post from an even older website that has since vanished from the internets. Meatspace does not run on Jekyll, nor does it use Pygments for syntax highlighting anymore.</div>
 
 <p>This is a sample Bandito page highlighting some Markdown techniques, primarily regarding syntax highlighting in my Jekyll-built Markdown/Pygments environment. To add some value to this reference, this document is <a href="http://github.com/indrode/indrode.github.com/raw/master/_posts/2010-09-10-markdown-jekyll.markdown">available in raw text</a>, which will make it easier to figure out how certain Markdown syntax is used to get the desired output. As a more thorough reference, check out John Gruberâ€™s official <a href="http://daringfireball.net/projects/markdown/syntax">Markdown Syntax Documentation</a>.</p>
@@ -6403,9 +6403,9 @@ git push origin master</code></pre>
 </body>
 </html>
 
-;T;	I"¾# Short Markdown, Liquid, and Jekyll reference
+;T;	I"Á# Short Markdown, Liquid, and Jekyll reference
 
-<div class="alert"><strong>Note:</strong> this is an older post from an even older website that has since vanished from the internets. Meatspace does not run on Jekyll, nor does it use Pygments for syntax highlighting anymore.</div>
+<div class="alertbox"><strong>Note:</strong> this is an older post from an even older website that has since vanished from the internets. Meatspace does not run on Jekyll, nor does it use Pygments for syntax highlighting anymore.</div>
 
 This is a sample Bandito page highlighting some Markdown techniques, primarily regarding syntax highlighting in my Jekyll-built Markdown/Pygments environment. To add some value to this reference, this document is [available in raw text](http://github.com/indrode/indrode.github.com/raw/master/_posts/2010-09-10-markdown-jekyll.markdown), which will make it easier to figure out how certain Markdown syntax is used to get the desired output. As a more thorough reference, check out John Gruber's official [Markdown Syntax Documentation](http://daringfireball.net/projects/markdown/syntax).
 
@@ -6470,9 +6470,9 @@ git push origin master
 </code></pre>
 
 This is all that is needed to have GitHub serve your Jekyll implementation. This space may be updated in future to add some more worthwhile Jekyll / GitHub goodness.;T;
-I"@<h1 id="short-markdown-liquid-and-jekyll-reference">Short Markdown, Liquid, and Jekyll reference</h1>
+I"C<h1 id="short-markdown-liquid-and-jekyll-reference">Short Markdown, Liquid, and Jekyll reference</h1>
 
-<div class="alert">
+<div class="alertbox">
 <strong>Note:</strong> this is an older post from an even older website that has since vanished from the internets. Meatspace does not run on Jekyll, nor does it use Pygments for syntax highlighting anymore.</div>
 
 <p>This is a sample Bandito page highlighting some Markdown techniques, primarily regarding syntax highlighting in my Jekyll-built Markdown/Pygments environment. To add some value to this reference, this document is <a href="http://github.com/indrode/indrode.github.com/raw/master/_posts/2010-09-10-markdown-jekyll.markdown">available in raw text</a>, which will make it easier to figure out how certain Markdown syntax is used to get the desired output. As a more thorough reference, check out John Gruberâ€™s official <a href="http://daringfireball.net/projects/markdown/syntax">Markdown Syntax Documentation</a>.</p>
