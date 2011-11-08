@@ -6178,7 +6178,8 @@ jQuery(document).ready(function ($) {
 </body>
 </html>
 ;T;	I"Hi, I'm a new item!;T;
-I"Hi, I'm a new item!;T;@J"/about/{;{	;I"<!DOCTYPE html>
+I"Hi, I'm a new item!;T;@J"/about/{;{	;I"ü
+<!DOCTYPE html>
 
 <!-- paulirish.com/2008/conditional-stylesheets-vs-css-hacks-answer-neither/ -->
 <!--[if lt IE 7]> <html class="no-js lt-ie9 lt-ie8 lt-ie7" lang="en"> <![endif]-->
@@ -6239,7 +6240,7 @@ I"Hi, I'm a new item!;T;@J"/about/{;{	;I"<!DOCTYPE html>
 
 <p><a href="http://ms.indrode.com//i/nanoc/">Creating static sites with nanoc</a></p>
 
-<p><a href="http://ms.indrode.com//i/markdown/">Short Markdown, Liquid, Pygments, and Jekyll reference</a></p>
+<p><a href="http://ms.indrode.com//i/markdown/">Short Markdown, Pygments, and Jekyll reference</a></p>
 
       </div>
     </div>
@@ -6271,7 +6272,7 @@ I"Hi, I'm a new item!;T;@J"/about/{;{	;I"<!DOCTYPE html>
 <% @site.sorted_articles.each do |article| %>
 <p><%= link_to(article[:title], url_for(article)) %></p>
 <% end %>;T;
-I"Á<h2>About</h2>
+I"¹<h2>About</h2>
 
 <p><strong>Meatspace</strong> is a personal project of <a href="http://indrode.com/">Indro De</a>. It will grow to contain pages for personal reference, picture galleries, and writings on other nonspecific topics. You may call it a hybrid between a blog, photo gallery, reference manual, and personal shoutbox.</p>
 
@@ -6286,8 +6287,8 @@ I"Á<h2>About</h2>
 
 <p><a href="http://ms.indrode.com//i/nanoc/">Creating static sites with nanoc</a></p>
 
-<p><a href="http://ms.indrode.com//i/markdown/">Short Markdown, Liquid, Pygments, and Jekyll reference</a></p>
-;T;@P"/i/markdown/{;{	;I"-<!DOCTYPE html>
+<p><a href="http://ms.indrode.com//i/markdown/">Short Markdown, Pygments, and Jekyll reference</a></p>
+;T;@P"/i/markdown/{;{	;I"<!DOCTYPE html>
 
 <!-- paulirish.com/2008/conditional-stylesheets-vs-css-hacks-answer-neither/ -->
 <!--[if lt IE 7]> <html class="no-js lt-ie9 lt-ie8 lt-ie7" lang="en"> <![endif]-->
@@ -6300,7 +6301,7 @@ I"Á<h2>About</h2>
   <!-- Set the viewport width to device width for mobile -->
   <meta name="viewport" content="width=device-width,max-scale=1" />
   
-  <title>Short Markdown, Liquid, Pygments, and Jekyll reference</title>
+  <title>Short Markdown, Pygments, and Jekyll reference</title>
   
   <!-- Included CSS Files -->
   <link rel="stylesheet" href="/stylesheets/foundation.css">
@@ -6333,7 +6334,7 @@ I"Á<h2>About</h2>
   <div class="container">
     <div class="row">
       <div class="twelve columns">
-        <h1 id="short-markdown-liquid-pygments-and-jekyll-reference">Short Markdown, Liquid, Pygments, and Jekyll reference</h1>
+        <h1 id="short-markdown-liquid-and-jekyll-reference">Short Markdown, Liquid, and Jekyll reference</h1>
 
 <div class="alert">
 <strong>Note:</strong> this is an older post from an even older website that has since vanished from the internets. Meatspace does not run on Jekyll, nor does it use Pygments for syntax highlighting anymore.</div>
@@ -6402,7 +6403,7 @@ git push origin master</code></pre>
 </body>
 </html>
 
-;T;	I"È# Short Markdown, Liquid, Pygments, and Jekyll reference
+;T;	I"¾# Short Markdown, Liquid, and Jekyll reference
 
 <div class="alert"><strong>Note:</strong> this is an older post from an even older website that has since vanished from the internets. Meatspace does not run on Jekyll, nor does it use Pygments for syntax highlighting anymore.</div>
 
@@ -6469,7 +6470,7 @@ git push origin master
 </code></pre>
 
 This is all that is needed to have GitHub serve your Jekyll implementation. This space may be updated in future to add some more worthwhile Jekyll / GitHub goodness.;T;
-I"S<h1 id="short-markdown-liquid-pygments-and-jekyll-reference">Short Markdown, Liquid, Pygments, and Jekyll reference</h1>
+I"@<h1 id="short-markdown-liquid-and-jekyll-reference">Short Markdown, Liquid, and Jekyll reference</h1>
 
 <div class="alert">
 <strong>Note:</strong> this is an older post from an even older website that has since vanished from the internets. Meatspace does not run on Jekyll, nor does it use Pygments for syntax highlighting anymore.</div>

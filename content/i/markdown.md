@@ -1,10 +1,10 @@
 ---
-title: "Short Markdown, Liquid, Pygments, and Jekyll reference"
+title: "Short Markdown, Pygments, and Jekyll reference"
 created_at: 14.01.2011
 kind: article
 ---
 
-# Short Markdown, Liquid, Pygments, and Jekyll reference
+# Short Markdown, Liquid, and Jekyll reference
 
 <div class="alert"><strong>Note:</strong> this is an older post from an even older website that has since vanished from the internets. Meatspace does not run on Jekyll, nor does it use Pygments for syntax highlighting anymore.</div>
 
