@@ -70,7 +70,7 @@
 	
 	
 	
-	body { background: #fff; font-family: "Helvetica Neue", "HelveticaNeue", Helvetica, Arial, "Lucida Grande", sans-serif; font-size: 13px; line-height: 18px; color: #555; position: relative; -webkit-font-smoothing: antialiased; }
+	body { background: #fff; font-family: "Helvetica Neue", "HelveticaNeue", Helvetica, Arial, "Lucida Grande", sans-serif; font-size: 14px; line-height: 22px; color: #555; position: relative; -webkit-font-smoothing: antialiased; }
 	
 
 
@@ -141,7 +141,7 @@
 
 	.subheader { color: #777; font-weight: 300; margin-bottom: 24px; }
 
-	p { line-height: 17px; margin: 0 0 18px; }
+	p { line-height: 22px; margin: 0 0 18px; }
 	p img { margin: 0; }
 	p.lead { font-size: 18px; font-size: 1.8rem; line-height: 24px;  }
 	
@@ -1011,6 +1011,39 @@ div.slider-nav span.left {
 		.show-on-desktops { display: none !important; }
 	}
 	
+	/* -------------------------------------------------- 
+  	:: Mobile Visibility Affordances - Inline
+  ---------------------------------------------------*/
+	
+	.show-on-phones-inline { display: none !important; }	
+	.show-on-tablets-inline { display: none !important; }
+	.show-on-desktops-inline { display: inline; }
+	
+	.hide-on-phones-inline { display: inline !important; }	
+	.hide-on-tablets-inline { display: inline !important; }
+	.hide-on-desktops-inline { display: none; }
+	
+	
+	@media only screen and (max-device-width: 800px), only screen and (device-width: 800px) {
+		.hide-on-phones-inline { display: inline !important; }
+		.hide-on-tablets-inline { display: none !important; }
+		.hide-on-desktops-inline { display: inline !important; }
+		
+		.show-on-phones-inline { display: none !important; }
+		.show-on-tablets-inline { display: inline !important; }
+		.show-on-desktops-inline { display: none !important; }
+	}
+	
+		
+	@media only screen and (max-width: 767px) {
+		.hide-on-phones-inline { display: none !important; }
+		.hide-on-tablets-inline { display: inline !important; }
+		.hide-on-desktops-inline { display: inline !important; }
+		
+		.show-on-phones-inline { display: inline !important; }
+		.show-on-tablets-inline { display: none !important; }
+		.show-on-desktops-inline { display: none !important; }
+	}
 	/* only screen and (device-width: 1280px), only screen and (max-device-width: 1280px),  /*
 	
 	

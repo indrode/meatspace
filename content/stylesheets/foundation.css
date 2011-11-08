@@ -70,7 +70,7 @@
 	
 	
 	
-	body { background: #fff; font-family: "Helvetica Neue", "HelveticaNeue", Helvetica, Arial, "Lucida Grande", sans-serif; font-size: 13px; line-height: 18px; color: #555; position: relative; -webkit-font-smoothing: antialiased; }
+	body { background: #fff; font-family: "Helvetica Neue", "HelveticaNeue", Helvetica, Arial, "Lucida Grande", sans-serif; font-size: 14px; line-height: 22px; color: #555; position: relative; -webkit-font-smoothing: antialiased; }
 	
 
 
@@ -141,7 +141,7 @@
 
 	.subheader { color: #777; font-weight: 300; margin-bottom: 24px; }
 
-	p { line-height: 17px; margin: 0 0 18px; }
+	p { line-height: 22px; margin: 0 0 18px; }
 	p img { margin: 0; }
 	p.lead { font-size: 18px; font-size: 1.8rem; line-height: 24px;  }
 	

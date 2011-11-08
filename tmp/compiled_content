@@ -1,4 +1,4 @@
-{:	data{"/{:default{	:	lastI"Å<!DOCTYPE html>
+{:	data{"/{:default{	:	lastI"–<!DOCTYPE html>
 
 <!-- paulirish.com/2008/conditional-stylesheets-vs-css-hacks-answer-neither/ -->
 <!--[if lt IE 7]> <html class="no-js lt-ie9 lt-ie8 lt-ie7" lang="en"> <![endif]-->
@@ -18,6 +18,9 @@
   <link rel="stylesheet" href="/stylesheets/app.css">
   <link rel="stylesheet" href="/stylesheets/coderay.css">
   
+  <script type="text/javascript" src="http://use.typekit.com/otz2xgn.js"></script>
+  <script type="text/javascript">try{Typekit.load();}catch(e){}</script>
+  
   <!--[if lt IE 9]>
     <link rel="stylesheet" href="/stylesheets/ie.css">
   <![endif]-->
@@ -34,7 +37,7 @@
     <div class="container">
       <div class="row">
         <div class="twelve columns">
-          <span class="active" title="You're here.">meatspace</span> (<a href="/about">about</a>)
+          <span class="active" title="You're here.">meatspace</span> <span class="show-on-phones-inline">mobile</span> (<a href="/about">about</a>)
         </div>
       </div>
     </div>
@@ -215,7 +218,7 @@ pre {
   margin: -5px 0 15px 0;
 }
 ;T;	@;
-@"/i/nanoc/{;{	;I"Â<!DOCTYPE html>
+@"/i/nanoc/{;{	;I"“<!DOCTYPE html>
 
 <!-- paulirish.com/2008/conditional-stylesheets-vs-css-hacks-answer-neither/ -->
 <!--[if lt IE 7]> <html class="no-js lt-ie9 lt-ie8 lt-ie7" lang="en"> <![endif]-->
@@ -235,6 +238,9 @@ pre {
   <link rel="stylesheet" href="/stylesheets/app.css">
   <link rel="stylesheet" href="/stylesheets/coderay.css">
   
+  <script type="text/javascript" src="http://use.typekit.com/otz2xgn.js"></script>
+  <script type="text/javascript">try{Typekit.load();}catch(e){}</script>
+  
   <!--[if lt IE 9]>
     <link rel="stylesheet" href="/stylesheets/ie.css">
   <![endif]-->
@@ -251,7 +257,7 @@ pre {
     <div class="container">
       <div class="row">
         <div class="twelve columns">
-          <a href="/">meatspace</a> (<a href="/about">about</a>)
+          <a href="/">meatspace</a> <span class="show-on-phones-inline">mobile</span> (<a href="/about">about</a>)
         </div>
       </div>
     </div>
@@ -3927,7 +3933,7 @@ div.slider-nav span.left {
 	div.panel { border: 1px solid #ccc; };T;
 I"p/* This is for all IE specfific style less than IE9. We hate IE. */
 
-	div.panel { border: 1px solid #ccc; };T;@,"/stylesheets/app/{;{;I"Rbody {
+	div.panel { border: 1px solid #ccc; };T;@,"/stylesheets/app/{;{;I"§body {
   background-color:#C6C8C6;
 }
 
@@ -3964,7 +3970,7 @@ I"p/* This is for all IE specfific style less than IE9. We hate IE. */
   -moz-border-radius: 10px;
   -webkit-border-radius: 10px;
   padding:6px;
-  margin:35px 0;
+  margin:20px 0;
   color:#222;
   text-shadow: none;
   -moz-text-shadow: none;
@@ -3985,7 +3991,8 @@ pre code {
 }
 
 pre {
-  font: 13px Monaco, monospace;
+  font-family: monospace;
+  font-size: 15px;
   line-height: 1.4em;
   display: block;
   color: #fff;
@@ -4002,20 +4009,22 @@ pre {
 }
 
 #container p {
-  font-family: Helvetica, sans-serif;
-  color:#000;
-  line-height:22px;
+
 }
 
 h1 {
-  font-size: 28px;
+  font-family: futura-pt-1,futura-pt-2,sans-serif;
+  font-weight:300;
+  font-size: 46px;
   text-shadow: 0px 1px 0px #fff;
   -moz-text-shadow: 0px 1px 0px #fff;
   -webkit-text-shadow: 0px 1px 0px #fff;
 }
 
 h2 {
-  font-size: 22px;
+  font-family: futura-pt-1,futura-pt-2,sans-serif;
+  font-weight:normal;
+  font-size: 24px;
   text-shadow: 0px 1px 0px #fff;
   -moz-text-shadow: 0px 1px 0px #fff;
   -webkit-text-shadow: 0px 1px 0px #fff;
@@ -4093,7 +4102,7 @@ h2 {
 	
 	
 	
-	body { background: #fff; font-family: "Helvetica Neue", "HelveticaNeue", Helvetica, Arial, "Lucida Grande", sans-serif; font-size: 13px; line-height: 18px; color: #555; position: relative; -webkit-font-smoothing: antialiased; }
+	body { background: #fff; font-family: "Helvetica Neue", "HelveticaNeue", Helvetica, Arial, "Lucida Grande", sans-serif; font-size: 14px; line-height: 22px; color: #555; position: relative; -webkit-font-smoothing: antialiased; }
 	
 
 
@@ -4164,7 +4173,7 @@ h2 {
 
 	.subheader { color: #777; font-weight: 300; margin-bottom: 24px; }
 
-	p { line-height: 17px; margin: 0 0 18px; }
+	p { line-height: 22px; margin: 0 0 18px; }
 	p img { margin: 0; }
 	p.lead { font-size: 18px; font-size: 1.8rem; line-height: 24px;  }
 	
@@ -6178,8 +6187,7 @@ jQuery(document).ready(function ($) {
 </body>
 </html>
 ;T;	I"Hi, I'm a new item!;T;
-I"Hi, I'm a new item!;T;@J"/about/{;{	;I"ü
-<!DOCTYPE html>
+I"Hi, I'm a new item!;T;@J"/about/{;{	;I"Æ<!DOCTYPE html>
 
 <!-- paulirish.com/2008/conditional-stylesheets-vs-css-hacks-answer-neither/ -->
 <!--[if lt IE 7]> <html class="no-js lt-ie9 lt-ie8 lt-ie7" lang="en"> <![endif]-->
@@ -6199,6 +6207,9 @@ I"Hi, I'm a new item!;T;@J"/about/{;{	;I"ü
   <link rel="stylesheet" href="/stylesheets/app.css">
   <link rel="stylesheet" href="/stylesheets/coderay.css">
   
+  <script type="text/javascript" src="http://use.typekit.com/otz2xgn.js"></script>
+  <script type="text/javascript">try{Typekit.load();}catch(e){}</script>
+  
   <!--[if lt IE 9]>
     <link rel="stylesheet" href="/stylesheets/ie.css">
   <![endif]-->
@@ -6215,7 +6226,7 @@ I"Hi, I'm a new item!;T;@J"/about/{;{	;I"ü
     <div class="container">
       <div class="row">
         <div class="twelve columns">
-          <a href="/">meatspace</a> (<a href="/about">about</a>)
+          <a href="/">meatspace</a> <span class="show-on-phones-inline">mobile</span> (<a href="/about">about</a>)
         </div>
       </div>
     </div>
@@ -6238,9 +6249,9 @@ I"Hi, I'm a new item!;T;@J"/about/{;{	;I"ü
 <p>The following articles have been posted on Meatspace so far:</p>
 
 
-<p><a href="http://ms.indrode.com//i/nanoc/">Creating static sites with nanoc</a></p>
+<p><a href="http://ms.indrode.com/i/nanoc/">Creating static sites with nanoc</a></p>
 
-<p><a href="http://ms.indrode.com//i/markdown/">Short Markdown, Pygments, and Jekyll reference</a></p>
+<p><a href="http://ms.indrode.com/i/markdown/">Short Markdown, Jekyll, and Git reference</a></p>
 
       </div>
     </div>
@@ -6272,7 +6283,7 @@ I"Hi, I'm a new item!;T;@J"/about/{;{	;I"ü
 <% @site.sorted_articles.each do |article| %>
 <p><%= link_to(article[:title], url_for(article)) %></p>
 <% end %>;T;
-I"¹<h2>About</h2>
+I"²<h2>About</h2>
 
 <p><strong>Meatspace</strong> is a personal project of <a href="http://indrode.com/">Indro De</a>. It will grow to contain pages for personal reference, picture galleries, and writings on other nonspecific topics. You may call it a hybrid between a blog, photo gallery, reference manual, and personal shoutbox.</p>
 
@@ -6285,10 +6296,10 @@ I"¹<h2>About</h2>
 <p>The following articles have been posted on Meatspace so far:</p>
 
 
-<p><a href="http://ms.indrode.com//i/nanoc/">Creating static sites with nanoc</a></p>
+<p><a href="http://ms.indrode.com/i/nanoc/">Creating static sites with nanoc</a></p>
 
-<p><a href="http://ms.indrode.com//i/markdown/">Short Markdown, Pygments, and Jekyll reference</a></p>
-;T;@P"/i/markdown/{;{	;I"<!DOCTYPE html>
+<p><a href="http://ms.indrode.com/i/markdown/">Short Markdown, Jekyll, and Git reference</a></p>
+;T;@P"/i/markdown/{;{	;I"Ù<!DOCTYPE html>
 
 <!-- paulirish.com/2008/conditional-stylesheets-vs-css-hacks-answer-neither/ -->
 <!--[if lt IE 7]> <html class="no-js lt-ie9 lt-ie8 lt-ie7" lang="en"> <![endif]-->
@@ -6301,12 +6312,15 @@ I"¹<h2>About</h2>
   <!-- Set the viewport width to device width for mobile -->
   <meta name="viewport" content="width=device-width,max-scale=1" />
   
-  <title>Short Markdown, Pygments, and Jekyll reference</title>
+  <title>Short Markdown, Jekyll, and Git reference</title>
   
   <!-- Included CSS Files -->
   <link rel="stylesheet" href="/stylesheets/foundation.css">
   <link rel="stylesheet" href="/stylesheets/app.css">
   <link rel="stylesheet" href="/stylesheets/coderay.css">
+  
+  <script type="text/javascript" src="http://use.typekit.com/otz2xgn.js"></script>
+  <script type="text/javascript">try{Typekit.load();}catch(e){}</script>
   
   <!--[if lt IE 9]>
     <link rel="stylesheet" href="/stylesheets/ie.css">
@@ -6324,7 +6338,7 @@ I"¹<h2>About</h2>
     <div class="container">
       <div class="row">
         <div class="twelve columns">
-          <a href="/">meatspace</a> (<a href="/about">about</a>)
+          <a href="/">meatspace</a> <span class="show-on-phones-inline">mobile</span> (<a href="/about">about</a>)
         </div>
       </div>
     </div>
@@ -6334,10 +6348,10 @@ I"¹<h2>About</h2>
   <div class="container">
     <div class="row">
       <div class="twelve columns">
-        <h1 id="short-markdown-liquid-and-jekyll-reference">Short Markdown, Liquid, and Jekyll reference</h1>
+        <h1 id="short-markdown-jekyll-and-git-reference">Short Markdown, Jekyll, and Git reference</h1>
 
 <div class="alertbox">
-<strong>Note:</strong> this is an older post from an even older website that has since vanished from the internets. Meatspace does not run on Jekyll, nor does it use Pygments for syntax highlighting anymore.</div>
+<strong>Note:</strong> this is an old post from an even older website that has since vanished from the internets. Meatspace does not run on Jekyll, nor does it use Pygments for syntax highlighting anymore.</div>
 
 <p>This is a sample Bandito page highlighting some Markdown techniques, primarily regarding syntax highlighting in my Jekyll-built Markdown/Pygments environment. To add some value to this reference, this document is <a href="http://github.com/indrode/indrode.github.com/raw/master/_posts/2010-09-10-markdown-jekyll.markdown">available in raw text</a>, which will make it easier to figure out how certain Markdown syntax is used to get the desired output. As a more thorough reference, check out John Gruberâ€™s official <a href="http://daringfireball.net/projects/markdown/syntax">Markdown Syntax Documentation</a>.</p>
 
@@ -6403,9 +6417,9 @@ git push origin master</code></pre>
 </body>
 </html>
 
-;T;	I"Á# Short Markdown, Liquid, and Jekyll reference
+;T;	I"¼# Short Markdown, Jekyll, and Git reference
 
-<div class="alertbox"><strong>Note:</strong> this is an older post from an even older website that has since vanished from the internets. Meatspace does not run on Jekyll, nor does it use Pygments for syntax highlighting anymore.</div>
+<div class="alertbox"><strong>Note:</strong> this is an old post from an even older website that has since vanished from the internets. Meatspace does not run on Jekyll, nor does it use Pygments for syntax highlighting anymore.</div>
 
 This is a sample Bandito page highlighting some Markdown techniques, primarily regarding syntax highlighting in my Jekyll-built Markdown/Pygments environment. To add some value to this reference, this document is [available in raw text](http://github.com/indrode/indrode.github.com/raw/master/_posts/2010-09-10-markdown-jekyll.markdown), which will make it easier to figure out how certain Markdown syntax is used to get the desired output. As a more thorough reference, check out John Gruber's official [Markdown Syntax Documentation](http://daringfireball.net/projects/markdown/syntax).
 
@@ -6470,10 +6484,10 @@ git push origin master
 </code></pre>
 
 This is all that is needed to have GitHub serve your Jekyll implementation. This space may be updated in future to add some more worthwhile Jekyll / GitHub goodness.;T;
-I"C<h1 id="short-markdown-liquid-and-jekyll-reference">Short Markdown, Liquid, and Jekyll reference</h1>
+I";<h1 id="short-markdown-jekyll-and-git-reference">Short Markdown, Jekyll, and Git reference</h1>
 
 <div class="alertbox">
-<strong>Note:</strong> this is an older post from an even older website that has since vanished from the internets. Meatspace does not run on Jekyll, nor does it use Pygments for syntax highlighting anymore.</div>
+<strong>Note:</strong> this is an old post from an even older website that has since vanished from the internets. Meatspace does not run on Jekyll, nor does it use Pygments for syntax highlighting anymore.</div>
 
 <p>This is a sample Bandito page highlighting some Markdown techniques, primarily regarding syntax highlighting in my Jekyll-built Markdown/Pygments environment. To add some value to this reference, this document is <a href="http://github.com/indrode/indrode.github.com/raw/master/_posts/2010-09-10-markdown-jekyll.markdown">available in raw text</a>, which will make it easier to figure out how certain Markdown syntax is used to get the desired output. As a more thorough reference, check out John Gruberâ€™s official <a href="http://daringfireball.net/projects/markdown/syntax">Markdown Syntax Documentation</a>.</p>
 
