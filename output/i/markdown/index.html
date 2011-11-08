@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+
+<!-- paulirish.com/2008/conditional-stylesheets-vs-css-hacks-answer-neither/ -->
+<!--[if lt IE 7]> <html class="no-js lt-ie9 lt-ie8 lt-ie7" lang="en"> <![endif]-->
+<!--[if IE 7]>    <html class="no-js lt-ie9 lt-ie8" lang="en"> <![endif]-->
+<!--[if IE 8]>    <html class="no-js lt-ie9" lang="en"> <![endif]-->
+<!--[if gt IE 8]><!--> <html lang="en"> <!--<![endif]-->
+<head>
+  <meta charset="utf-8" />
+  
+  <!-- Set the viewport width to device width for mobile -->
+  <meta name="viewport" content="width=device-width,max-scale=1" />
+  
+  <title>Short Markdown, Liquid, Pygments, and Jekyll reference</title>
+  
+  <!-- Included CSS Files -->
+  <link rel="stylesheet" href="/stylesheets/foundation.css">
+  <link rel="stylesheet" href="/stylesheets/app.css">
+  <link rel="stylesheet" href="/stylesheets/coderay.css">
+  
+  <!--[if lt IE 9]>
+    <link rel="stylesheet" href="/stylesheets/ie.css">
+  <![endif]-->
+  
+  <!-- IE Fix for HTML5 Tags -->
+  <!--[if lt IE 9]>
+    <script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+  <![endif]-->
+  
+</head>
+<body>
+
+  <div id="navigation">
+    <div class="container">
+      <div class="row">
+        <div class="twelve columns">
+          <a href="/">meatspace</a> (<a href="/about">about</a>)
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  <!-- container -->
+  <div class="container">
+    <div class="row">
+      <div class="twelve columns">
+        <h1 id="short-markdown-liquid-pygments-and-jekyll-reference">Short Markdown, Liquid, Pygments, and Jekyll reference</h1>
+
+<div class="alert">
+<strong>Note:</strong> this is an older post from an even older website that has since vanished from the internets. Meatspace does not run on Jekyll, nor does it use Pygments for syntax highlighting anymore.</div>
+
+<p>This is a sample Bandito page highlighting some Markdown techniques, primarily regarding syntax highlighting in my Jekyll-built Markdown/Pygments environment. To add some value to this reference, this document is <a href="http://github.com/indrode/indrode.github.com/raw/master/_posts/2010-09-10-markdown-jekyll.markdown">available in raw text</a>, which will make it easier to figure out how certain Markdown syntax is used to get the desired output. As a more thorough reference, check out John Gruber’s official <a href="http://daringfireball.net/projects/markdown/syntax">Markdown Syntax Documentation</a>.</p>
+
+<h2 id="displaying-code-excerpts">Displaying code excerpts</h2>
+
+<p>Of course there are the very basics, like the pound signs <code>#</code> which stand for HTML heading tags, e.g. <code>### Displaying code excerpts</code> will display this paragraph’s heading (h3). Two asterisks will <strong>make things bold</strong> for you. Just one asterisks <em>makes it look like this</em>. Now to the good stuff. To add language-specific syntax highlighting like the one below, check the raw text file of this document.</p>
+
+<pre><code class="language-ruby"><span class="keyword">def</span> <span class="function">destroy</span>
+  <span class="comment"># delete a user</span>
+  current_user.destroy!
+  flash[<span class="symbol">:notice</span>] = t(<span class="string"><span class="delimiter">"</span><span class="content">user.deleted</span><span class="delimiter">"</span></span>)
+  redirect_to home_path
+<span class="keyword">end</span></code></pre>
+
+<p>What you’ve just seen was some syntax-highlighted Ruby code. For this particular Jekyll implementation, I have added language styles for <code>ruby</code>, <code>css</code>, <code>bash</code> and <code>sql</code>.</p>
+
+<h2 id="github-pages-and-jekyll-workflow">GitHub Pages and Jekyll workflow</h2>
+
+<p>As you can read on <code>http://pages.github.com/</code>, the GitHub Pages feature allows you to publish content to the web by simply pushing content to one of your GitHub hosted repositories.</p>
+
+<p>The first step is to add a GitHub Pages repository, which will be used to serve the Jekyll site. Create the new repository via the link on <code>https://github.com/</code> (log in first), then fire up Terminal and follow the instructions to set up git for your project. Make sure you have your SSH public keys set up. You may also have to set some global settings, if this is your first git repository. Here are mine:</p>
+
+<pre><code class="language-sql">git config <span class="comment">--global user.name "Indro De"</span>
+git config <span class="comment">--global user.email indro.de@gmail.com</span></code></pre>
+
+<p>This adds your development environment, an empty <code>readme</code> (I like to use <code>README.rdoc</code> so I can use some simple markup), and tells git where to push your files to. That’s already all there is to do.</p>
+
+<pre><code class="language-sql">mkdir indrode.github.com
+cd indrode.github.com
+git init
+touch README
+git <span class="class">add</span> README
+git <span class="class">commit</span> -m <span class="string"><span class="delimiter">'</span><span class="content">first commit</span><span class="delimiter">'</span></span>
+git remote <span class="class">add</span> origin git<span class="variable">@github</span>.com:indrode/indrode.github.com.git
+git push origin master</code></pre>
+
+<p>Once everything is set up on your development machine, the actual development can commence. It couldn’t be much easier to build a Jekyll website locally into the project’s <code>_site</code> folder.</p>
+
+<pre><code class="language-sql">cd sites/indrode.github.com
+jekyll</code></pre>
+
+<p>In production, GitHub will actually run <code>jekyll --pygments --safe</code>, but the steps above work for me. Checking out to GitHub is simple, as seen below. The GitHub Pages engine does the rest to serve the Jekyll website to <code>ìndrode.github.com</code>. However, you should add a simple <code>.gitignore</code> file containing a single line <code>_site</code> to the root of your project, to tell git to ignore the folder with your locally built website.</p>
+
+<pre><code class="language-ruby">git status
+git add .
+git commit -m <span class="string"><span class="delimiter">'</span><span class="content">change description</span><span class="delimiter">'</span></span>
+git push origin master</code></pre>
+
+<p>This is all that is needed to have GitHub serve your Jekyll implementation. This space may be updated in future to add some more worthwhile Jekyll / GitHub goodness.</p>
+        <div class="infoline"><a href="/i/markdown/">Permalink</a> &middot; Written on 2011-01-14</class>
+      </div>
+    </div>
+  </div>
+  <!-- container -->
+
+
+  <hr />
+  
+  <!-- Included JS Files -->
+  <script src="/javascripts/foundation.js"></script>
+  <script src="/javascripts/app.js"></script>
+
+</body>
+</html>
+

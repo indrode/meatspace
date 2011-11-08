@@ -29,6 +29,20 @@ body {
   margin:35px 0;
 }
 
+.alert {
+  width:100%;
+  background-color:#FFC66D;
+  -moz-border-radius: 10px;
+  -webkit-border-radius: 10px;
+  padding:6px;
+  margin:15px 0;
+  color:#222;
+  text-shadow: 0;
+  -moz-text-shadow: 0;
+  -webkit-text-shadow: 0;
+  font-weight:normal;
+}
+
 code {
   background-color: #f0f0f0;
   border: 1px solid #f0f0f0;

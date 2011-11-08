@@ -1,6 +1,6 @@
 ---
 title: "Creating static sites with nanoc"
-created_at: 11.07.2011
+created_at: 07.11.2011
 kind: article
 ---
 

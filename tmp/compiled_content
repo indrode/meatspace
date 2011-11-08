@@ -1,4 +1,4 @@
-{:	data{"/{:default{	:	lastI"Å<!DOCTYPE html>
+{:	data{"/{:default{	:	lastI"Å<!DOCTYPE html>
 
 <!-- paulirish.com/2008/conditional-stylesheets-vs-css-hacks-answer-neither/ -->
 <!--[if lt IE 7]> <html class="no-js lt-ie9 lt-ie8 lt-ie7" lang="en"> <![endif]-->
@@ -110,7 +110,7 @@ nanoc create_item about</code></pre>
 <p>The <code>compile</code> blocks specify how items are processed. The <code>route</code> blocks set all the necessary routing settings. All in all, a lot of the concepts and implementations look familiar if you know your way around Ruby and some Ruby-based frameworks.</p>
 
 <p>Meatspace uses <a href="http://foundation.zurb.com/">Foundation</a>, a boilerplate framework, so I replaced the existing layout and styles. I also added a coderay-specific stylesheet. I will cut this short by, once again, referring to the very nice write-up on the <a href="http://nanoc.stoneship.org/docs/1-introduction/">nanoc homepage</a>. You can also view the <a href="https://github.com/indrode/meatspace">entire source of Meatspace on GitHub</a>.</p>
-<div class="infoline"><a href="/i/nanoc/">Permalink</a> &middot; Written on 11.07.2011
+<div class="infoline"><a href="/i/nanoc/">Permalink</a> &middot; Written on 2011-11-07
 </div>
 
       </div>
@@ -128,9 +128,9 @@ nanoc create_item about</code></pre>
 </body>
 </html>
 
-:ET:rawI"Æ<% article = @site.sorted_articles.first %>
+:ET:rawI"æ<% article = @site.sorted_articles.first %>
 <%= article.compiled_content %>
-<div class="infoline"><a href="<%= article.path %>">Permalink</a> &middot; Written on <%= article[:created_at] %></class>
+<div class="infoline"><a href="<%= article.path %>">Permalink</a> &middot; Written on <%= Date.strptime("#{article[:created_at]}", "%d.%m.%Y") %></class>
 ;T:preI"a
 <h1 id="creating-static-sites-with-nanoc">Creating static sites with nanoc</h1>
 
@@ -197,7 +197,7 @@ nanoc create_item about</code></pre>
 <p>The <code>compile</code> blocks specify how items are processed. The <code>route</code> blocks set all the necessary routing settings. All in all, a lot of the concepts and implementations look familiar if you know your way around Ruby and some Ruby-based frameworks.</p>
 
 <p>Meatspace uses <a href="http://foundation.zurb.com/">Foundation</a>, a boilerplate framework, so I replaced the existing layout and styles. I also added a coderay-specific stylesheet. I will cut this short by, once again, referring to the very nice write-up on the <a href="http://nanoc.stoneship.org/docs/1-introduction/">nanoc homepage</a>. You can also view the <a href="https://github.com/indrode/meatspace">entire source of Meatspace on GitHub</a>.</p>
-<div class="infoline"><a href="/i/nanoc/">Permalink</a> &middot; Written on 11.07.2011
+<div class="infoline"><a href="/i/nanoc/">Permalink</a> &middot; Written on 2011-11-07
 </div>
 ;T:	post@
 "/stylesheet/{;{;I"ð
@@ -326,7 +326,7 @@ nanoc create_item about</code></pre>
 <p>The <code>compile</code> blocks specify how items are processed. The <code>route</code> blocks set all the necessary routing settings. All in all, a lot of the concepts and implementations look familiar if you know your way around Ruby and some Ruby-based frameworks.</p>
 
 <p>Meatspace uses <a href="http://foundation.zurb.com/">Foundation</a>, a boilerplate framework, so I replaced the existing layout and styles. I also added a coderay-specific stylesheet. I will cut this short by, once again, referring to the very nice write-up on the <a href="http://nanoc.stoneship.org/docs/1-introduction/">nanoc homepage</a>. You can also view the <a href="https://github.com/indrode/meatspace">entire source of Meatspace on GitHub</a>.</p>
-        <div class="infoline"><a href="/i/nanoc/">Permalink</a> &middot; Written on 11.07.2011</class>
+        <div class="infoline"><a href="/i/nanoc/">Permalink</a> &middot; Written on 2011-11-07</class>
       </div>
     </div>
   </div>
@@ -3927,7 +3927,7 @@ div.slider-nav span.left {
 	div.panel { border: 1px solid #ccc; };T;
 I"p/* This is for all IE specfific style less than IE9. We hate IE. */
 
-	div.panel { border: 1px solid #ccc; };T;@,"/stylesheets/app/{;{;I"Nbody {
+	div.panel { border: 1px solid #ccc; };T;@,"/stylesheets/app/{;{;I"Fbody {
   background-color:#C6C8C6;
 }
 
@@ -3956,6 +3956,20 @@ I"p/* This is for all IE specfific style less than IE9. We hate IE. */
   padding:6px;
   font-size:15px;
   margin:35px 0;
+}
+
+.alert {
+  width:100%;
+  background-color:#FFC66D;
+  -moz-border-radius: 10px;
+  -webkit-border-radius: 10px;
+  padding:6px;
+  margin:15px 0;
+  color:#222;
+  text-shadow: 0;
+  -moz-text-shadow: 0;
+  -webkit-text-shadow: 0;
+  font-weight:normal;
 }
 
 code {
@@ -6164,7 +6178,7 @@ jQuery(document).ready(function ($) {
 </body>
 </html>
 ;T;	I"Hi, I'm a new item!;T;
-I"Hi, I'm a new item!;T;@J"/about/{;{	;I"Ü	<!DOCTYPE html>
+I"Hi, I'm a new item!;T;@J"/about/{;{	;I"<!DOCTYPE html>
 
 <!-- paulirish.com/2008/conditional-stylesheets-vs-css-hacks-answer-neither/ -->
 <!--[if lt IE 7]> <html class="no-js lt-ie9 lt-ie8 lt-ie7" lang="en"> <![endif]-->
@@ -6210,13 +6224,23 @@ I"Hi, I'm a new item!;T;@J"/about/{;{	;I"Ü	<!DOCTYPE html>
   <div class="container">
     <div class="row">
       <div class="twelve columns">
-        <p><strong>Meatspace</strong> is a personal project of <a href="http://indrode.com/">Indro De</a>. It will grow to contain pages for personal reference, picture galleries, and writings on other nonspecific topics. You may call it a hybrid between a blog, photo gallery, reference manual, and personal shoutbox.</p>
+        <h2>About</h2>
+
+<p><strong>Meatspace</strong> is a personal project of <a href="http://indrode.com/">Indro De</a>. It will grow to contain pages for personal reference, picture galleries, and writings on other nonspecific topics. You may call it a hybrid between a blog, photo gallery, reference manual, and personal shoutbox.</p>
 
 <p>This website will be constantly tweaked and updated while maintaining a simplistic, minimal layout. You may follow the source code on <a href="http://github.com/indrode/meatspace">GitHub</a>.
   
-<p>Built using <a href="http://www.ruby-lang.org/">Ruby</a>, <a href="http://foundation.zurb.com/">Foundation</a>, and <a href="http://nanoc.stoneship.org/">nanoc</a>. Powered by <a href="http://www.nginx.com/">nginx</a> on a <a href="http://www.linode.com/">Linode VPS</a>.</p>
+<p>Built using <a href="http://www.ruby-lang.org/">Ruby</a>, <a href="http://foundation.zurb.com/">Foundation</a>, and <a href="http://nanoc.stoneship.org/">nanoc</a>. Powered by <a href="http://www.nginx.com/">nginx</a> on a <a href="http://www.linode.com/">Linode VPS</a>. This site is <a href="http://validator.w3.org/check?uri=ms.indrode.com">valid HTML5</a> and enhanced for mobile devices.</p>
 
-<p>This site is <a href="http://validator.w3.org/check?uri=ms.indrode.com">valid HTML5</a> and enhanced for mobile devices.</p>
+<h2>Archive</h2>
+
+<p>The following articles have been posted on Meatspace so far:</p>
+
+
+<p><a href="http://ms.indrode.com//i/nanoc/">Creating static sites with nanoc</a></p>
+
+<p><a href="http://ms.indrode.com//i/markdown/">Short Markdown, Liquid, Pygments, and Jekyll reference</a></p>
+
       </div>
     </div>
   </div>
@@ -6232,17 +6256,269 @@ I"Hi, I'm a new item!;T;@J"/about/{;{	;I"Ü	<!DOCTYPE html>
 </body>
 </html>
 
-;T;	I"™<p><strong>Meatspace</strong> is a personal project of <a href="http://indrode.com/">Indro De</a>. It will grow to contain pages for personal reference, picture galleries, and writings on other nonspecific topics. You may call it a hybrid between a blog, photo gallery, reference manual, and personal shoutbox.</p>
+;T;	I"j<h2>About</h2>
+
+<p><strong>Meatspace</strong> is a personal project of <a href="http://indrode.com/">Indro De</a>. It will grow to contain pages for personal reference, picture galleries, and writings on other nonspecific topics. You may call it a hybrid between a blog, photo gallery, reference manual, and personal shoutbox.</p>
 
 <p>This website will be constantly tweaked and updated while maintaining a simplistic, minimal layout. You may follow the source code on <a href="http://github.com/indrode/meatspace">GitHub</a>.
   
-<p>Built using <a href="http://www.ruby-lang.org/">Ruby</a>, <a href="http://foundation.zurb.com/">Foundation</a>, and <a href="http://nanoc.stoneship.org/">nanoc</a>. Powered by <a href="http://www.nginx.com/">nginx</a> on a <a href="http://www.linode.com/">Linode VPS</a>.</p>
+<p>Built using <a href="http://www.ruby-lang.org/">Ruby</a>, <a href="http://foundation.zurb.com/">Foundation</a>, and <a href="http://nanoc.stoneship.org/">nanoc</a>. Powered by <a href="http://www.nginx.com/">nginx</a> on a <a href="http://www.linode.com/">Linode VPS</a>. This site is <a href="http://validator.w3.org/check?uri=ms.indrode.com">valid HTML5</a> and enhanced for mobile devices.</p>
 
-<p>This site is <a href="http://validator.w3.org/check?uri=ms.indrode.com">valid HTML5</a> and enhanced for mobile devices.</p>;T;
-I"™<p><strong>Meatspace</strong> is a personal project of <a href="http://indrode.com/">Indro De</a>. It will grow to contain pages for personal reference, picture galleries, and writings on other nonspecific topics. You may call it a hybrid between a blog, photo gallery, reference manual, and personal shoutbox.</p>
+<h2>Archive</h2>
+
+<p>The following articles have been posted on Meatspace so far:</p>
+
+<% @site.sorted_articles.each do |article| %>
+<p><%= link_to(article[:title], url_for(article)) %></p>
+<% end %>;T;
+I"Á<h2>About</h2>
+
+<p><strong>Meatspace</strong> is a personal project of <a href="http://indrode.com/">Indro De</a>. It will grow to contain pages for personal reference, picture galleries, and writings on other nonspecific topics. You may call it a hybrid between a blog, photo gallery, reference manual, and personal shoutbox.</p>
 
 <p>This website will be constantly tweaked and updated while maintaining a simplistic, minimal layout. You may follow the source code on <a href="http://github.com/indrode/meatspace">GitHub</a>.
   
-<p>Built using <a href="http://www.ruby-lang.org/">Ruby</a>, <a href="http://foundation.zurb.com/">Foundation</a>, and <a href="http://nanoc.stoneship.org/">nanoc</a>. Powered by <a href="http://www.nginx.com/">nginx</a> on a <a href="http://www.linode.com/">Linode VPS</a>.</p>
+<p>Built using <a href="http://www.ruby-lang.org/">Ruby</a>, <a href="http://foundation.zurb.com/">Foundation</a>, and <a href="http://nanoc.stoneship.org/">nanoc</a>. Powered by <a href="http://www.nginx.com/">nginx</a> on a <a href="http://www.linode.com/">Linode VPS</a>. This site is <a href="http://validator.w3.org/check?uri=ms.indrode.com">valid HTML5</a> and enhanced for mobile devices.</p>
 
-<p>This site is <a href="http://validator.w3.org/check?uri=ms.indrode.com">valid HTML5</a> and enhanced for mobile devices.</p>;T;@P:versioni
+<h2>Archive</h2>
+
+<p>The following articles have been posted on Meatspace so far:</p>
+
+
+<p><a href="http://ms.indrode.com//i/nanoc/">Creating static sites with nanoc</a></p>
+
+<p><a href="http://ms.indrode.com//i/markdown/">Short Markdown, Liquid, Pygments, and Jekyll reference</a></p>
+;T;@P"/i/markdown/{;{	;I"-<!DOCTYPE html>
+
+<!-- paulirish.com/2008/conditional-stylesheets-vs-css-hacks-answer-neither/ -->
+<!--[if lt IE 7]> <html class="no-js lt-ie9 lt-ie8 lt-ie7" lang="en"> <![endif]-->
+<!--[if IE 7]>    <html class="no-js lt-ie9 lt-ie8" lang="en"> <![endif]-->
+<!--[if IE 8]>    <html class="no-js lt-ie9" lang="en"> <![endif]-->
+<!--[if gt IE 8]><!--> <html lang="en"> <!--<![endif]-->
+<head>
+  <meta charset="utf-8" />
+  
+  <!-- Set the viewport width to device width for mobile -->
+  <meta name="viewport" content="width=device-width,max-scale=1" />
+  
+  <title>Short Markdown, Liquid, Pygments, and Jekyll reference</title>
+  
+  <!-- Included CSS Files -->
+  <link rel="stylesheet" href="/stylesheets/foundation.css">
+  <link rel="stylesheet" href="/stylesheets/app.css">
+  <link rel="stylesheet" href="/stylesheets/coderay.css">
+  
+  <!--[if lt IE 9]>
+    <link rel="stylesheet" href="/stylesheets/ie.css">
+  <![endif]-->
+  
+  <!-- IE Fix for HTML5 Tags -->
+  <!--[if lt IE 9]>
+    <script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+  <![endif]-->
+  
+</head>
+<body>
+
+  <div id="navigation">
+    <div class="container">
+      <div class="row">
+        <div class="twelve columns">
+          <a href="/">meatspace</a> (<a href="/about">about</a>)
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  <!-- container -->
+  <div class="container">
+    <div class="row">
+      <div class="twelve columns">
+        <h1 id="short-markdown-liquid-pygments-and-jekyll-reference">Short Markdown, Liquid, Pygments, and Jekyll reference</h1>
+
+<div class="alert">
+<strong>Note:</strong> this is an older post from an even older website that has since vanished from the internets. Meatspace does not run on Jekyll, nor does it use Pygments for syntax highlighting anymore.</div>
+
+<p>This is a sample Bandito page highlighting some Markdown techniques, primarily regarding syntax highlighting in my Jekyll-built Markdown/Pygments environment. To add some value to this reference, this document is <a href="http://github.com/indrode/indrode.github.com/raw/master/_posts/2010-09-10-markdown-jekyll.markdown">available in raw text</a>, which will make it easier to figure out how certain Markdown syntax is used to get the desired output. As a more thorough reference, check out John Gruberâ€™s official <a href="http://daringfireball.net/projects/markdown/syntax">Markdown Syntax Documentation</a>.</p>
+
+<h2 id="displaying-code-excerpts">Displaying code excerpts</h2>
+
+<p>Of course there are the very basics, like the pound signs <code>#</code> which stand for HTML heading tags, e.g. <code>### Displaying code excerpts</code> will display this paragraphâ€™s heading (h3). Two asterisks will <strong>make things bold</strong> for you. Just one asterisks <em>makes it look like this</em>. Now to the good stuff. To add language-specific syntax highlighting like the one below, check the raw text file of this document.</p>
+
+<pre><code class="language-ruby"><span class="keyword">def</span> <span class="function">destroy</span>
+  <span class="comment"># delete a user</span>
+  current_user.destroy!
+  flash[<span class="symbol">:notice</span>] = t(<span class="string"><span class="delimiter">"</span><span class="content">user.deleted</span><span class="delimiter">"</span></span>)
+  redirect_to home_path
+<span class="keyword">end</span></code></pre>
+
+<p>What youâ€™ve just seen was some syntax-highlighted Ruby code. For this particular Jekyll implementation, I have added language styles for <code>ruby</code>, <code>css</code>, <code>bash</code> and <code>sql</code>.</p>
+
+<h2 id="github-pages-and-jekyll-workflow">GitHub Pages and Jekyll workflow</h2>
+
+<p>As you can read on <code>http://pages.github.com/</code>, the GitHub Pages feature allows you to publish content to the web by simply pushing content to one of your GitHub hosted repositories.</p>
+
+<p>The first step is to add a GitHub Pages repository, which will be used to serve the Jekyll site. Create the new repository via the link on <code>https://github.com/</code> (log in first), then fire up Terminal and follow the instructions to set up git for your project. Make sure you have your SSH public keys set up. You may also have to set some global settings, if this is your first git repository. Here are mine:</p>
+
+<pre><code class="language-sql">git config <span class="comment">--global user.name "Indro De"</span>
+git config <span class="comment">--global user.email indro.de@gmail.com</span></code></pre>
+
+<p>This adds your development environment, an empty <code>readme</code> (I like to use <code>README.rdoc</code> so I can use some simple markup), and tells git where to push your files to. Thatâ€™s already all there is to do.</p>
+
+<pre><code class="language-sql">mkdir indrode.github.com
+cd indrode.github.com
+git init
+touch README
+git <span class="class">add</span> README
+git <span class="class">commit</span> -m <span class="string"><span class="delimiter">'</span><span class="content">first commit</span><span class="delimiter">'</span></span>
+git remote <span class="class">add</span> origin git<span class="variable">@github</span>.com:indrode/indrode.github.com.git
+git push origin master</code></pre>
+
+<p>Once everything is set up on your development machine, the actual development can commence. It couldnâ€™t be much easier to build a Jekyll website locally into the projectâ€™s <code>_site</code> folder.</p>
+
+<pre><code class="language-sql">cd sites/indrode.github.com
+jekyll</code></pre>
+
+<p>In production, GitHub will actually run <code>jekyll --pygments --safe</code>, but the steps above work for me. Checking out to GitHub is simple, as seen below. The GitHub Pages engine does the rest to serve the Jekyll website to <code>Ã¬ndrode.github.com</code>. However, you should add a simple <code>.gitignore</code> file containing a single line <code>_site</code> to the root of your project, to tell git to ignore the folder with your locally built website.</p>
+
+<pre><code class="language-ruby">git status
+git add .
+git commit -m <span class="string"><span class="delimiter">'</span><span class="content">change description</span><span class="delimiter">'</span></span>
+git push origin master</code></pre>
+
+<p>This is all that is needed to have GitHub serve your Jekyll implementation. This space may be updated in future to add some more worthwhile Jekyll / GitHub goodness.</p>
+        <div class="infoline"><a href="/i/markdown/">Permalink</a> &middot; Written on 2011-01-14</class>
+      </div>
+    </div>
+  </div>
+  <!-- container -->
+
+
+  <hr />
+  
+  <!-- Included JS Files -->
+  <script src="/javascripts/foundation.js"></script>
+  <script src="/javascripts/app.js"></script>
+
+</body>
+</html>
+
+;T;	I"È# Short Markdown, Liquid, Pygments, and Jekyll reference
+
+<div class="alert"><strong>Note:</strong> this is an older post from an even older website that has since vanished from the internets. Meatspace does not run on Jekyll, nor does it use Pygments for syntax highlighting anymore.</div>
+
+This is a sample Bandito page highlighting some Markdown techniques, primarily regarding syntax highlighting in my Jekyll-built Markdown/Pygments environment. To add some value to this reference, this document is [available in raw text](http://github.com/indrode/indrode.github.com/raw/master/_posts/2010-09-10-markdown-jekyll.markdown), which will make it easier to figure out how certain Markdown syntax is used to get the desired output. As a more thorough reference, check out John Gruber's official [Markdown Syntax Documentation](http://daringfireball.net/projects/markdown/syntax).
+
+## Displaying code excerpts
+
+Of course there are the very basics, like the pound signs `#` which stand for HTML heading tags, e.g. `### Displaying code excerpts` will display this paragraph's heading (h3). Two asterisks will **make things bold** for you. Just one asterisks *makes it look like this*. Now to the good stuff. To add language-specific syntax highlighting like the one below, check the raw text file of this document.
+
+<pre><code>
+#!ruby
+def destroy
+  # delete a user
+  current_user.destroy!
+  flash[:notice] = t("user.deleted")
+  redirect_to home_path
+end
+</code></pre>
+
+What you've just seen was some syntax-highlighted Ruby code. For this particular Jekyll implementation, I have added language styles for `ruby`, `css`, `bash` and `sql`.
+
+## GitHub Pages and Jekyll workflow
+
+As you can read on `http://pages.github.com/`, the GitHub Pages feature allows you to publish content to the web by simply pushing content to one of your GitHub hosted repositories.
+
+The first step is to add a GitHub Pages repository, which will be used to serve the Jekyll site. Create the new repository via the link on `https://github.com/` (log in first), then fire up Terminal and follow the instructions to set up git for your project. Make sure you have your SSH public keys set up. You may also have to set some global settings, if this is your first git repository. Here are mine:
+
+<pre><code>
+#!sql
+git config --global user.name "Indro De"
+git config --global user.email indro.de@gmail.com
+</code></pre>
+
+This adds your development environment, an empty `readme` (I like to use `README.rdoc` so I can use some simple markup), and tells git where to push your files to. That's already all there is to do.
+
+<pre><code>
+#!sql
+mkdir indrode.github.com
+cd indrode.github.com
+git init
+touch README
+git add README
+git commit -m 'first commit'
+git remote add origin git@github.com:indrode/indrode.github.com.git
+git push origin master
+</code></pre>
+
+Once everything is set up on your development machine, the actual development can commence. It couldn't be much easier to build a Jekyll website locally into the project's `_site` folder.
+
+<pre><code>
+#!sql
+cd sites/indrode.github.com
+jekyll
+</code></pre>
+
+In production, GitHub will actually run `jekyll --pygments --safe`, but the steps above work for me. Checking out to GitHub is simple, as seen below. The GitHub Pages engine does the rest to serve the Jekyll website to `Ã¬ndrode.github.com`. However, you should add a simple `.gitignore` file containing a single line `_site` to the root of your project, to tell git to ignore the folder with your locally built website.
+
+<pre><code>
+#!ruby
+git status
+git add .
+git commit -m 'change description'
+git push origin master
+</code></pre>
+
+This is all that is needed to have GitHub serve your Jekyll implementation. This space may be updated in future to add some more worthwhile Jekyll / GitHub goodness.;T;
+I"S<h1 id="short-markdown-liquid-pygments-and-jekyll-reference">Short Markdown, Liquid, Pygments, and Jekyll reference</h1>
+
+<div class="alert">
+<strong>Note:</strong> this is an older post from an even older website that has since vanished from the internets. Meatspace does not run on Jekyll, nor does it use Pygments for syntax highlighting anymore.</div>
+
+<p>This is a sample Bandito page highlighting some Markdown techniques, primarily regarding syntax highlighting in my Jekyll-built Markdown/Pygments environment. To add some value to this reference, this document is <a href="http://github.com/indrode/indrode.github.com/raw/master/_posts/2010-09-10-markdown-jekyll.markdown">available in raw text</a>, which will make it easier to figure out how certain Markdown syntax is used to get the desired output. As a more thorough reference, check out John Gruberâ€™s official <a href="http://daringfireball.net/projects/markdown/syntax">Markdown Syntax Documentation</a>.</p>
+
+<h2 id="displaying-code-excerpts">Displaying code excerpts</h2>
+
+<p>Of course there are the very basics, like the pound signs <code>#</code> which stand for HTML heading tags, e.g. <code>### Displaying code excerpts</code> will display this paragraphâ€™s heading (h3). Two asterisks will <strong>make things bold</strong> for you. Just one asterisks <em>makes it look like this</em>. Now to the good stuff. To add language-specific syntax highlighting like the one below, check the raw text file of this document.</p>
+
+<pre><code class="language-ruby"><span class="keyword">def</span> <span class="function">destroy</span>
+  <span class="comment"># delete a user</span>
+  current_user.destroy!
+  flash[<span class="symbol">:notice</span>] = t(<span class="string"><span class="delimiter">"</span><span class="content">user.deleted</span><span class="delimiter">"</span></span>)
+  redirect_to home_path
+<span class="keyword">end</span></code></pre>
+
+<p>What youâ€™ve just seen was some syntax-highlighted Ruby code. For this particular Jekyll implementation, I have added language styles for <code>ruby</code>, <code>css</code>, <code>bash</code> and <code>sql</code>.</p>
+
+<h2 id="github-pages-and-jekyll-workflow">GitHub Pages and Jekyll workflow</h2>
+
+<p>As you can read on <code>http://pages.github.com/</code>, the GitHub Pages feature allows you to publish content to the web by simply pushing content to one of your GitHub hosted repositories.</p>
+
+<p>The first step is to add a GitHub Pages repository, which will be used to serve the Jekyll site. Create the new repository via the link on <code>https://github.com/</code> (log in first), then fire up Terminal and follow the instructions to set up git for your project. Make sure you have your SSH public keys set up. You may also have to set some global settings, if this is your first git repository. Here are mine:</p>
+
+<pre><code class="language-sql">git config <span class="comment">--global user.name "Indro De"</span>
+git config <span class="comment">--global user.email indro.de@gmail.com</span></code></pre>
+
+<p>This adds your development environment, an empty <code>readme</code> (I like to use <code>README.rdoc</code> so I can use some simple markup), and tells git where to push your files to. Thatâ€™s already all there is to do.</p>
+
+<pre><code class="language-sql">mkdir indrode.github.com
+cd indrode.github.com
+git init
+touch README
+git <span class="class">add</span> README
+git <span class="class">commit</span> -m <span class="string"><span class="delimiter">'</span><span class="content">first commit</span><span class="delimiter">'</span></span>
+git remote <span class="class">add</span> origin git<span class="variable">@github</span>.com:indrode/indrode.github.com.git
+git push origin master</code></pre>
+
+<p>Once everything is set up on your development machine, the actual development can commence. It couldnâ€™t be much easier to build a Jekyll website locally into the projectâ€™s <code>_site</code> folder.</p>
+
+<pre><code class="language-sql">cd sites/indrode.github.com
+jekyll</code></pre>
+
+<p>In production, GitHub will actually run <code>jekyll --pygments --safe</code>, but the steps above work for me. Checking out to GitHub is simple, as seen below. The GitHub Pages engine does the rest to serve the Jekyll website to <code>Ã¬ndrode.github.com</code>. However, you should add a simple <code>.gitignore</code> file containing a single line <code>_site</code> to the root of your project, to tell git to ignore the folder with your locally built website.</p>
+
+<pre><code class="language-ruby">git status
+git add .
+git commit -m <span class="string"><span class="delimiter">'</span><span class="content">change description</span><span class="delimiter">'</span></span>
+git push origin master</code></pre>
+
+<p>This is all that is needed to have GitHub serve your Jekyll implementation. This space may be updated in future to add some more worthwhile Jekyll / GitHub goodness.</p>;T;@V:versioni

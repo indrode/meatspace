@@ -5,7 +5,7 @@
     <div class="row">
       <div class="twelve columns">
         <%= yield %>
-        <div class="infoline"><a href="<%= @item.path %>">Permalink</a> &middot; Written on <%= @item[:created_at] %></class>
+        <div class="infoline"><a href="<%= @item.path %>">Permalink</a> &middot; Written on <%= Date.strptime("#{@item[:created_at]}", "%d.%m.%Y") %></class>
       </div>
     </div>
   </div>
