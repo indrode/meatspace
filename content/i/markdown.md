@@ -1,5 +1,5 @@
 ---
-title: "Short Markdown, Jekyll, and Git reference"
+title: Short Markdown, Jekyll, and Git reference
 created_at: 14.01.2011
 kind: article
 ---

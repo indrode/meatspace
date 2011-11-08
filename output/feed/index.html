@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+
+<!-- paulirish.com/2008/conditional-stylesheets-vs-css-hacks-answer-neither/ -->
+<!--[if lt IE 7]> <html class="no-js lt-ie9 lt-ie8 lt-ie7" lang="en"> <![endif]-->
+<!--[if IE 7]>    <html class="no-js lt-ie9 lt-ie8" lang="en"> <![endif]-->
+<!--[if IE 8]>    <html class="no-js lt-ie9" lang="en"> <![endif]-->
+<!--[if gt IE 8]><!--> <html lang="en"> <!--<![endif]-->
+<head>
+  <meta charset="utf-8" />
+  
+  <!-- Set the viewport width to device width for mobile -->
+  <meta name="viewport" content="width=device-width,max-scale=1" />
+  
+  <title>meatspace RSS</title>
+  <link href="/feed.atom" rel="alternate" title="meatspace RSS" type="application/atom+xml">
+  
+  <!-- Included CSS Files -->
+  <link rel="stylesheet" href="/stylesheets/foundation.css">
+  <link rel="stylesheet" href="/stylesheets/app.css">
+  <link rel="stylesheet" href="/stylesheets/coderay.css">
+  
+  <script type="text/javascript" src="http://use.typekit.com/otz2xgn.js"></script>
+  <script type="text/javascript">try{Typekit.load();}catch(e){}</script>
+  
+  <!--[if lt IE 9]>
+    <link rel="stylesheet" href="/stylesheets/ie.css">
+  <![endif]-->
+  
+  <!-- IE Fix for HTML5 Tags -->
+  <!--[if lt IE 9]>
+    <script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+  <![endif]-->
+  
+</head>
+<body>
+
+  <div id="navigation">
+    <div class="container">
+      <div class="row">
+        <div class="twelve columns">
+          <a href="/">meatspace</a> <span class="show-on-phones-inline">mobile</span> (<a href="/about">about</a>)
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  <!-- container -->
+  <div class="container">
+    <div class="row">
+      <div class="twelve columns">
+        <?xml version="1.0" encoding="UTF-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <id>http://ms.indrode.com/</id>
+  <title>meatspace RSS</title>
+  <updated>2011-11-06T23:00:00Z</updated>
+  <link rel="alternate" href="http://ms.indrode.com/"/>
+  <link rel="self" href="http://ms.indrode.com/feed/"/>
+  <author>
+    <name>Indro De</name>
+    <uri>http://indrode.com/</uri>
+  </author>
+  <entry>
+    <id>tag:ms.indrode.com,2011-11-07:/i/nanoc/</id>
+    <title type="html">Creating static sites with nanoc</title>
+    <published>2011-11-06T23:00:00Z</published>
+    <updated>2011-11-06T23:00:00Z</updated>
+    <link rel="alternate" href="http://ms.indrode.com/i/nanoc/"/>
+    <content type="html">&lt;h1 id="creating-static-sites-with-nanoc"&gt;Creating static sites with nanoc&lt;/h1&gt;
+
+&lt;p&gt;Meatspace is a nanoc-powered static website that displays Markdown- and CodeRay-formatted content. The following is a quick tutorial and reference on the nanoc installation process and usage workflow.&lt;/p&gt;
+
+&lt;h2 id="install"&gt;Install&lt;/h2&gt;
+
+&lt;p&gt;All important nanoc generators and commands can be triggered via the command line, so we launch our favorite terminal emulator and start off by installing some required gems for our implementation of nanoc.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class="language-sql"&gt;gem install nanoc
+gem instal asdf
+gem install kramdown
+gem install coderay&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Next up, we will set up a basic scaffold of the nanoc site.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class="language-sql"&gt;nanoc create_site meatspace&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;If you wish, you could create a new GitHub repository for the nanoc site. Although, unlike Jekyll sites, which can be updated via a simple &lt;code&gt;git push&lt;/code&gt; if used as GitHub page, this would be just for general version control. If you do, initialize the git repository in the &lt;code&gt;meatspace&lt;/code&gt; folder, add the generated files and folders, commit, and push this first commit to master.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class="language-sql"&gt;cd meatspace
+nanoc compile&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;The last command compiles the site. Repeat this step after you made changes and are ready to deploy or if you want to view the current state of your site in your browser. For the latter, we start a WEBrick server in order to view the site under &lt;code&gt;http://localhost:3000/&lt;/code&gt;:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class="language-sql"&gt;nanoc &lt;span class="type"&gt;view&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Your most basic nanoc setup is now complete! Before we continue to hack around with nanoc items, layouts, and rules, we want to deploy what we have to a remote web server. The nanoc way to do this is via a rake task that calls rsync for lightning-fast deploys.&lt;/p&gt;
+
+&lt;h2 id="deploy"&gt;Deploy&lt;/h2&gt;
+
+&lt;p&gt;Just add this block to the config.yml in the root of your site, where &lt;code&gt;dst&lt;/code&gt; is the location on your remote web server:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class="language-ruby"&gt;deploy:
+  default:
+    dst: &lt;span class="string"&gt;&lt;span class="delimiter"&gt;"&lt;/span&gt;&lt;span class="content"&gt;indrode.com:/home/bandito/meatspace&lt;/span&gt;&lt;span class="delimiter"&gt;"&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;ss64’s rsync page &lt;a href="http://ss64.com/bash/rsync.html"&gt;http://ss64.com/bash/rsync.html&lt;/a&gt; tells you all the different options to set up the rsync connection, and much more. The rake task to deploy is:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class="language-sql"&gt;rake deploy:rsync&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;For Meatspace, I am using a different approach because of some customized server security configurations. Also, I want to deploy to different environments (staging, production) so instead of rsync, a simple secure copy triggered by a &lt;a href="https://github.com/wycats/thor"&gt;Thor script&lt;/a&gt; gets the nanoc deployed just as fast:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class="language-sql"&gt;thor nanoc:deploy staging&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;I do keep the Thor script outside of revision control as it includes some server specific configurations. Now that we know how to locally view our site and how to quickly deploy any changes to production, we can start configuring and customizing.&lt;/p&gt;
+
+&lt;h2 id="customize"&gt;Customize&lt;/h2&gt;
+
+&lt;p&gt;The nanoc documenation is pretty good (&lt;a href="http://nanoc.stoneship.org/docs/3-getting-started/"&gt;http://nanoc.stoneship.org/docs/3-getting-started/&lt;/a&gt;), so this will just cover some reminders and notes.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class="language-sql"&gt;&lt;span class="comment"&gt;# creating a new static page&lt;/span&gt;
+nanoc create_item about&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;I want to use Markdown to write my pages (at least the articles), so nanoc will have to know that certain item types should go through the &lt;code&gt;kramdown&lt;/code&gt; filter. On top of that, I want to be able to highlight any source code that I may include in an article using &lt;code&gt;coderay&lt;/code&gt;. All these configurations are called rules and exist in the &lt;code&gt;Rules&lt;/code&gt; file.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class="language-ruby"&gt;compile &lt;span class="string"&gt;&lt;span class="delimiter"&gt;'&lt;/span&gt;&lt;span class="content"&gt;/i/*&lt;/span&gt;&lt;span class="delimiter"&gt;'&lt;/span&gt;&lt;/span&gt; &lt;span class="keyword"&gt;do&lt;/span&gt;
+  filter &lt;span class="symbol"&gt;:kramdown&lt;/span&gt;
+  filter &lt;span class="symbol"&gt;:colorize_syntax&lt;/span&gt;,
+    &lt;span class="symbol"&gt;:colorizers&lt;/span&gt; =&amp;gt; { &lt;span class="symbol"&gt;:ruby&lt;/span&gt; =&amp;gt; &lt;span class="symbol"&gt;:coderay&lt;/span&gt; }
+  layout &lt;span class="string"&gt;&lt;span class="delimiter"&gt;'&lt;/span&gt;&lt;span class="content"&gt;default&lt;/span&gt;&lt;span class="delimiter"&gt;'&lt;/span&gt;&lt;/span&gt;
+&lt;span class="keyword"&gt;end&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;The &lt;code&gt;compile&lt;/code&gt; blocks specify how items are processed. The &lt;code&gt;route&lt;/code&gt; blocks set all the necessary routing settings. All in all, a lot of the concepts and implementations look familiar if you know your way around Ruby and some Ruby-based frameworks.&lt;/p&gt;
+
+&lt;p&gt;Meatspace uses &lt;a href="http://foundation.zurb.com/"&gt;Foundation&lt;/a&gt;, a boilerplate framework, so I replaced the existing layout and styles. I also added a coderay-specific stylesheet. I will cut this short by, once again, referring to the very nice write-up on the &lt;a href="http://nanoc.stoneship.org/docs/1-introduction/"&gt;nanoc homepage&lt;/a&gt;. You can also view the &lt;a href="https://github.com/indrode/meatspace"&gt;entire source of Meatspace on GitHub&lt;/a&gt;.&lt;/p&gt;</content>
+  </entry>
+  <entry>
+    <id>tag:ms.indrode.com,2011-01-14:/i/markdown/</id>
+    <title type="html">Short Markdown, Jekyll, and Git reference</title>
+    <published>2011-01-13T23:00:00Z</published>
+    <updated>2011-01-13T23:00:00Z</updated>
+    <link rel="alternate" href="http://ms.indrode.com/i/markdown/"/>
+    <content type="html">&lt;h1 id="short-markdown-jekyll-and-git-reference"&gt;Short Markdown, Jekyll, and Git reference&lt;/h1&gt;
+
+&lt;div class="alertbox"&gt;
+&lt;strong&gt;Note:&lt;/strong&gt; this is an old post from an even older website that has since vanished from the internets. Meatspace does not run on Jekyll, nor does it use Pygments for syntax highlighting anymore.&lt;/div&gt;
+
+&lt;p&gt;This is a sample Bandito page highlighting some Markdown techniques, primarily regarding syntax highlighting in my Jekyll-built Markdown/Pygments environment. To add some value to this reference, this document is &lt;a href="http://github.com/indrode/indrode.github.com/raw/master/_posts/2010-09-10-markdown-jekyll.markdown"&gt;available in raw text&lt;/a&gt;, which will make it easier to figure out how certain Markdown syntax is used to get the desired output. As a more thorough reference, check out John Gruber’s official &lt;a href="http://daringfireball.net/projects/markdown/syntax"&gt;Markdown Syntax Documentation&lt;/a&gt;.&lt;/p&gt;
+
+&lt;h2 id="displaying-code-excerpts"&gt;Displaying code excerpts&lt;/h2&gt;
+
+&lt;p&gt;Of course there are the very basics, like the pound signs &lt;code&gt;#&lt;/code&gt; which stand for HTML heading tags, e.g. &lt;code&gt;### Displaying code excerpts&lt;/code&gt; will display this paragraph’s heading (h3). Two asterisks will &lt;strong&gt;make things bold&lt;/strong&gt; for you. Just one asterisks &lt;em&gt;makes it look like this&lt;/em&gt;. Now to the good stuff. To add language-specific syntax highlighting like the one below, check the raw text file of this document.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class="language-ruby"&gt;&lt;span class="keyword"&gt;def&lt;/span&gt; &lt;span class="function"&gt;destroy&lt;/span&gt;
+  &lt;span class="comment"&gt;# delete a user&lt;/span&gt;
+  current_user.destroy!
+  flash[&lt;span class="symbol"&gt;:notice&lt;/span&gt;] = t(&lt;span class="string"&gt;&lt;span class="delimiter"&gt;"&lt;/span&gt;&lt;span class="content"&gt;user.deleted&lt;/span&gt;&lt;span class="delimiter"&gt;"&lt;/span&gt;&lt;/span&gt;)
+  redirect_to home_path
+&lt;span class="keyword"&gt;end&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;What you’ve just seen was some syntax-highlighted Ruby code. For this particular Jekyll implementation, I have added language styles for &lt;code&gt;ruby&lt;/code&gt;, &lt;code&gt;css&lt;/code&gt;, &lt;code&gt;bash&lt;/code&gt; and &lt;code&gt;sql&lt;/code&gt;.&lt;/p&gt;
+
+&lt;h2 id="github-pages-and-jekyll-workflow"&gt;GitHub Pages and Jekyll workflow&lt;/h2&gt;
+
+&lt;p&gt;As you can read on &lt;code&gt;http://pages.github.com/&lt;/code&gt;, the GitHub Pages feature allows you to publish content to the web by simply pushing content to one of your GitHub hosted repositories.&lt;/p&gt;
+
+&lt;p&gt;The first step is to add a GitHub Pages repository, which will be used to serve the Jekyll site. Create the new repository via the link on &lt;code&gt;https://github.com/&lt;/code&gt; (log in first), then fire up Terminal and follow the instructions to set up git for your project. Make sure you have your SSH public keys set up. You may also have to set some global settings, if this is your first git repository. Here are mine:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class="language-sql"&gt;git config &lt;span class="comment"&gt;--global user.name "Indro De"&lt;/span&gt;
+git config &lt;span class="comment"&gt;--global user.email indro.de@gmail.com&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;This adds your development environment, an empty &lt;code&gt;readme&lt;/code&gt; (I like to use &lt;code&gt;README.rdoc&lt;/code&gt; so I can use some simple markup), and tells git where to push your files to. That’s already all there is to do.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class="language-sql"&gt;mkdir indrode.github.com
+cd indrode.github.com
+git init
+touch README
+git &lt;span class="class"&gt;add&lt;/span&gt; README
+git &lt;span class="class"&gt;commit&lt;/span&gt; -m &lt;span class="string"&gt;&lt;span class="delimiter"&gt;'&lt;/span&gt;&lt;span class="content"&gt;first commit&lt;/span&gt;&lt;span class="delimiter"&gt;'&lt;/span&gt;&lt;/span&gt;
+git remote &lt;span class="class"&gt;add&lt;/span&gt; origin git&lt;span class="variable"&gt;@github&lt;/span&gt;.com:indrode/indrode.github.com.git
+git push origin master&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Once everything is set up on your development machine, the actual development can commence. It couldn’t be much easier to build a Jekyll website locally into the project’s &lt;code&gt;_site&lt;/code&gt; folder.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class="language-sql"&gt;cd sites/indrode.github.com
+jekyll&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;In production, GitHub will actually run &lt;code&gt;jekyll --pygments --safe&lt;/code&gt;, but the steps above work for me. Checking out to GitHub is simple, as seen below. The GitHub Pages engine does the rest to serve the Jekyll website to &lt;code&gt;ìndrode.github.com&lt;/code&gt;. However, you should add a simple &lt;code&gt;.gitignore&lt;/code&gt; file containing a single line &lt;code&gt;_site&lt;/code&gt; to the root of your project, to tell git to ignore the folder with your locally built website.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class="language-ruby"&gt;git status
+git add .
+git commit -m &lt;span class="string"&gt;&lt;span class="delimiter"&gt;'&lt;/span&gt;&lt;span class="content"&gt;change description&lt;/span&gt;&lt;span class="delimiter"&gt;'&lt;/span&gt;&lt;/span&gt;
+git push origin master&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;This is all that is needed to have GitHub serve your Jekyll implementation. This space may be updated in future to add some more worthwhile Jekyll / GitHub goodness.&lt;/p&gt;</content>
+  </entry>
+</feed>
+
+      </div>
+    </div>
+  </div>
+  <!-- container -->
+
+
+  <hr />
+  
+  <!-- Included JS Files -->
+  <script src="/javascripts/foundation.js"></script>
+  <script src="/javascripts/app.js"></script>
+
+</body>
+</html>
+

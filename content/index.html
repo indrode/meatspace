@@ -1,3 +1,3 @@
 <% article = @site.sorted_articles.first %>
 <%= article.compiled_content %>
-<div class="infoline"><a href="<%= article.path %>">Permalink</a> &middot; Written on <%= Date.strptime("#{article[:created_at]}", "%d.%m.%Y") %></class>
+<div class="infoline"><a href="<%= article.path %>">Permalink</a> &middot; Written on <%= Date.strptime("#{article[:created_at]}", "%d.%m.%Y") %></div>

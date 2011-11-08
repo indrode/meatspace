@@ -1011,6 +1011,37 @@ div.slider-nav span.left {
 		.show-on-desktops { display: none !important; }
 	}
 	
+	/* inline versions */
+	
+	.show-on-phones-inline { display: none !important; }	
+	.show-on-tablets-inline { display: none !important; }
+	.show-on-desktops-inline { display: inline; }
+	
+	.hide-on-phones-inline { display: inline !important; }	
+	.hide-on-tablets-inline { display: inline !important; }
+	.hide-on-desktops-inline { display: none; }
+	
+	
+	@media only screen and (max-device-width: 800px), only screen and (device-width: 800px) {
+		.hide-on-phones-inline { display: inline !important; }
+		.hide-on-tablets-inline { display: none !important; }
+		.hide-on-desktops-inline { display: inline !important; }
+		
+		.show-on-phones-inline { display: none !important; }
+		.show-on-tablets-inline { display: inline !important; }
+		.show-on-desktops-inline { display: none !important; }
+	}
+	
+		
+	@media only screen and (max-width: 767px) {
+		.hide-on-phones-inline { display: none !important; }
+		.hide-on-tablets-inline { display: inline !important; }
+		.hide-on-desktops-inline { display: inline !important; }
+		
+		.show-on-phones-inline { display: inline !important; }
+		.show-on-tablets-inline { display: none !important; }
+		.show-on-desktops-inline { display: none !important; }
+	}	
 	/* only screen and (device-width: 1280px), only screen and (max-device-width: 1280px),  /*
 	
 	

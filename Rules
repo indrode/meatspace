@@ -21,6 +21,10 @@ compile '/javascripts/*' do
   # don’t filter or layout
 end
 
+compile '/feed.xml' do
+  filter :erb
+end
+
 compile '/' do
   filter :erb
   filter :kramdown
@@ -41,6 +45,10 @@ compile '*' do
     filter :erb
     layout 'default'
   end
+end
+
+route '/feed/*' do
+  item.identifier.chop + '.xml'
 end
 
 route '/stylesheets/*' do

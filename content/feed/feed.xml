@@ -1,0 +1,7 @@
+---
+title: meatspace RSS
+author_name: Indro De
+author_uri: http://indrode.com/
+---
+
+<%= atom_feed %>
