@@ -1,4 +1,4 @@
-{:	data{"/{:default{	:	lastI"Œ"<!DOCTYPE html>
+{:	data{"/{:default{	:	lastI"ß"<!DOCTYPE html>
 
 <!-- paulirish.com/2008/conditional-stylesheets-vs-css-hacks-answer-neither/ -->
 <!--[if lt IE 7]> <html class="no-js lt-ie9 lt-ie8 lt-ie7" lang="en"> <![endif]-->
@@ -38,7 +38,7 @@
     <div class="container">
       <div class="row">
         <div class="twelve columns">
-          <span class="active" title="You're here.">meatspace</span> <span class="show-on-phones-inline">mobile</span> (<a href="/about">about</a>)
+          <span class="active" title="You're here.">meatspace</span> <span class="show-on-phones-inline">mobile</span> &nbsp; &middot; &nbsp; <code><a href="/about">about</a></code> <code><a href="/contents">contents</a></code>
         </div>
       </div>
     </div>
@@ -115,7 +115,7 @@ nanoc create_item about</code></pre>
 
 <p>The <code>compile</code> blocks specify how items are processed. The <code>route</code> blocks set all the necessary routing settings. All in all, a lot of the concepts and implementations look very familiar if you know your way around Ruby and some Ruby-based frameworks.</p>
 
-<p>Meatspace uses <a href="http://foundation.zurb.com/">Foundation</a>, a boilerplate framework, so I replaced the existing layout and styles. I also added a CodeRay-specific stylesheet. Nanoc is perfect for websites with static pages, but it can easily work as a blog or really anything else you throw at it. For example, displaying all blog entries on one page would achieved through a simple Ruby enumeration:</p>
+<p>Meatspace uses <a href="http://foundation.zurb.com/">Foundation</a>, a boilerplate framework, so I replaced the existing layout and styles. I also added a CodeRay-specific stylesheet. Nanoc is perfect for websites with static pages, but it can easily work as a blog or really anything else you throw at it. For example, displaying all blog entries on one page would be achieved through a simple Ruby enumeration:</p>
 
 <pre><code class="language-haml">- <span class="instance-variable">@site</span>.sorted_articles.each |article| <span class="keyword">do</span>
   <span class="tag">%p</span>= article.compiled_content
@@ -146,7 +146,7 @@ nanoc create_item about</code></pre>
 :ET:rawI"ä<% article = @site.sorted_articles.first %>
 <%= article.compiled_content %>
 <div class="infoline"><a href="<%= article.path %>">Permalink</a> &middot; Written on <%= Date.strptime("#{article[:created_at]}", "%d.%m.%Y") %></div>
-;T:preI"û
+;T:preI"þ
 <h1 id="creating-static-sites-with-nanoc">Creating static sites with nanoc</h1>
 
 <p>Meatspace is a nanoc-powered static website that displays Markdown- and CodeRay-formatted content. The following is a quick tutorial and reference on the nanoc installation process and usage workflow. Nanoc is light-weight, flexible, and completely written in Ruby, which we all love. To find out more, check out <a href="http://nanoc.stoneship.org/">the nanoc website</a>.</p>
@@ -213,7 +213,7 @@ nanoc create_item about</code></pre>
 
 <p>The <code>compile</code> blocks specify how items are processed. The <code>route</code> blocks set all the necessary routing settings. All in all, a lot of the concepts and implementations look very familiar if you know your way around Ruby and some Ruby-based frameworks.</p>
 
-<p>Meatspace uses <a href="http://foundation.zurb.com/">Foundation</a>, a boilerplate framework, so I replaced the existing layout and styles. I also added a CodeRay-specific stylesheet. Nanoc is perfect for websites with static pages, but it can easily work as a blog or really anything else you throw at it. For example, displaying all blog entries on one page would achieved through a simple Ruby enumeration:</p>
+<p>Meatspace uses <a href="http://foundation.zurb.com/">Foundation</a>, a boilerplate framework, so I replaced the existing layout and styles. I also added a CodeRay-specific stylesheet. Nanoc is perfect for websites with static pages, but it can easily work as a blog or really anything else you throw at it. For example, displaying all blog entries on one page would be achieved through a simple Ruby enumeration:</p>
 
 <pre><code class="language-haml">- <span class="instance-variable">@site</span>.sorted_articles.each |article| <span class="keyword">do</span>
   <span class="tag">%p</span>= article.compiled_content
@@ -241,7 +241,7 @@ pre {
   margin: -5px 0 15px 0;
 }
 ;T;	@;
-@"/i/nanoc/{;{	;I"Š"<!DOCTYPE html>
+@"/i/nanoc/{;{	;I"Ý"<!DOCTYPE html>
 
 <!-- paulirish.com/2008/conditional-stylesheets-vs-css-hacks-answer-neither/ -->
 <!--[if lt IE 7]> <html class="no-js lt-ie9 lt-ie8 lt-ie7" lang="en"> <![endif]-->
@@ -281,7 +281,7 @@ pre {
     <div class="container">
       <div class="row">
         <div class="twelve columns">
-          <a href="/">meatspace</a> <span class="show-on-phones-inline">mobile</span> (<a href="/about">about</a>)
+          <a href="/">meatspace</a> <span class="show-on-phones-inline">mobile</span> &nbsp; &middot; &nbsp; <code><a href="/about">about</a></code> <code><a href="/contents">contents</a></code>
         </div>
       </div>
     </div>
@@ -357,7 +357,7 @@ nanoc create_item about</code></pre>
 
 <p>The <code>compile</code> blocks specify how items are processed. The <code>route</code> blocks set all the necessary routing settings. All in all, a lot of the concepts and implementations look very familiar if you know your way around Ruby and some Ruby-based frameworks.</p>
 
-<p>Meatspace uses <a href="http://foundation.zurb.com/">Foundation</a>, a boilerplate framework, so I replaced the existing layout and styles. I also added a CodeRay-specific stylesheet. Nanoc is perfect for websites with static pages, but it can easily work as a blog or really anything else you throw at it. For example, displaying all blog entries on one page would achieved through a simple Ruby enumeration:</p>
+<p>Meatspace uses <a href="http://foundation.zurb.com/">Foundation</a>, a boilerplate framework, so I replaced the existing layout and styles. I also added a CodeRay-specific stylesheet. Nanoc is perfect for websites with static pages, but it can easily work as a blog or really anything else you throw at it. For example, displaying all blog entries on one page would be achieved through a simple Ruby enumeration:</p>
 
 <pre><code class="language-haml">- <span class="instance-variable">@site</span>.sorted_articles.each |article| <span class="keyword">do</span>
   <span class="tag">%p</span>= article.compiled_content
@@ -384,7 +384,7 @@ nanoc create_item about</code></pre>
 </body>
 </html>
 
-;T;	I"#Creating static sites with nanoc
+;T;	I"#Creating static sites with nanoc
 
 Meatspace is a nanoc-powered static website that displays Markdown- and CodeRay-formatted content. The following is a quick tutorial and reference on the nanoc installation process and usage workflow. Nanoc is light-weight, flexible, and completely written in Ruby, which we all love. To find out more, check out [the nanoc website](http://nanoc.stoneship.org/).
 
@@ -477,7 +477,7 @@ end
 
 The `compile` blocks specify how items are processed. The `route` blocks set all the necessary routing settings. All in all, a lot of the concepts and implementations look very familiar if you know your way around Ruby and some Ruby-based frameworks.
 
-Meatspace uses [Foundation](http://foundation.zurb.com/), a boilerplate framework, so I replaced the existing layout and styles. I also added a CodeRay-specific stylesheet. Nanoc is perfect for websites with static pages, but it can easily work as a blog or really anything else you throw at it. For example, displaying all blog entries on one page would achieved through a simple Ruby enumeration:
+Meatspace uses [Foundation](http://foundation.zurb.com/), a boilerplate framework, so I replaced the existing layout and styles. I also added a CodeRay-specific stylesheet. Nanoc is perfect for websites with static pages, but it can easily work as a blog or really anything else you throw at it. For example, displaying all blog entries on one page would be achieved through a simple Ruby enumeration:
 
 <pre><code>
 #!haml
@@ -491,7 +491,7 @@ Meatspace uses [Foundation](http://foundation.zurb.com/), a boilerplate framewor
 The above code snippet is in Haml, but you can easily use ERB instead. Just specify in the compile filters of the `Rules` file, how you want to process your code.
 
 I will cut this short by, once again, referring to the very nice write-up on the [nanoc homepage](http://nanoc.stoneship.org/docs/1-introduction/). You can also view the [entire source of Meatspace on GitHub](https://github.com/indrode/meatspace).;T;
-I"œ<h1 id="creating-static-sites-with-nanoc">Creating static sites with nanoc</h1>
+I"Ÿ<h1 id="creating-static-sites-with-nanoc">Creating static sites with nanoc</h1>
 
 <p>Meatspace is a nanoc-powered static website that displays Markdown- and CodeRay-formatted content. The following is a quick tutorial and reference on the nanoc installation process and usage workflow. Nanoc is light-weight, flexible, and completely written in Ruby, which we all love. To find out more, check out <a href="http://nanoc.stoneship.org/">the nanoc website</a>.</p>
 
@@ -557,7 +557,7 @@ nanoc create_item about</code></pre>
 
 <p>The <code>compile</code> blocks specify how items are processed. The <code>route</code> blocks set all the necessary routing settings. All in all, a lot of the concepts and implementations look very familiar if you know your way around Ruby and some Ruby-based frameworks.</p>
 
-<p>Meatspace uses <a href="http://foundation.zurb.com/">Foundation</a>, a boilerplate framework, so I replaced the existing layout and styles. I also added a CodeRay-specific stylesheet. Nanoc is perfect for websites with static pages, but it can easily work as a blog or really anything else you throw at it. For example, displaying all blog entries on one page would achieved through a simple Ruby enumeration:</p>
+<p>Meatspace uses <a href="http://foundation.zurb.com/">Foundation</a>, a boilerplate framework, so I replaced the existing layout and styles. I also added a CodeRay-specific stylesheet. Nanoc is perfect for websites with static pages, but it can easily work as a blog or really anything else you throw at it. For example, displaying all blog entries on one page would be achieved through a simple Ruby enumeration:</p>
 
 <pre><code class="language-haml">- <span class="instance-variable">@site</span>.sorted_articles.each |article| <span class="keyword">do</span>
   <span class="tag">%p</span>= article.compiled_content
@@ -6281,7 +6281,7 @@ jQuery(document).ready(function ($) {
 </body>
 </html>
 ;T;	I"Hi, I'm a new item!;T;
-I"Hi, I'm a new item!;T;@J"/about/{;{	;I""<!DOCTYPE html>
+I"Hi, I'm a new item!;T;@J"/about/{;{	;I"r<!DOCTYPE html>
 
 <!-- paulirish.com/2008/conditional-stylesheets-vs-css-hacks-answer-neither/ -->
 <!--[if lt IE 7]> <html class="no-js lt-ie9 lt-ie8 lt-ie7" lang="en"> <![endif]-->
@@ -6321,7 +6321,7 @@ I"Hi, I'm a new item!;T;@J"/about/{;{	;I""<!DOCTYPE html>
     <div class="container">
       <div class="row">
         <div class="twelve columns">
-          <a href="/">meatspace</a> <span class="show-on-phones-inline">mobile</span> (<a href="/about">about</a>)
+          <a href="/">meatspace</a> <span class="show-on-phones-inline">mobile</span> &nbsp; &middot; &nbsp; <code><a href="/about">about</a></code> <code><a href="/contents">contents</a></code>
         </div>
       </div>
     </div>
@@ -6394,7 +6394,7 @@ I"²<h2>About</h2>
 <p><a href="http://ms.indrode.com/i/nanoc/">Creating static sites with nanoc</a></p>
 
 <p><a href="http://ms.indrode.com/i/markdown/">Short Markdown, Jekyll, and Git reference</a></p>
-;T;@P"/i/markdown/{;{	;I"5<!DOCTYPE html>
+;T;@P"/i/markdown/{;{	;I"…<!DOCTYPE html>
 
 <!-- paulirish.com/2008/conditional-stylesheets-vs-css-hacks-answer-neither/ -->
 <!--[if lt IE 7]> <html class="no-js lt-ie9 lt-ie8 lt-ie7" lang="en"> <![endif]-->
@@ -6434,7 +6434,7 @@ I"²<h2>About</h2>
     <div class="container">
       <div class="row">
         <div class="twelve columns">
-          <a href="/">meatspace</a> <span class="show-on-phones-inline">mobile</span> (<a href="/about">about</a>)
+          <a href="/">meatspace</a> <span class="show-on-phones-inline">mobile</span> &nbsp; &middot; &nbsp; <code><a href="/about">about</a></code> <code><a href="/contents">contents</a></code>
         </div>
       </div>
     </div>
@@ -6987,7 +6987,7 @@ git push origin master&lt;/code&gt;&lt;/pre&gt;
 &lt;p&gt;This is all that is needed to have GitHub serve your Jekyll implementation. This space may be updated in future to add some more worthwhile Jekyll / GitHub goodness.&lt;/p&gt;</content>
   </entry>
 </feed>
-;T;@\"/feed/feed/{;{	;I"3A<!DOCTYPE html>
+;T;@\"/feed/feed/{;{	;I"†A<!DOCTYPE html>
 
 <!-- paulirish.com/2008/conditional-stylesheets-vs-css-hacks-answer-neither/ -->
 <!--[if lt IE 7]> <html class="no-js lt-ie9 lt-ie8 lt-ie7" lang="en"> <![endif]-->
@@ -7027,7 +7027,7 @@ git push origin master&lt;/code&gt;&lt;/pre&gt;
     <div class="container">
       <div class="row">
         <div class="twelve columns">
-          <a href="/">meatspace</a> <span class="show-on-phones-inline">mobile</span> (<a href="/about">about</a>)
+          <a href="/">meatspace</a> <span class="show-on-phones-inline">mobile</span> &nbsp; &middot; &nbsp; <code><a href="/about">about</a></code> <code><a href="/contents">contents</a></code>
         </div>
       </div>
     </div>
@@ -7120,7 +7120,7 @@ nanoc create_item about&lt;/code&gt;&lt;/pre&gt;
 
 &lt;p&gt;The &lt;code&gt;compile&lt;/code&gt; blocks specify how items are processed. The &lt;code&gt;route&lt;/code&gt; blocks set all the necessary routing settings. All in all, a lot of the concepts and implementations look very familiar if you know your way around Ruby and some Ruby-based frameworks.&lt;/p&gt;
 
-&lt;p&gt;Meatspace uses &lt;a href="http://foundation.zurb.com/"&gt;Foundation&lt;/a&gt;, a boilerplate framework, so I replaced the existing layout and styles. I also added a CodeRay-specific stylesheet. Nanoc is perfect for websites with static pages, but it can easily work as a blog or really anything else you throw at it. For example, displaying all blog entries on one page would achieved through a simple Ruby enumeration:&lt;/p&gt;
+&lt;p&gt;Meatspace uses &lt;a href="http://foundation.zurb.com/"&gt;Foundation&lt;/a&gt;, a boilerplate framework, so I replaced the existing layout and styles. I also added a CodeRay-specific stylesheet. Nanoc is perfect for websites with static pages, but it can easily work as a blog or really anything else you throw at it. For example, displaying all blog entries on one page would be achieved through a simple Ruby enumeration:&lt;/p&gt;
 
 &lt;pre&gt;&lt;code class="language-haml"&gt;- &lt;span class="instance-variable"&gt;@site&lt;/span&gt;.sorted_articles.each |article| &lt;span class="keyword"&gt;do&lt;/span&gt;
   &lt;span class="tag"&gt;%p&lt;/span&gt;= article.compiled_content
@@ -7210,7 +7210,7 @@ git push origin master&lt;/code&gt;&lt;/pre&gt;
 </html>
 
 ;T;	I"<%= atom_feed %>;T;
-I"¿9<?xml version="1.0" encoding="UTF-8"?>
+I"Â9<?xml version="1.0" encoding="UTF-8"?>
 <feed xmlns="http://www.w3.org/2005/Atom">
   <id>http://ms.indrode.com/</id>
   <title>meatspace RSS</title>
@@ -7293,7 +7293,7 @@ nanoc create_item about&lt;/code&gt;&lt;/pre&gt;
 
 &lt;p&gt;The &lt;code&gt;compile&lt;/code&gt; blocks specify how items are processed. The &lt;code&gt;route&lt;/code&gt; blocks set all the necessary routing settings. All in all, a lot of the concepts and implementations look very familiar if you know your way around Ruby and some Ruby-based frameworks.&lt;/p&gt;
 
-&lt;p&gt;Meatspace uses &lt;a href="http://foundation.zurb.com/"&gt;Foundation&lt;/a&gt;, a boilerplate framework, so I replaced the existing layout and styles. I also added a CodeRay-specific stylesheet. Nanoc is perfect for websites with static pages, but it can easily work as a blog or really anything else you throw at it. For example, displaying all blog entries on one page would achieved through a simple Ruby enumeration:&lt;/p&gt;
+&lt;p&gt;Meatspace uses &lt;a href="http://foundation.zurb.com/"&gt;Foundation&lt;/a&gt;, a boilerplate framework, so I replaced the existing layout and styles. I also added a CodeRay-specific stylesheet. Nanoc is perfect for websites with static pages, but it can easily work as a blog or really anything else you throw at it. For example, displaying all blog entries on one page would be achieved through a simple Ruby enumeration:&lt;/p&gt;
 
 &lt;pre&gt;&lt;code class="language-haml"&gt;- &lt;span class="instance-variable"&gt;@site&lt;/span&gt;.sorted_articles.each |article| &lt;span class="keyword"&gt;do&lt;/span&gt;
   &lt;span class="tag"&gt;%p&lt;/span&gt;= article.compiled_content
@@ -7366,4 +7366,71 @@ git push origin master&lt;/code&gt;&lt;/pre&gt;
 &lt;p&gt;This is all that is needed to have GitHub serve your Jekyll implementation. This space may be updated in future to add some more worthwhile Jekyll / GitHub goodness.&lt;/p&gt;</content>
   </entry>
 </feed>
-;T;@b:versioni
+;T;@b"/contents/{;{	;I"Ô<!DOCTYPE html>
+
+<!-- paulirish.com/2008/conditional-stylesheets-vs-css-hacks-answer-neither/ -->
+<!--[if lt IE 7]> <html class="no-js lt-ie9 lt-ie8 lt-ie7" lang="en"> <![endif]-->
+<!--[if IE 7]>    <html class="no-js lt-ie9 lt-ie8" lang="en"> <![endif]-->
+<!--[if IE 8]>    <html class="no-js lt-ie9" lang="en"> <![endif]-->
+<!--[if gt IE 8]><!--> <html lang="en"> <!--<![endif]-->
+<head>
+  <meta charset="utf-8" />
+  
+  <!-- Set the viewport width to device width for mobile -->
+  <meta name="viewport" content="width=device-width,max-scale=1" />
+  
+  <title>A New Item</title>
+  <link href="/feed.xml" rel="alternate" title="meatspace RSS" type="application/atom+xml">
+  
+  <!-- Included CSS Files -->
+  <link rel="stylesheet" href="/stylesheets/foundation.css">
+  <link rel="stylesheet" href="/stylesheets/app.css">
+  <link rel="stylesheet" href="/stylesheets/coderay.css">
+  
+  <script type="text/javascript" src="http://use.typekit.com/otz2xgn.js"></script>
+  <script type="text/javascript">try{Typekit.load();}catch(e){}</script>
+  
+  <!--[if lt IE 9]>
+    <link rel="stylesheet" href="/stylesheets/ie.css">
+  <![endif]-->
+  
+  <!-- IE Fix for HTML5 Tags -->
+  <!--[if lt IE 9]>
+    <script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+  <![endif]-->
+  
+</head>
+<body>
+
+  <div id="navigation">
+    <div class="container">
+      <div class="row">
+        <div class="twelve columns">
+          <a href="/">meatspace</a> <span class="show-on-phones-inline">mobile</span> &nbsp; &middot; &nbsp; <code><a href="/about">about</a></code> <code><a href="/contents">contents</a></code>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  <!-- container -->
+  <div class="container">
+    <div class="row">
+      <div class="twelve columns">
+        Hi, I'm a new item!
+      </div>
+    </div>
+  </div>
+  <!-- container -->
+
+
+  <hr />
+  
+  <!-- Included JS Files -->
+  <script src="/javascripts/foundation.js"></script>
+  <script src="/javascripts/app.js"></script>
+
+</body>
+</html>
+
+;T;	I"Hi, I'm a new item!;T;
+I"Hi, I'm a new item!;T;@h:versioni

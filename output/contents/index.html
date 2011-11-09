@@ -11,7 +11,7 @@
   <!-- Set the viewport width to device width for mobile -->
   <meta name="viewport" content="width=device-width,max-scale=1" />
   
-  <title><%= @item[:title] || "meatspace" %></title>
+  <title>A New Item</title>
   <link href="/feed.xml" rel="alternate" title="meatspace RSS" type="application/atom+xml">
   
   <!-- Included CSS Files -->
@@ -38,8 +38,29 @@
     <div class="container">
       <div class="row">
         <div class="twelve columns">
-          <%= link_to_unless_current('meatspace', '/') %> <span class="show-on-phones-inline">mobile</span> &nbsp; &middot; &nbsp; <code><a href="/about">about</a></code> <code><a href="/contents">contents</a></code>
+          <a href="/">meatspace</a> <span class="show-on-phones-inline">mobile</span> &nbsp; &middot; &nbsp; <code><a href="/about">about</a></code> <code><a href="/contents">contents</a></code>
         </div>
       </div>
     </div>
   </div>
+  
+  <!-- container -->
+  <div class="container">
+    <div class="row">
+      <div class="twelve columns">
+        Hi, I'm a new item!
+      </div>
+    </div>
+  </div>
+  <!-- container -->
+
+
+  <hr />
+  
+  <!-- Included JS Files -->
+  <script src="/javascripts/foundation.js"></script>
+  <script src="/javascripts/app.js"></script>
+
+</body>
+</html>
+

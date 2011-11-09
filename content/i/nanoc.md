@@ -97,7 +97,7 @@ end
 
 The `compile` blocks specify how items are processed. The `route` blocks set all the necessary routing settings. All in all, a lot of the concepts and implementations look very familiar if you know your way around Ruby and some Ruby-based frameworks.
 
-Meatspace uses [Foundation](http://foundation.zurb.com/), a boilerplate framework, so I replaced the existing layout and styles. I also added a CodeRay-specific stylesheet. Nanoc is perfect for websites with static pages, but it can easily work as a blog or really anything else you throw at it. For example, displaying all blog entries on one page would achieved through a simple Ruby enumeration:
+Meatspace uses [Foundation](http://foundation.zurb.com/), a boilerplate framework, so I replaced the existing layout and styles. I also added a CodeRay-specific stylesheet. Nanoc is perfect for websites with static pages, but it can easily work as a blog or really anything else you throw at it. For example, displaying all blog entries on one page would be achieved through a simple Ruby enumeration:
 
 <pre><code>
 #!haml
