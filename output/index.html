@@ -49,13 +49,13 @@
     <div class="row">
       <div class="nine columns">
         
-<h1 id="writing-an-api-wrapper-in-ruby-with-httparty-and-fakeweb">Writing an API wrapper in Ruby with HTTParty and Fakeweb</h1>
+<h1 id="an-api-wrapper-in-ruby-with-httparty-and-fakeweb">An API wrapper in Ruby with HTTParty and Fakeweb</h1>
 
 <p>This is a quick tutorial on writing a fully-tested API wrapper in Ruby. As example, I am taking <a href="https://github.com/indrode/zimdb">zimdb</a>, a small gem that I developed the other day. First, I’ll cover the (test-driven) implementation of the functionality. To top it off, I’ll explain the process of creating a gem that can be used by other developers.</p>
 
 <h2 id="what-does-zimdb-do">What does zimdb do?</h2>
 
-<p>Zimdb is a wrapper for <a href="http://www.imdbapi.com/">imdbapi.com</a>, a service that provides content from the vast movie database <a href="http://www.imdb.com/">IMDB</a> which I am sure everyone has heard of. IMDb doesn’t provide it’s own open API to developers, so in order to access information, we’ll have to resort to 3rd party providers. Right now, zimdb only fetches information about a single movie and the only way to access information for a specific movie is to search it by its title. For the scope of this article, that should be all we need.</p>
+<p>Zimdb is a wrapper for <a href="http://www.imdbapi.com/">imdbapi.com</a>, a service that provides content from the vast movie database <a href="http://www.imdb.com/">IMDB</a> which I am sure everyone has heard of. IMDb doesn’t provide its own open API to developers, so in order to access information, we’ll have to resort to 3rd party providers. Right now, zimdb only fetches information about a single movie and the only way to access information for a specific movie is to search for it by its title. For the scope of this article, that should be all we need.</p>
 
 <h2 id="a-simple-approach">A simple approach</h2>
 
@@ -65,15 +65,15 @@
 <li>trigger a sample call and examine the result</li>
   <li>define what we want to fetch (via tests)</li>
   <li>implement it!</li>
-  <li>transform it into a gem (we may do that earlier in the process)</li>
+  <li>transform it into a gem (we may start doing that earlier in the process)</li>
 </ol>
 <h3 id="the-call">1. The Call</h3>
 
-<p><a href="http://www.imdbapi.com/">imdbapi.com</a> provides a nice interface to make sample calls. It is also very convenient that responses are nicely packed in a JSON. For now, we’ll just search for movies by title, but we could additionally allow searching movies by IMDb-ID and year. Here is how a sample response looks like:</p>
+<p><a href="http://www.imdbapi.com/">imdbapi.com</a> provides a nice web interface to make sample calls. It is also very convenient that responses are nicely packed in JSON. For now, we’ll just search for movies by title, but we could additionally allow searching movies by IMDb-ID and year. Here is how a sample response looks like:</p>
 
 <pre><code class="language-json">{<span class="key"><span class="delimiter">"</span><span class="content">Title</span><span class="delimiter">"</span></span>:<span class="string"><span class="delimiter">"</span><span class="content">The Godfather</span><span class="delimiter">"</span></span>,<span class="key"><span class="delimiter">"</span><span class="content">Year</span><span class="delimiter">"</span></span>:<span class="string"><span class="delimiter">"</span><span class="content">1972</span><span class="delimiter">"</span></span>,<span class="key"><span class="delimiter">"</span><span class="content">Rated</span><span class="delimiter">"</span></span>:<span class="string"><span class="delimiter">"</span><span class="content">R</span><span class="delimiter">"</span></span>,<span class="key"><span class="delimiter">"</span><span class="content">Released</span><span class="delimiter">"</span></span>:<span class="string"><span class="delimiter">"</span><span class="content">24 Mar 1972</span><span class="delimiter">"</span></span>,<span class="key"><span class="delimiter">"</span><span class="content">Genre</span><span class="delimiter">"</span></span>:<span class="string"><span class="delimiter">"</span><span class="content">Crime, Drama</span><span class="delimiter">"</span></span>,<span class="key"><span class="delimiter">"</span><span class="content">Director</span><span class="delimiter">"</span></span>:<span class="string"><span class="delimiter">"</span><span class="content">Francis Ford Coppola</span><span class="delimiter">"</span></span>,<span class="key"><span class="delimiter">"</span><span class="content">Writer</span><span class="delimiter">"</span></span>:<span class="string"><span class="delimiter">"</span><span class="content">Mario Puzo, Mario Puzo</span><span class="delimiter">"</span></span>,<span class="key"><span class="delimiter">"</span><span class="content">Actors</span><span class="delimiter">"</span></span>:<span class="string"><span class="delimiter">"</span><span class="content">Marlon Brando, Al Pacino, James Caan, Diane Keaton</span><span class="delimiter">"</span></span>,<span class="key"><span class="delimiter">"</span><span class="content">Plot</span><span class="delimiter">"</span></span>:<span class="string"><span class="delimiter">"</span><span class="content">The aging patriarch of an organized crime dynasty transfers control of his clandestine empire to his reluctant son.</span><span class="delimiter">"</span></span>,<span class="key"><span class="delimiter">"</span><span class="content">Poster</span><span class="delimiter">"</span></span>:<span class="string"><span class="delimiter">"</span><span class="content">http://ia.media-imdb.com/images/M/MV5BMTIyMTIxNjI5NF5BMl5BanBnXkFtZTcwNzQzNDM5MQ@@._V1._SX320.jpg</span><span class="delimiter">"</span></span>,<span class="key"><span class="delimiter">"</span><span class="content">Runtime</span><span class="delimiter">"</span></span>:<span class="string"><span class="delimiter">"</span><span class="content">2 hrs 55 mins</span><span class="delimiter">"</span></span>,<span class="key"><span class="delimiter">"</span><span class="content">Rating</span><span class="delimiter">"</span></span>:<span class="string"><span class="delimiter">"</span><span class="content">9.2</span><span class="delimiter">"</span></span>,<span class="key"><span class="delimiter">"</span><span class="content">Votes</span><span class="delimiter">"</span></span>:<span class="string"><span class="delimiter">"</span><span class="content">436305</span><span class="delimiter">"</span></span>,<span class="key"><span class="delimiter">"</span><span class="content">ID</span><span class="delimiter">"</span></span>:<span class="string"><span class="delimiter">"</span><span class="content">tt0068646</span><span class="delimiter">"</span></span>,<span class="key"><span class="delimiter">"</span><span class="content">Response</span><span class="delimiter">"</span></span>:<span class="string"><span class="delimiter">"</span><span class="content">True</span><span class="delimiter">"</span></span>}</code></pre>
 
-<p>For our API wrapper, we would like to fetch all of these movie attributes. So let’s fire up your favorite text editor and create a new file. We’ll create a new folder and some subfolders too while we’re at it.</p>
+<p>For our API wrapper, we would like to fetch some of these movie attributes. So let’s fire up your favorite text editor and create a new file. We’ll create a new folder and some subfolders too while we’re at it.</p>
 
 <pre><code class="language-sql">mkdir zimdb
 cd zimdb
@@ -83,7 +83,7 @@ mate spec/movie_spec.rb</code></pre>
 
 <h3 id="a-first-test">2. A first test</h3>
 
-<p>We will use <code>rspec</code> to test our gem, so make sure it is installed (<code>gem install rspec</code>). In <code>movie_spec.rb</code>, we can then add a first test for a very common task we want the gem to achieve.</p>
+<p>We will use <code>rspec</code> to test our gem, so make sure it is installed (<code>gem install rspec</code>). In <code>movie_spec.rb</code>, we can now add a first test for a very common task we want the gem to achieve.</p>
 
 <pre><code class="language-ruby">describe <span class="string"><span class="delimiter">"</span><span class="content">zimdb</span><span class="delimiter">"</span></span> <span class="keyword">do</span>
   it <span class="string"><span class="delimiter">"</span><span class="content">should fetch a movie title</span><span class="delimiter">"</span></span> <span class="keyword">do</span>
@@ -92,7 +92,7 @@ mate spec/movie_spec.rb</code></pre>
   <span class="keyword">end</span>
 <span class="keyword">end</span></code></pre>
 
-<p>This already does more than one step at once, but I will keep this tutorial rather brief, so let’s this this file with <code>rspec spec/movie_spec.rb</code> and see what’s happening.</p>
+<p>This already does more than one step at once, but I will keep this tutorial rather brief, so let’s run these tests with <code>rspec spec/movie_spec.rb</code> and see what’s happening.</p>
 
 <pre><code class="language-sql">F
 
@@ -158,11 +158,11 @@ require <span class="string"><span class="delimiter">'</span><span class="conten
   <span class="comment"># we'll add more here later</span>
 <span class="keyword">end</span></code></pre>
 
-<p>In our <code>movie_spec.rb</code> we can now <code>require 'spec_helper'</code> instead of requiring rspec.</p>
+<p>In our <code>movie_spec.rb</code> we can now <code>require 'spec_helper'</code>.</p>
 
 <h3 id="fakeweb">5. Fakeweb</h3>
 
-<p>In our final code, we will make calls to imdbapi.com, but we don’t want to do that for testing. To fake these web requests, we will take advantage of a neat little gem called <code>fakeweb</code> (see <a href="https://github.com/chrisk/fakeweb">https://github.com/chrisk/fakeweb</a>). Let’s just drop the response we got earlier and drop it into <code>spec/fixtures</code>. For testing purposes, we will read the contents of that file, whenever a test tries to make such a request. Still in <code>spec_helper.rb</code> we can add the following code to the RSpec configure-block:</p>
+<p>In our final code, we will make calls to imdbapi.com, but we don’t want to do that during testing. To fake these web requests, we will take advantage of a neat little gem called <code>fakeweb</code> (see <a href="https://github.com/chrisk/fakeweb">https://github.com/chrisk/fakeweb</a>). Let’s just drop the response we got earlier and drop it into <code>spec/fixtures</code>. For testing purposes, we will read the contents of that file, whenever a test tries to make such a request. Still in <code>spec_helper.rb</code> we can add the following code to the RSpec configure-block:</p>
 
 <pre><code class="language-ruby"><span class="constant">RSpec</span>.configure <span class="keyword">do</span> |config|
   <span class="keyword">def</span> <span class="function">fixture</span>(filename)
@@ -189,7 +189,7 @@ require <span class="string"><span class="delimiter">"</span><span class="conten
   include <span class="constant">HTTParty</span>
 <span class="keyword">end</span></code></pre>
 
-<p>Now on to ‘lib/zimdb/movie.rb’:</p>
+<p>Now on to <code>lib/zimdb/movie.rb</code>:</p>
 
 <pre><code class="language-ruby"><span class="keyword">module</span> <span class="class">Zimdb</span>
   <span class="keyword">class</span> <span class="class">Movie</span>
@@ -282,7 +282,7 @@ describe <span class="constant">Hash</span> <span class="keyword">do</span>
 
 <p>Our code is implemented and our tests are passing. The next step would be to package it all into a gem using the <code>gem</code> command-line tools. Read more about this in the <a href="http://docs.rubygems.org/read/book/2">rubygems documentation</a>. It would be wise to create a sample Ruby app that uses the gem, for example querying the user for a movie title and then spitting out some information about that movie. Or, we could just test it in the Ruby shell. Of course, adding the remaining attributes and handling empty responses (what happens when our movie wasn’t found?) should be taken care of as well.</p>
 
-<p>To view the current state of the actual zimdb gem, check out on <a href="https://github.com/indrode/zimdb">GitHub</a> or browse the <a href="http://rubydoc.info/gems/zimdb/0.0.1/frames">documentation</a>. Install it the old-fashioned way:</p>
+<p>To view the current state of the actual zimdb gem, check it out on <a href="https://github.com/indrode/zimdb">GitHub</a> or browse the <a href="http://rubydoc.info/gems/zimdb/0.0.1/frames">documentation</a>. As always, install it the old-fashioned way:</p>
 
 <pre><code class="language-sql">gem install zimdb</code></pre>
 

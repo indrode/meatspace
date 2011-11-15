@@ -61,17 +61,17 @@
   </author>
   <entry>
     <id>tag:ms.indrode.com,2011-11-15:/i/zimdb/</id>
-    <title type="html">Writing an API wrapper in Ruby with HTTParty and Fakeweb</title>
+    <title type="html">An API wrapper in Ruby with HTTParty and Fakeweb</title>
     <published>2011-11-14T23:00:00Z</published>
     <updated>2011-11-14T23:00:00Z</updated>
     <link rel="alternate" href="http://ms.indrode.com/i/zimdb/"/>
-    <content type="html">&lt;h1 id="writing-an-api-wrapper-in-ruby-with-httparty-and-fakeweb"&gt;Writing an API wrapper in Ruby with HTTParty and Fakeweb&lt;/h1&gt;
+    <content type="html">&lt;h1 id="an-api-wrapper-in-ruby-with-httparty-and-fakeweb"&gt;An API wrapper in Ruby with HTTParty and Fakeweb&lt;/h1&gt;
 
 &lt;p&gt;This is a quick tutorial on writing a fully-tested API wrapper in Ruby. As example, I am taking &lt;a href="https://github.com/indrode/zimdb"&gt;zimdb&lt;/a&gt;, a small gem that I developed the other day. First, I’ll cover the (test-driven) implementation of the functionality. To top it off, I’ll explain the process of creating a gem that can be used by other developers.&lt;/p&gt;
 
 &lt;h2 id="what-does-zimdb-do"&gt;What does zimdb do?&lt;/h2&gt;
 
-&lt;p&gt;Zimdb is a wrapper for &lt;a href="http://www.imdbapi.com/"&gt;imdbapi.com&lt;/a&gt;, a service that provides content from the vast movie database &lt;a href="http://www.imdb.com/"&gt;IMDB&lt;/a&gt; which I am sure everyone has heard of. IMDb doesn’t provide it’s own open API to developers, so in order to access information, we’ll have to resort to 3rd party providers. Right now, zimdb only fetches information about a single movie and the only way to access information for a specific movie is to search it by its title. For the scope of this article, that should be all we need.&lt;/p&gt;
+&lt;p&gt;Zimdb is a wrapper for &lt;a href="http://www.imdbapi.com/"&gt;imdbapi.com&lt;/a&gt;, a service that provides content from the vast movie database &lt;a href="http://www.imdb.com/"&gt;IMDB&lt;/a&gt; which I am sure everyone has heard of. IMDb doesn’t provide its own open API to developers, so in order to access information, we’ll have to resort to 3rd party providers. Right now, zimdb only fetches information about a single movie and the only way to access information for a specific movie is to search for it by its title. For the scope of this article, that should be all we need.&lt;/p&gt;
 
 &lt;h2 id="a-simple-approach"&gt;A simple approach&lt;/h2&gt;
 
@@ -81,14 +81,14 @@
 &lt;li&gt;trigger a sample call and examine the result&lt;/li&gt;
   &lt;li&gt;define what we want to fetch (via tests)&lt;/li&gt;
   &lt;li&gt;implement it!&lt;/li&gt;
-  &lt;li&gt;transform it into a gem (we may do that earlier in the process)&lt;/li&gt;
+  &lt;li&gt;transform it into a gem (we may start doing that earlier in the process)&lt;/li&gt;
 &lt;/ol&gt;&lt;h3 id="the-call"&gt;1. The Call&lt;/h3&gt;
 
-&lt;p&gt;&lt;a href="http://www.imdbapi.com/"&gt;imdbapi.com&lt;/a&gt; provides a nice interface to make sample calls. It is also very convenient that responses are nicely packed in a JSON. For now, we’ll just search for movies by title, but we could additionally allow searching movies by IMDb-ID and year. Here is how a sample response looks like:&lt;/p&gt;
+&lt;p&gt;&lt;a href="http://www.imdbapi.com/"&gt;imdbapi.com&lt;/a&gt; provides a nice web interface to make sample calls. It is also very convenient that responses are nicely packed in JSON. For now, we’ll just search for movies by title, but we could additionally allow searching movies by IMDb-ID and year. Here is how a sample response looks like:&lt;/p&gt;
 
 &lt;pre&gt;&lt;code class="language-json"&gt;{&lt;span class="key"&gt;&lt;span class="delimiter"&gt;"&lt;/span&gt;&lt;span class="content"&gt;Title&lt;/span&gt;&lt;span class="delimiter"&gt;"&lt;/span&gt;&lt;/span&gt;:&lt;span class="string"&gt;&lt;span class="delimiter"&gt;"&lt;/span&gt;&lt;span class="content"&gt;The Godfather&lt;/span&gt;&lt;span class="delimiter"&gt;"&lt;/span&gt;&lt;/span&gt;,&lt;span class="key"&gt;&lt;span class="delimiter"&gt;"&lt;/span&gt;&lt;span class="content"&gt;Year&lt;/span&gt;&lt;span class="delimiter"&gt;"&lt;/span&gt;&lt;/span&gt;:&lt;span class="string"&gt;&lt;span class="delimiter"&gt;"&lt;/span&gt;&lt;span class="content"&gt;1972&lt;/span&gt;&lt;span class="delimiter"&gt;"&lt;/span&gt;&lt;/span&gt;,&lt;span class="key"&gt;&lt;span class="delimiter"&gt;"&lt;/span&gt;&lt;span class="content"&gt;Rated&lt;/span&gt;&lt;span class="delimiter"&gt;"&lt;/span&gt;&lt;/span&gt;:&lt;span class="string"&gt;&lt;span class="delimiter"&gt;"&lt;/span&gt;&lt;span class="content"&gt;R&lt;/span&gt;&lt;span class="delimiter"&gt;"&lt;/span&gt;&lt;/span&gt;,&lt;span class="key"&gt;&lt;span class="delimiter"&gt;"&lt;/span&gt;&lt;span class="content"&gt;Released&lt;/span&gt;&lt;span class="delimiter"&gt;"&lt;/span&gt;&lt;/span&gt;:&lt;span class="string"&gt;&lt;span class="delimiter"&gt;"&lt;/span&gt;&lt;span class="content"&gt;24 Mar 1972&lt;/span&gt;&lt;span class="delimiter"&gt;"&lt;/span&gt;&lt;/span&gt;,&lt;span class="key"&gt;&lt;span class="delimiter"&gt;"&lt;/span&gt;&lt;span class="content"&gt;Genre&lt;/span&gt;&lt;span class="delimiter"&gt;"&lt;/span&gt;&lt;/span&gt;:&lt;span class="string"&gt;&lt;span class="delimiter"&gt;"&lt;/span&gt;&lt;span class="content"&gt;Crime, Drama&lt;/span&gt;&lt;span class="delimiter"&gt;"&lt;/span&gt;&lt;/span&gt;,&lt;span class="key"&gt;&lt;span class="delimiter"&gt;"&lt;/span&gt;&lt;span class="content"&gt;Director&lt;/span&gt;&lt;span class="delimiter"&gt;"&lt;/span&gt;&lt;/span&gt;:&lt;span class="string"&gt;&lt;span class="delimiter"&gt;"&lt;/span&gt;&lt;span class="content"&gt;Francis Ford Coppola&lt;/span&gt;&lt;span class="delimiter"&gt;"&lt;/span&gt;&lt;/span&gt;,&lt;span class="key"&gt;&lt;span class="delimiter"&gt;"&lt;/span&gt;&lt;span class="content"&gt;Writer&lt;/span&gt;&lt;span class="delimiter"&gt;"&lt;/span&gt;&lt;/span&gt;:&lt;span class="string"&gt;&lt;span class="delimiter"&gt;"&lt;/span&gt;&lt;span class="content"&gt;Mario Puzo, Mario Puzo&lt;/span&gt;&lt;span class="delimiter"&gt;"&lt;/span&gt;&lt;/span&gt;,&lt;span class="key"&gt;&lt;span class="delimiter"&gt;"&lt;/span&gt;&lt;span class="content"&gt;Actors&lt;/span&gt;&lt;span class="delimiter"&gt;"&lt;/span&gt;&lt;/span&gt;:&lt;span class="string"&gt;&lt;span class="delimiter"&gt;"&lt;/span&gt;&lt;span class="content"&gt;Marlon Brando, Al Pacino, James Caan, Diane Keaton&lt;/span&gt;&lt;span class="delimiter"&gt;"&lt;/span&gt;&lt;/span&gt;,&lt;span class="key"&gt;&lt;span class="delimiter"&gt;"&lt;/span&gt;&lt;span class="content"&gt;Plot&lt;/span&gt;&lt;span class="delimiter"&gt;"&lt;/span&gt;&lt;/span&gt;:&lt;span class="string"&gt;&lt;span class="delimiter"&gt;"&lt;/span&gt;&lt;span class="content"&gt;The aging patriarch of an organized crime dynasty transfers control of his clandestine empire to his reluctant son.&lt;/span&gt;&lt;span class="delimiter"&gt;"&lt;/span&gt;&lt;/span&gt;,&lt;span class="key"&gt;&lt;span class="delimiter"&gt;"&lt;/span&gt;&lt;span class="content"&gt;Poster&lt;/span&gt;&lt;span class="delimiter"&gt;"&lt;/span&gt;&lt;/span&gt;:&lt;span class="string"&gt;&lt;span class="delimiter"&gt;"&lt;/span&gt;&lt;span class="content"&gt;http://ia.media-imdb.com/images/M/MV5BMTIyMTIxNjI5NF5BMl5BanBnXkFtZTcwNzQzNDM5MQ@@._V1._SX320.jpg&lt;/span&gt;&lt;span class="delimiter"&gt;"&lt;/span&gt;&lt;/span&gt;,&lt;span class="key"&gt;&lt;span class="delimiter"&gt;"&lt;/span&gt;&lt;span class="content"&gt;Runtime&lt;/span&gt;&lt;span class="delimiter"&gt;"&lt;/span&gt;&lt;/span&gt;:&lt;span class="string"&gt;&lt;span class="delimiter"&gt;"&lt;/span&gt;&lt;span class="content"&gt;2 hrs 55 mins&lt;/span&gt;&lt;span class="delimiter"&gt;"&lt;/span&gt;&lt;/span&gt;,&lt;span class="key"&gt;&lt;span class="delimiter"&gt;"&lt;/span&gt;&lt;span class="content"&gt;Rating&lt;/span&gt;&lt;span class="delimiter"&gt;"&lt;/span&gt;&lt;/span&gt;:&lt;span class="string"&gt;&lt;span class="delimiter"&gt;"&lt;/span&gt;&lt;span class="content"&gt;9.2&lt;/span&gt;&lt;span class="delimiter"&gt;"&lt;/span&gt;&lt;/span&gt;,&lt;span class="key"&gt;&lt;span class="delimiter"&gt;"&lt;/span&gt;&lt;span class="content"&gt;Votes&lt;/span&gt;&lt;span class="delimiter"&gt;"&lt;/span&gt;&lt;/span&gt;:&lt;span class="string"&gt;&lt;span class="delimiter"&gt;"&lt;/span&gt;&lt;span class="content"&gt;436305&lt;/span&gt;&lt;span class="delimiter"&gt;"&lt;/span&gt;&lt;/span&gt;,&lt;span class="key"&gt;&lt;span class="delimiter"&gt;"&lt;/span&gt;&lt;span class="content"&gt;ID&lt;/span&gt;&lt;span class="delimiter"&gt;"&lt;/span&gt;&lt;/span&gt;:&lt;span class="string"&gt;&lt;span class="delimiter"&gt;"&lt;/span&gt;&lt;span class="content"&gt;tt0068646&lt;/span&gt;&lt;span class="delimiter"&gt;"&lt;/span&gt;&lt;/span&gt;,&lt;span class="key"&gt;&lt;span class="delimiter"&gt;"&lt;/span&gt;&lt;span class="content"&gt;Response&lt;/span&gt;&lt;span class="delimiter"&gt;"&lt;/span&gt;&lt;/span&gt;:&lt;span class="string"&gt;&lt;span class="delimiter"&gt;"&lt;/span&gt;&lt;span class="content"&gt;True&lt;/span&gt;&lt;span class="delimiter"&gt;"&lt;/span&gt;&lt;/span&gt;}&lt;/code&gt;&lt;/pre&gt;
 
-&lt;p&gt;For our API wrapper, we would like to fetch all of these movie attributes. So let’s fire up your favorite text editor and create a new file. We’ll create a new folder and some subfolders too while we’re at it.&lt;/p&gt;
+&lt;p&gt;For our API wrapper, we would like to fetch some of these movie attributes. So let’s fire up your favorite text editor and create a new file. We’ll create a new folder and some subfolders too while we’re at it.&lt;/p&gt;
 
 &lt;pre&gt;&lt;code class="language-sql"&gt;mkdir zimdb
 cd zimdb
@@ -98,7 +98,7 @@ mate spec/movie_spec.rb&lt;/code&gt;&lt;/pre&gt;
 
 &lt;h3 id="a-first-test"&gt;2. A first test&lt;/h3&gt;
 
-&lt;p&gt;We will use &lt;code&gt;rspec&lt;/code&gt; to test our gem, so make sure it is installed (&lt;code&gt;gem install rspec&lt;/code&gt;). In &lt;code&gt;movie_spec.rb&lt;/code&gt;, we can then add a first test for a very common task we want the gem to achieve.&lt;/p&gt;
+&lt;p&gt;We will use &lt;code&gt;rspec&lt;/code&gt; to test our gem, so make sure it is installed (&lt;code&gt;gem install rspec&lt;/code&gt;). In &lt;code&gt;movie_spec.rb&lt;/code&gt;, we can now add a first test for a very common task we want the gem to achieve.&lt;/p&gt;
 
 &lt;pre&gt;&lt;code class="language-ruby"&gt;describe &lt;span class="string"&gt;&lt;span class="delimiter"&gt;"&lt;/span&gt;&lt;span class="content"&gt;zimdb&lt;/span&gt;&lt;span class="delimiter"&gt;"&lt;/span&gt;&lt;/span&gt; &lt;span class="keyword"&gt;do&lt;/span&gt;
   it &lt;span class="string"&gt;&lt;span class="delimiter"&gt;"&lt;/span&gt;&lt;span class="content"&gt;should fetch a movie title&lt;/span&gt;&lt;span class="delimiter"&gt;"&lt;/span&gt;&lt;/span&gt; &lt;span class="keyword"&gt;do&lt;/span&gt;
@@ -107,7 +107,7 @@ mate spec/movie_spec.rb&lt;/code&gt;&lt;/pre&gt;
   &lt;span class="keyword"&gt;end&lt;/span&gt;
 &lt;span class="keyword"&gt;end&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
 
-&lt;p&gt;This already does more than one step at once, but I will keep this tutorial rather brief, so let’s this this file with &lt;code&gt;rspec spec/movie_spec.rb&lt;/code&gt; and see what’s happening.&lt;/p&gt;
+&lt;p&gt;This already does more than one step at once, but I will keep this tutorial rather brief, so let’s run these tests with &lt;code&gt;rspec spec/movie_spec.rb&lt;/code&gt; and see what’s happening.&lt;/p&gt;
 
 &lt;pre&gt;&lt;code class="language-sql"&gt;F
 
@@ -173,11 +173,11 @@ require &lt;span class="string"&gt;&lt;span class="delimiter"&gt;'&lt;/span&gt;&
   &lt;span class="comment"&gt;# we'll add more here later&lt;/span&gt;
 &lt;span class="keyword"&gt;end&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
 
-&lt;p&gt;In our &lt;code&gt;movie_spec.rb&lt;/code&gt; we can now &lt;code&gt;require 'spec_helper'&lt;/code&gt; instead of requiring rspec.&lt;/p&gt;
+&lt;p&gt;In our &lt;code&gt;movie_spec.rb&lt;/code&gt; we can now &lt;code&gt;require 'spec_helper'&lt;/code&gt;.&lt;/p&gt;
 
 &lt;h3 id="fakeweb"&gt;5. Fakeweb&lt;/h3&gt;
 
-&lt;p&gt;In our final code, we will make calls to imdbapi.com, but we don’t want to do that for testing. To fake these web requests, we will take advantage of a neat little gem called &lt;code&gt;fakeweb&lt;/code&gt; (see &lt;a href="https://github.com/chrisk/fakeweb"&gt;https://github.com/chrisk/fakeweb&lt;/a&gt;). Let’s just drop the response we got earlier and drop it into &lt;code&gt;spec/fixtures&lt;/code&gt;. For testing purposes, we will read the contents of that file, whenever a test tries to make such a request. Still in &lt;code&gt;spec_helper.rb&lt;/code&gt; we can add the following code to the RSpec configure-block:&lt;/p&gt;
+&lt;p&gt;In our final code, we will make calls to imdbapi.com, but we don’t want to do that during testing. To fake these web requests, we will take advantage of a neat little gem called &lt;code&gt;fakeweb&lt;/code&gt; (see &lt;a href="https://github.com/chrisk/fakeweb"&gt;https://github.com/chrisk/fakeweb&lt;/a&gt;). Let’s just drop the response we got earlier and drop it into &lt;code&gt;spec/fixtures&lt;/code&gt;. For testing purposes, we will read the contents of that file, whenever a test tries to make such a request. Still in &lt;code&gt;spec_helper.rb&lt;/code&gt; we can add the following code to the RSpec configure-block:&lt;/p&gt;
 
 &lt;pre&gt;&lt;code class="language-ruby"&gt;&lt;span class="constant"&gt;RSpec&lt;/span&gt;.configure &lt;span class="keyword"&gt;do&lt;/span&gt; |config|
   &lt;span class="keyword"&gt;def&lt;/span&gt; &lt;span class="function"&gt;fixture&lt;/span&gt;(filename)
@@ -204,7 +204,7 @@ require &lt;span class="string"&gt;&lt;span class="delimiter"&gt;"&lt;/span&gt;&
   include &lt;span class="constant"&gt;HTTParty&lt;/span&gt;
 &lt;span class="keyword"&gt;end&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
 
-&lt;p&gt;Now on to ‘lib/zimdb/movie.rb’:&lt;/p&gt;
+&lt;p&gt;Now on to &lt;code&gt;lib/zimdb/movie.rb&lt;/code&gt;:&lt;/p&gt;
 
 &lt;pre&gt;&lt;code class="language-ruby"&gt;&lt;span class="keyword"&gt;module&lt;/span&gt; &lt;span class="class"&gt;Zimdb&lt;/span&gt;
   &lt;span class="keyword"&gt;class&lt;/span&gt; &lt;span class="class"&gt;Movie&lt;/span&gt;
@@ -297,7 +297,7 @@ describe &lt;span class="constant"&gt;Hash&lt;/span&gt; &lt;span class="keyword"
 
 &lt;p&gt;Our code is implemented and our tests are passing. The next step would be to package it all into a gem using the &lt;code&gt;gem&lt;/code&gt; command-line tools. Read more about this in the &lt;a href="http://docs.rubygems.org/read/book/2"&gt;rubygems documentation&lt;/a&gt;. It would be wise to create a sample Ruby app that uses the gem, for example querying the user for a movie title and then spitting out some information about that movie. Or, we could just test it in the Ruby shell. Of course, adding the remaining attributes and handling empty responses (what happens when our movie wasn’t found?) should be taken care of as well.&lt;/p&gt;
 
-&lt;p&gt;To view the current state of the actual zimdb gem, check out on &lt;a href="https://github.com/indrode/zimdb"&gt;GitHub&lt;/a&gt; or browse the &lt;a href="http://rubydoc.info/gems/zimdb/0.0.1/frames"&gt;documentation&lt;/a&gt;. Install it the old-fashioned way:&lt;/p&gt;
+&lt;p&gt;To view the current state of the actual zimdb gem, check it out on &lt;a href="https://github.com/indrode/zimdb"&gt;GitHub&lt;/a&gt; or browse the &lt;a href="http://rubydoc.info/gems/zimdb/0.0.1/frames"&gt;documentation&lt;/a&gt;. As always, install it the old-fashioned way:&lt;/p&gt;
 
 &lt;pre&gt;&lt;code class="language-sql"&gt;gem install zimdb&lt;/code&gt;&lt;/pre&gt;
 

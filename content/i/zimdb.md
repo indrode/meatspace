@@ -1,16 +1,16 @@
 ---
-title: Writing an API wrapper in Ruby with HTTParty and Fakeweb
+title: An API wrapper in Ruby with HTTParty and Fakeweb
 created_at: 15.11.2011
 kind: article
 ---
 
-#Writing an API wrapper in Ruby with HTTParty and Fakeweb
+#An API wrapper in Ruby with HTTParty and Fakeweb
 
 This is a quick tutorial on writing a fully-tested API wrapper in Ruby. As example, I am taking [zimdb](https://github.com/indrode/zimdb), a small gem that I developed the other day. First, I'll cover the (test-driven) implementation of the functionality. To top it off, I'll explain the process of creating a gem that can be used by other developers.
 
 ##What does zimdb do?
 
-Zimdb is a wrapper for [imdbapi.com](http://www.imdbapi.com/), a service that provides content from the vast movie database [IMDB](http://www.imdb.com/) which I am sure everyone has heard of. IMDb doesn't provide it's own open API to developers, so in order to access information, we'll have to resort to 3rd party providers. Right now, zimdb only fetches information about a single movie and the only way to access information for a specific movie is to search it by its title. For the scope of this article, that should be all we need.
+Zimdb is a wrapper for [imdbapi.com](http://www.imdbapi.com/), a service that provides content from the vast movie database [IMDB](http://www.imdb.com/) which I am sure everyone has heard of. IMDb doesn't provide its own open API to developers, so in order to access information, we'll have to resort to 3rd party providers. Right now, zimdb only fetches information about a single movie and the only way to access information for a specific movie is to search for it by its title. For the scope of this article, that should be all we need.
 
 ##A simple approach
 
@@ -19,18 +19,18 @@ The imdbapi.com "API" (it's basically just one call) is very straight-forward. S
 1. trigger a sample call and examine the result
 2. define what we want to fetch (via tests)
 3. implement it!
-4. transform it into a gem (we may do that earlier in the process)
+4. transform it into a gem (we may start doing that earlier in the process)
 
 ###1. The Call
 
-[imdbapi.com](http://www.imdbapi.com/) provides a nice interface to make sample calls. It is also very convenient that responses are nicely packed in a JSON. For now, we'll just search for movies by title, but we could additionally allow searching movies by IMDb-ID and year. Here is how a sample response looks like:
+[imdbapi.com](http://www.imdbapi.com/) provides a nice web interface to make sample calls. It is also very convenient that responses are nicely packed in JSON. For now, we'll just search for movies by title, but we could additionally allow searching movies by IMDb-ID and year. Here is how a sample response looks like:
 
 <pre><code>
 #!json
 {"Title":"The Godfather","Year":"1972","Rated":"R","Released":"24 Mar 1972","Genre":"Crime, Drama","Director":"Francis Ford Coppola","Writer":"Mario Puzo, Mario Puzo","Actors":"Marlon Brando, Al Pacino, James Caan, Diane Keaton","Plot":"The aging patriarch of an organized crime dynasty transfers control of his clandestine empire to his reluctant son.","Poster":"http://ia.media-imdb.com/images/M/MV5BMTIyMTIxNjI5NF5BMl5BanBnXkFtZTcwNzQzNDM5MQ@@._V1._SX320.jpg","Runtime":"2 hrs 55 mins","Rating":"9.2","Votes":"436305","ID":"tt0068646","Response":"True"}
 </code></pre>
 
-For our API wrapper, we would like to fetch all of these movie attributes. So let's fire up your favorite text editor and create a new file. We'll create a new folder and some subfolders too while we're at it.
+For our API wrapper, we would like to fetch some of these movie attributes. So let's fire up your favorite text editor and create a new file. We'll create a new folder and some subfolders too while we're at it.
 
 <pre><code>
 #!sql
@@ -43,7 +43,7 @@ mate spec/movie_spec.rb
 
 ###2. A first test
 
-We will use `rspec` to test our gem, so make sure it is installed (`gem install rspec`). In `movie_spec.rb`, we can then add a first test for a very common task we want the gem to achieve.
+We will use `rspec` to test our gem, so make sure it is installed (`gem install rspec`). In `movie_spec.rb`, we can now add a first test for a very common task we want the gem to achieve.
 
 <pre><code>
 #!ruby
@@ -55,7 +55,7 @@ describe "zimdb" do
 end
 </code></pre>
 
-This already does more than one step at once, but I will keep this tutorial rather brief, so let's this this file with `rspec spec/movie_spec.rb` and see what's happening.
+This already does more than one step at once, but I will keep this tutorial rather brief, so let's run these tests with `rspec spec/movie_spec.rb` and see what's happening.
 
 <pre><code>
 #!sql
@@ -136,11 +136,11 @@ RSpec.configure do |config|
 end
 </code></pre>
 
-In our `movie_spec.rb` we can now `require 'spec_helper'` instead of requiring rspec.
+In our `movie_spec.rb` we can now `require 'spec_helper'`.
 
 ###5. Fakeweb
 
-In our final code, we will make calls to imdbapi.com, but we don't want to do that for testing. To fake these web requests, we will take advantage of a neat little gem called `fakeweb` (see [https://github.com/chrisk/fakeweb](https://github.com/chrisk/fakeweb)). Let's just drop the response we got earlier and drop it into `spec/fixtures`. For testing purposes, we will read the contents of that file, whenever a test tries to make such a request. Still in `spec_helper.rb` we can add the following code to the RSpec configure-block:
+In our final code, we will make calls to imdbapi.com, but we don't want to do that during testing. To fake these web requests, we will take advantage of a neat little gem called `fakeweb` (see [https://github.com/chrisk/fakeweb](https://github.com/chrisk/fakeweb)). Let's just drop the response we got earlier and drop it into `spec/fixtures`. For testing purposes, we will read the contents of that file, whenever a test tries to make such a request. Still in `spec_helper.rb` we can add the following code to the RSpec configure-block:
 
 <pre><code>
 #!ruby
@@ -173,7 +173,7 @@ module Zimdb
 end
 </code></pre>
 
-Now on to 'lib/zimdb/movie.rb':
+Now on to `lib/zimdb/movie.rb`:
 
 <pre><code>
 #!ruby
@@ -290,7 +290,7 @@ end
 
 Our code is implemented and our tests are passing. The next step would be to package it all into a gem using the `gem` command-line tools. Read more about this in the [rubygems documentation](http://docs.rubygems.org/read/book/2). It would be wise to create a sample Ruby app that uses the gem, for example querying the user for a movie title and then spitting out some information about that movie. Or, we could just test it in the Ruby shell. Of course, adding the remaining attributes and handling empty responses (what happens when our movie wasn't found?) should be taken care of as well.
 
-To view the current state of the actual zimdb gem, check out on [GitHub](https://github.com/indrode/zimdb) or browse the [documentation](http://rubydoc.info/gems/zimdb/0.0.1/frames). Install it the old-fashioned way:
+To view the current state of the actual zimdb gem, check it out on [GitHub](https://github.com/indrode/zimdb) or browse the [documentation](http://rubydoc.info/gems/zimdb/0.0.1/frames). As always, install it the old-fashioned way:
 
 <pre><code>
 #!sql
