@@ -98,3 +98,14 @@ h2 {
   -moz-text-shadow: 0px 1px 0px #fff;
   -webkit-text-shadow: 0px 1px 0px #fff;
 }
+
+h3 {
+  margin-top:40px;
+  font-family: futura-pt-1,futura-pt-2,sans-serif;
+  font-weight:normal;
+  text-transform:uppercase;
+  font-size: 16px;
+  text-shadow: 0px 1px 0px #fff;
+  -moz-text-shadow: 0px 1px 0px #fff;
+  -webkit-text-shadow: 0px 1px 0px #fff;
+}

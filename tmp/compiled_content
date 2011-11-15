@@ -4379,7 +4379,7 @@ div.slider-nav span.left {
 	div.panel { border: 1px solid #ccc; };T;
 I"p/* This is for all IE specfific style less than IE9. We hate IE. */
 
-	div.panel { border: 1px solid #ccc; };T;@,"/stylesheets/app/{;{;I"Çbody {
+	div.panel { border: 1px solid #ccc; };T;@,"/stylesheets/app/{;{;I"Ébody {
   background-color:#C6C8C6;
 }
 
@@ -4479,7 +4479,17 @@ h2 {
   -moz-text-shadow: 0px 1px 0px #fff;
   -webkit-text-shadow: 0px 1px 0px #fff;
 }
-;T;	@2;
+
+h3 {
+  margin-top:40px;
+  font-family: futura-pt-1,futura-pt-2,sans-serif;
+  font-weight:normal;
+  text-transform:uppercase;
+  font-size: 16px;
+  text-shadow: 0px 1px 0px #fff;
+  -moz-text-shadow: 0px 1px 0px #fff;
+  -webkit-text-shadow: 0px 1px 0px #fff;
+};T;	@2;
 @2"/stylesheets/foundation/{;{;I"“–/* Arfully Masterminded by ZURB */
 
 /* -------------------------------------------------- 
