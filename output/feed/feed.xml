@@ -86,100 +86,92 @@
 
 &lt;p&gt;&lt;a href="http://www.imdbapi.com/"&gt;imdbapi.com&lt;/a&gt; provides a nice interface to make sample calls. It is also very convenient that responses are nicely packed in a JSON. For now, we’ll just search for movies by title, but we could additionally allow searching movies by IMDb-ID and year. Here is how a sample response looks like:&lt;/p&gt;
 
-&lt;pre&gt;&lt;code&gt;{"Title":"The Godfather","Year":"1972","Rated":"R","Released":"24 Mar 1972","Genre":"Crime, Drama","Director":"Francis Ford Coppola","Writer":"Mario Puzo, Mario Puzo","Actors":"Marlon Brando, Al Pacino, James Caan, Diane Keaton","Plot":"The aging patriarch of an organized crime dynasty transfers control of his clandestine empire to his reluctant son.","Poster":"http://ia.media-imdb.com/images/M/MV5BMTIyMTIxNjI5NF5BMl5BanBnXkFtZTcwNzQzNDM5MQ@@._V1._SX320.jpg","Runtime":"2 hrs 55 mins","Rating":"9.2","Votes":"436305","ID":"tt0068646","Response":"True"}
-&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code class="language-json"&gt;{&lt;span class="key"&gt;&lt;span class="delimiter"&gt;"&lt;/span&gt;&lt;span class="content"&gt;Title&lt;/span&gt;&lt;span class="delimiter"&gt;"&lt;/span&gt;&lt;/span&gt;:&lt;span class="string"&gt;&lt;span class="delimiter"&gt;"&lt;/span&gt;&lt;span class="content"&gt;The Godfather&lt;/span&gt;&lt;span class="delimiter"&gt;"&lt;/span&gt;&lt;/span&gt;,&lt;span class="key"&gt;&lt;span class="delimiter"&gt;"&lt;/span&gt;&lt;span class="content"&gt;Year&lt;/span&gt;&lt;span class="delimiter"&gt;"&lt;/span&gt;&lt;/span&gt;:&lt;span class="string"&gt;&lt;span class="delimiter"&gt;"&lt;/span&gt;&lt;span class="content"&gt;1972&lt;/span&gt;&lt;span class="delimiter"&gt;"&lt;/span&gt;&lt;/span&gt;,&lt;span class="key"&gt;&lt;span class="delimiter"&gt;"&lt;/span&gt;&lt;span class="content"&gt;Rated&lt;/span&gt;&lt;span class="delimiter"&gt;"&lt;/span&gt;&lt;/span&gt;:&lt;span class="string"&gt;&lt;span class="delimiter"&gt;"&lt;/span&gt;&lt;span class="content"&gt;R&lt;/span&gt;&lt;span class="delimiter"&gt;"&lt;/span&gt;&lt;/span&gt;,&lt;span class="key"&gt;&lt;span class="delimiter"&gt;"&lt;/span&gt;&lt;span class="content"&gt;Released&lt;/span&gt;&lt;span class="delimiter"&gt;"&lt;/span&gt;&lt;/span&gt;:&lt;span class="string"&gt;&lt;span class="delimiter"&gt;"&lt;/span&gt;&lt;span class="content"&gt;24 Mar 1972&lt;/span&gt;&lt;span class="delimiter"&gt;"&lt;/span&gt;&lt;/span&gt;,&lt;span class="key"&gt;&lt;span class="delimiter"&gt;"&lt;/span&gt;&lt;span class="content"&gt;Genre&lt;/span&gt;&lt;span class="delimiter"&gt;"&lt;/span&gt;&lt;/span&gt;:&lt;span class="string"&gt;&lt;span class="delimiter"&gt;"&lt;/span&gt;&lt;span class="content"&gt;Crime, Drama&lt;/span&gt;&lt;span class="delimiter"&gt;"&lt;/span&gt;&lt;/span&gt;,&lt;span class="key"&gt;&lt;span class="delimiter"&gt;"&lt;/span&gt;&lt;span class="content"&gt;Director&lt;/span&gt;&lt;span class="delimiter"&gt;"&lt;/span&gt;&lt;/span&gt;:&lt;span class="string"&gt;&lt;span class="delimiter"&gt;"&lt;/span&gt;&lt;span class="content"&gt;Francis Ford Coppola&lt;/span&gt;&lt;span class="delimiter"&gt;"&lt;/span&gt;&lt;/span&gt;,&lt;span class="key"&gt;&lt;span class="delimiter"&gt;"&lt;/span&gt;&lt;span class="content"&gt;Writer&lt;/span&gt;&lt;span class="delimiter"&gt;"&lt;/span&gt;&lt;/span&gt;:&lt;span class="string"&gt;&lt;span class="delimiter"&gt;"&lt;/span&gt;&lt;span class="content"&gt;Mario Puzo, Mario Puzo&lt;/span&gt;&lt;span class="delimiter"&gt;"&lt;/span&gt;&lt;/span&gt;,&lt;span class="key"&gt;&lt;span class="delimiter"&gt;"&lt;/span&gt;&lt;span class="content"&gt;Actors&lt;/span&gt;&lt;span class="delimiter"&gt;"&lt;/span&gt;&lt;/span&gt;:&lt;span class="string"&gt;&lt;span class="delimiter"&gt;"&lt;/span&gt;&lt;span class="content"&gt;Marlon Brando, Al Pacino, James Caan, Diane Keaton&lt;/span&gt;&lt;span class="delimiter"&gt;"&lt;/span&gt;&lt;/span&gt;,&lt;span class="key"&gt;&lt;span class="delimiter"&gt;"&lt;/span&gt;&lt;span class="content"&gt;Plot&lt;/span&gt;&lt;span class="delimiter"&gt;"&lt;/span&gt;&lt;/span&gt;:&lt;span class="string"&gt;&lt;span class="delimiter"&gt;"&lt;/span&gt;&lt;span class="content"&gt;The aging patriarch of an organized crime dynasty transfers control of his clandestine empire to his reluctant son.&lt;/span&gt;&lt;span class="delimiter"&gt;"&lt;/span&gt;&lt;/span&gt;,&lt;span class="key"&gt;&lt;span class="delimiter"&gt;"&lt;/span&gt;&lt;span class="content"&gt;Poster&lt;/span&gt;&lt;span class="delimiter"&gt;"&lt;/span&gt;&lt;/span&gt;:&lt;span class="string"&gt;&lt;span class="delimiter"&gt;"&lt;/span&gt;&lt;span class="content"&gt;http://ia.media-imdb.com/images/M/MV5BMTIyMTIxNjI5NF5BMl5BanBnXkFtZTcwNzQzNDM5MQ@@._V1._SX320.jpg&lt;/span&gt;&lt;span class="delimiter"&gt;"&lt;/span&gt;&lt;/span&gt;,&lt;span class="key"&gt;&lt;span class="delimiter"&gt;"&lt;/span&gt;&lt;span class="content"&gt;Runtime&lt;/span&gt;&lt;span class="delimiter"&gt;"&lt;/span&gt;&lt;/span&gt;:&lt;span class="string"&gt;&lt;span class="delimiter"&gt;"&lt;/span&gt;&lt;span class="content"&gt;2 hrs 55 mins&lt;/span&gt;&lt;span class="delimiter"&gt;"&lt;/span&gt;&lt;/span&gt;,&lt;span class="key"&gt;&lt;span class="delimiter"&gt;"&lt;/span&gt;&lt;span class="content"&gt;Rating&lt;/span&gt;&lt;span class="delimiter"&gt;"&lt;/span&gt;&lt;/span&gt;:&lt;span class="string"&gt;&lt;span class="delimiter"&gt;"&lt;/span&gt;&lt;span class="content"&gt;9.2&lt;/span&gt;&lt;span class="delimiter"&gt;"&lt;/span&gt;&lt;/span&gt;,&lt;span class="key"&gt;&lt;span class="delimiter"&gt;"&lt;/span&gt;&lt;span class="content"&gt;Votes&lt;/span&gt;&lt;span class="delimiter"&gt;"&lt;/span&gt;&lt;/span&gt;:&lt;span class="string"&gt;&lt;span class="delimiter"&gt;"&lt;/span&gt;&lt;span class="content"&gt;436305&lt;/span&gt;&lt;span class="delimiter"&gt;"&lt;/span&gt;&lt;/span&gt;,&lt;span class="key"&gt;&lt;span class="delimiter"&gt;"&lt;/span&gt;&lt;span class="content"&gt;ID&lt;/span&gt;&lt;span class="delimiter"&gt;"&lt;/span&gt;&lt;/span&gt;:&lt;span class="string"&gt;&lt;span class="delimiter"&gt;"&lt;/span&gt;&lt;span class="content"&gt;tt0068646&lt;/span&gt;&lt;span class="delimiter"&gt;"&lt;/span&gt;&lt;/span&gt;,&lt;span class="key"&gt;&lt;span class="delimiter"&gt;"&lt;/span&gt;&lt;span class="content"&gt;Response&lt;/span&gt;&lt;span class="delimiter"&gt;"&lt;/span&gt;&lt;/span&gt;:&lt;span class="string"&gt;&lt;span class="delimiter"&gt;"&lt;/span&gt;&lt;span class="content"&gt;True&lt;/span&gt;&lt;span class="delimiter"&gt;"&lt;/span&gt;&lt;/span&gt;}&lt;/code&gt;&lt;/pre&gt;
 
 &lt;p&gt;For our API wrapper, we would like to fetch all of these movie attributes. So let’s fire up your favorite text editor and create a new file. We’ll create a new folder and some subfolders too while we’re at it.&lt;/p&gt;
 
-&lt;pre&gt;&lt;code&gt;mkdir zimdb
+&lt;pre&gt;&lt;code class="language-sql"&gt;mkdir zimdb
 cd zimdb
 mkdir lib
 mkdir spec
-mate spec/movie_spec.rb
-&lt;/code&gt;&lt;/pre&gt;
+mate spec/movie_spec.rb&lt;/code&gt;&lt;/pre&gt;
 
 &lt;h3 id="a-first-test"&gt;2. A first test&lt;/h3&gt;
 
 &lt;p&gt;We will use &lt;code&gt;rspec&lt;/code&gt; to test our gem, so make sure it is installed (&lt;code&gt;gem install rspec&lt;/code&gt;). In &lt;code&gt;movie_spec.rb&lt;/code&gt;, we can then add a first test for a very common task we want the gem to achieve.&lt;/p&gt;
 
-&lt;pre&gt;&lt;code&gt;describe "zimdb" do
-  it "should fetch a movie title" do
-    movie = Zimdb::Movie.new(:title =&amp;gt; "Hangover")
-    movie.title.should == "The Godfather"
-  end
-end
-&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code class="language-ruby"&gt;describe &lt;span class="string"&gt;&lt;span class="delimiter"&gt;"&lt;/span&gt;&lt;span class="content"&gt;zimdb&lt;/span&gt;&lt;span class="delimiter"&gt;"&lt;/span&gt;&lt;/span&gt; &lt;span class="keyword"&gt;do&lt;/span&gt;
+  it &lt;span class="string"&gt;&lt;span class="delimiter"&gt;"&lt;/span&gt;&lt;span class="content"&gt;should fetch a movie title&lt;/span&gt;&lt;span class="delimiter"&gt;"&lt;/span&gt;&lt;/span&gt; &lt;span class="keyword"&gt;do&lt;/span&gt;
+    movie = &lt;span class="constant"&gt;Zimdb&lt;/span&gt;::&lt;span class="constant"&gt;Movie&lt;/span&gt;.new(&lt;span class="symbol"&gt;:title&lt;/span&gt; =&amp;gt; &lt;span class="string"&gt;&lt;span class="delimiter"&gt;"&lt;/span&gt;&lt;span class="content"&gt;Hangover&lt;/span&gt;&lt;span class="delimiter"&gt;"&lt;/span&gt;&lt;/span&gt;)
+    movie.title.should == &lt;span class="string"&gt;&lt;span class="delimiter"&gt;"&lt;/span&gt;&lt;span class="content"&gt;The Godfather&lt;/span&gt;&lt;span class="delimiter"&gt;"&lt;/span&gt;&lt;/span&gt;
+  &lt;span class="keyword"&gt;end&lt;/span&gt;
+&lt;span class="keyword"&gt;end&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
 
 &lt;p&gt;This already does more than one step at once, but I will keep this tutorial rather brief, so let’s this this file with &lt;code&gt;rspec spec/movie_spec.rb&lt;/code&gt; and see what’s happening.&lt;/p&gt;
 
-&lt;pre&gt;&lt;code&gt;F
+&lt;pre&gt;&lt;code class="language-sql"&gt;F
 
 Failures:
 
-  1) zimdb should fetch a movie title
-     Failure/Error: movie = Zimdb::Movie.new(:title =&amp;gt; "Hangover")
+  &lt;span class="integer"&gt;1&lt;/span&gt;) zimdb should fetch a movie title
+     Failure/Error: movie = Zimdb::Movie.new(:title =&amp;gt; &lt;span class="string"&gt;&lt;span class="delimiter"&gt;"&lt;/span&gt;&lt;span class="content"&gt;Hangover&lt;/span&gt;&lt;span class="delimiter"&gt;"&lt;/span&gt;&lt;/span&gt;)
      NameError:
        uninitialized constant Zimdb
-     # ./spec/movie_spec.rb:5:in `block (2 levels) in &amp;lt;top (required)&amp;gt;'
+     &lt;span class="comment"&gt;# ./spec/movie_spec.rb:5:in `block (2 levels) in &amp;lt;top (required)&amp;gt;'&lt;/span&gt;
 
-Finished in 0.47559 seconds
-1 example, 1 failure
+Finished &lt;span class="keyword"&gt;in&lt;/span&gt; &lt;span class="float"&gt;0.47559&lt;/span&gt; seconds
+&lt;span class="integer"&gt;1&lt;/span&gt; example, &lt;span class="integer"&gt;1&lt;/span&gt; failure
 
 Failed examples:
 
-rspec ./spec/movie_spec.rb:4 # zimdb should fetch a movie title
-&lt;/code&gt;&lt;/pre&gt;
+rspec ./spec/movie_spec.rb:&lt;span class="integer"&gt;4&lt;/span&gt; &lt;span class="comment"&gt;# zimdb should fetch a movie title&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
 
 &lt;p&gt;Nothing unexpected here, considering that we haven’t written a single line of actual code. In our test, we already made a couple of assumptions. First, we want to create a module called &lt;code&gt;Zimdb&lt;/code&gt; because we want to pack it into a gem later. Then, we need a class &lt;code&gt;Movie&lt;/code&gt; which can be instantiated by passing it the param &lt;code&gt;:title&lt;/code&gt;. Maybe, at some later point in time, we’ll also want to fetch movies via the IMDb-ID, which is why we are passing the movie title via the &lt;code&gt;:title&lt;/code&gt; symbol. Finally, we have a &lt;code&gt;title&lt;/code&gt; method for each Movie object that returns the movie’s title.&lt;/p&gt;
 
 &lt;h3 id="some-more-tests"&gt;3. Some more tests&lt;/h3&gt;
 
-&lt;p&gt;Because we wanted to define the attributes we wanted to fetch (for sake of brevity, let’s just get a few of them), let’s add these to our spec file as well. We will still implement them one by one. Since we are aways instantiating a new movie object, we’ll put that into a &lt;code&gt;before(:each)&lt;/code&gt; block. Here is our movie_spec.rb:&lt;/p&gt;
+&lt;p&gt;Because we wanted to define the attributes we wanted to fetch (for the sake of brevity, let’s just get a few of them), let’s add these to our spec file as well. We will still implement them one by one. Since we are aways instantiating a new movie object, we’ll put that into a &lt;code&gt;before(:each)&lt;/code&gt; block. Here is our movie_spec.rb:&lt;/p&gt;
 
-&lt;pre&gt;&lt;code&gt;describe "zimdb" do
-  before(:each) do
-    @movie = Zimdb::Movie.new(:title =&amp;gt; "Godfather")
-  end
-
-  it "should return the title" do
-    @movie.title.should == "The Hangover"
-  end
+&lt;pre&gt;&lt;code class="language-ruby"&gt;describe &lt;span class="string"&gt;&lt;span class="delimiter"&gt;"&lt;/span&gt;&lt;span class="content"&gt;zimdb&lt;/span&gt;&lt;span class="delimiter"&gt;"&lt;/span&gt;&lt;/span&gt; &lt;span class="keyword"&gt;do&lt;/span&gt;
+  before(&lt;span class="symbol"&gt;:each&lt;/span&gt;) &lt;span class="keyword"&gt;do&lt;/span&gt;
+    &lt;span class="instance-variable"&gt;@movie&lt;/span&gt; = &lt;span class="constant"&gt;Zimdb&lt;/span&gt;::&lt;span class="constant"&gt;Movie&lt;/span&gt;.new(&lt;span class="symbol"&gt;:title&lt;/span&gt; =&amp;gt; &lt;span class="string"&gt;&lt;span class="delimiter"&gt;"&lt;/span&gt;&lt;span class="content"&gt;Godfather&lt;/span&gt;&lt;span class="delimiter"&gt;"&lt;/span&gt;&lt;/span&gt;)
+  &lt;span class="keyword"&gt;end&lt;/span&gt;
   
-  it "should return the year" do
-    @movie.year.should == 1972
-  end
+  it &lt;span class="string"&gt;&lt;span class="delimiter"&gt;"&lt;/span&gt;&lt;span class="content"&gt;should return the title&lt;/span&gt;&lt;span class="delimiter"&gt;"&lt;/span&gt;&lt;/span&gt; &lt;span class="keyword"&gt;do&lt;/span&gt;
+    &lt;span class="instance-variable"&gt;@movie&lt;/span&gt;.title.should == &lt;span class="string"&gt;&lt;span class="delimiter"&gt;"&lt;/span&gt;&lt;span class="content"&gt;The Hangover&lt;/span&gt;&lt;span class="delimiter"&gt;"&lt;/span&gt;&lt;/span&gt;
+  &lt;span class="keyword"&gt;end&lt;/span&gt;
   
-  it "should return the rating" do
-    @movie.rated.should == "R"
-  end
-end
-&lt;/code&gt;&lt;/pre&gt;
+  it &lt;span class="string"&gt;&lt;span class="delimiter"&gt;"&lt;/span&gt;&lt;span class="content"&gt;should return the year&lt;/span&gt;&lt;span class="delimiter"&gt;"&lt;/span&gt;&lt;/span&gt; &lt;span class="keyword"&gt;do&lt;/span&gt;
+    &lt;span class="instance-variable"&gt;@movie&lt;/span&gt;.year.should == &lt;span class="integer"&gt;1972&lt;/span&gt;
+  &lt;span class="keyword"&gt;end&lt;/span&gt;
+  
+  it &lt;span class="string"&gt;&lt;span class="delimiter"&gt;"&lt;/span&gt;&lt;span class="content"&gt;should return the rating&lt;/span&gt;&lt;span class="delimiter"&gt;"&lt;/span&gt;&lt;/span&gt; &lt;span class="keyword"&gt;do&lt;/span&gt;
+    &lt;span class="instance-variable"&gt;@movie&lt;/span&gt;.rated.should == &lt;span class="string"&gt;&lt;span class="delimiter"&gt;"&lt;/span&gt;&lt;span class="content"&gt;R&lt;/span&gt;&lt;span class="delimiter"&gt;"&lt;/span&gt;&lt;/span&gt;
+  &lt;span class="keyword"&gt;end&lt;/span&gt;
+&lt;span class="keyword"&gt;end&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
 
 &lt;h3 id="setting-up-the-gem-with-bundler"&gt;4. Setting up the Gem with Bundler&lt;/h3&gt;
 
 &lt;p&gt;Okay, now let’s get going and start to code? Not quite yet. Since we want to create a new gem anyway, why not set it up now, so we can start developing in the right places and don’t have to move too many files around later. We will use &lt;code&gt;Bundler&lt;/code&gt; to set up our gem.&lt;/p&gt;
 
-&lt;pre&gt;&lt;code&gt;bundle gem zimdb
-&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code class="language-ruby"&gt;bundle gem zimdb&lt;/code&gt;&lt;/pre&gt;
 
 &lt;p&gt;Run this from the level below the &lt;code&gt;/zimdb&lt;/code&gt; folder and it will create a couple of useful files, such as the gemspec file &lt;code&gt;zimdb.gemspec&lt;/code&gt;. There are various tutorials on the web on how to customize this gemspec file to I will make this short. We only need to add two dependencies apart from rspec: &lt;code&gt;httparty&lt;/code&gt; (for runtime) and &lt;code&gt;fakeweb&lt;/code&gt; (for development). More on these in a second.&lt;/p&gt;
 
-&lt;pre&gt;&lt;code&gt;s.add_runtime_dependency "httparty"
-s.add_development_dependency "rspec", "~&amp;gt; 2.6"
-s.add_development_dependency "fakeweb", "~&amp;gt; 1.3"
-&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code class="language-ruby"&gt;s.add_runtime_dependency &lt;span class="string"&gt;&lt;span class="delimiter"&gt;"&lt;/span&gt;&lt;span class="content"&gt;httparty&lt;/span&gt;&lt;span class="delimiter"&gt;"&lt;/span&gt;&lt;/span&gt;
+s.add_development_dependency &lt;span class="string"&gt;&lt;span class="delimiter"&gt;"&lt;/span&gt;&lt;span class="content"&gt;rspec&lt;/span&gt;&lt;span class="delimiter"&gt;"&lt;/span&gt;&lt;/span&gt;, &lt;span class="string"&gt;&lt;span class="delimiter"&gt;"&lt;/span&gt;&lt;span class="content"&gt;~&amp;gt; 2.6&lt;/span&gt;&lt;span class="delimiter"&gt;"&lt;/span&gt;&lt;/span&gt;
+s.add_development_dependency &lt;span class="string"&gt;&lt;span class="delimiter"&gt;"&lt;/span&gt;&lt;span class="content"&gt;fakeweb&lt;/span&gt;&lt;span class="delimiter"&gt;"&lt;/span&gt;&lt;/span&gt;, &lt;span class="string"&gt;&lt;span class="delimiter"&gt;"&lt;/span&gt;&lt;span class="content"&gt;~&amp;gt; 1.3&lt;/span&gt;&lt;span class="delimiter"&gt;"&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
 
 &lt;p&gt;We can also use this moment to setup a &lt;code&gt;spec_helper.rb&lt;/code&gt; to use for testing (we will need it later). In &lt;code&gt;/spec&lt;/code&gt; we create that file and add some code to it:&lt;/p&gt;
 
-&lt;pre&gt;&lt;code&gt;require 'rubygems'
-require 'bundler/setup'
-require 'zimdb'
-require 'fakeweb'
+&lt;pre&gt;&lt;code class="language-ruby"&gt;require &lt;span class="string"&gt;&lt;span class="delimiter"&gt;'&lt;/span&gt;&lt;span class="content"&gt;rubygems&lt;/span&gt;&lt;span class="delimiter"&gt;'&lt;/span&gt;&lt;/span&gt;
+require &lt;span class="string"&gt;&lt;span class="delimiter"&gt;'&lt;/span&gt;&lt;span class="content"&gt;bundler/setup&lt;/span&gt;&lt;span class="delimiter"&gt;'&lt;/span&gt;&lt;/span&gt;
+require &lt;span class="string"&gt;&lt;span class="delimiter"&gt;'&lt;/span&gt;&lt;span class="content"&gt;zimdb&lt;/span&gt;&lt;span class="delimiter"&gt;'&lt;/span&gt;&lt;/span&gt;
+require &lt;span class="string"&gt;&lt;span class="delimiter"&gt;'&lt;/span&gt;&lt;span class="content"&gt;fakeweb&lt;/span&gt;&lt;span class="delimiter"&gt;'&lt;/span&gt;&lt;/span&gt;
 
-RSpec.configure do |config|
-  # we'll add more here later
-end
-&lt;/code&gt;&lt;/pre&gt;
+&lt;span class="constant"&gt;RSpec&lt;/span&gt;.configure &lt;span class="keyword"&gt;do&lt;/span&gt; |config|
+  &lt;span class="comment"&gt;# we'll add more here later&lt;/span&gt;
+&lt;span class="keyword"&gt;end&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
 
 &lt;p&gt;In our &lt;code&gt;movie_spec.rb&lt;/code&gt; we can now &lt;code&gt;require 'spec_helper'&lt;/code&gt; instead of requiring rspec.&lt;/p&gt;
 
@@ -187,14 +179,13 @@ end
 
 &lt;p&gt;In our final code, we will make calls to imdbapi.com, but we don’t want to do that for testing. To fake these web requests, we will take advantage of a neat little gem called &lt;code&gt;fakeweb&lt;/code&gt; (see &lt;a href="https://github.com/chrisk/fakeweb"&gt;https://github.com/chrisk/fakeweb&lt;/a&gt;). Let’s just drop the response we got earlier and drop it into &lt;code&gt;spec/fixtures&lt;/code&gt;. For testing purposes, we will read the contents of that file, whenever a test tries to make such a request. Still in &lt;code&gt;spec_helper.rb&lt;/code&gt; we can add the following code to the RSpec configure-block:&lt;/p&gt;
 
-&lt;pre&gt;&lt;code&gt;RSpec.configure do |config|
-  def fixture(filename)
-    File.dirname(__FILE__) + '/fixtures/' + filename
-  end
-
-  FakeWeb.register_uri(:get, "http://www.imdbapi.com/?t=hangover", :body =&amp;gt; open(fixture("godfather.json")).read)
-end
-&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code class="language-ruby"&gt;&lt;span class="constant"&gt;RSpec&lt;/span&gt;.configure &lt;span class="keyword"&gt;do&lt;/span&gt; |config|
+  &lt;span class="keyword"&gt;def&lt;/span&gt; &lt;span class="function"&gt;fixture&lt;/span&gt;(filename)
+    &lt;span class="constant"&gt;File&lt;/span&gt;.dirname(&lt;span class="predefined-constant"&gt;__FILE__&lt;/span&gt;) + &lt;span class="string"&gt;&lt;span class="delimiter"&gt;'&lt;/span&gt;&lt;span class="content"&gt;/fixtures/&lt;/span&gt;&lt;span class="delimiter"&gt;'&lt;/span&gt;&lt;/span&gt; + filename
+  &lt;span class="keyword"&gt;end&lt;/span&gt;
+  
+  &lt;span class="constant"&gt;FakeWeb&lt;/span&gt;.register_uri(&lt;span class="symbol"&gt;:get&lt;/span&gt;, &lt;span class="string"&gt;&lt;span class="delimiter"&gt;"&lt;/span&gt;&lt;span class="content"&gt;http://www.imdbapi.com/?t=hangover&lt;/span&gt;&lt;span class="delimiter"&gt;"&lt;/span&gt;&lt;/span&gt;, &lt;span class="symbol"&gt;:body&lt;/span&gt; =&amp;gt; open(fixture(&lt;span class="string"&gt;&lt;span class="delimiter"&gt;"&lt;/span&gt;&lt;span class="content"&gt;godfather.json&lt;/span&gt;&lt;span class="delimiter"&gt;"&lt;/span&gt;&lt;/span&gt;)).read)
+&lt;span class="keyword"&gt;end&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
 
 &lt;p&gt;This assumed that we called the file &lt;code&gt;godfather.json&lt;/code&gt;.&lt;/p&gt;
 
@@ -204,133 +195,115 @@ end
 
 &lt;p&gt;But first let’s see where we want to put our code. In &lt;code&gt;lib/zimdb.rb&lt;/code&gt; we will have to require some dependencies and include httparty while we’re at it to make it available to all the classes which we define under &lt;code&gt;lib/zimdb/&lt;/code&gt;. In our example, we only have the &lt;code&gt;Movie&lt;/code&gt; class, but it’s still a good idea to separate the files. This leaves us with a very simple zimdb.rb:&lt;/p&gt;
 
-&lt;pre&gt;&lt;code class="language-ruby"&gt;    require &lt;span class="string"&gt;&lt;span class="delimiter"&gt;"&lt;/span&gt;&lt;span class="content"&gt;rubygems&lt;/span&gt;&lt;span class="delimiter"&gt;"&lt;/span&gt;&lt;/span&gt;
-    require &lt;span class="string"&gt;&lt;span class="delimiter"&gt;"&lt;/span&gt;&lt;span class="content"&gt;httparty&lt;/span&gt;&lt;span class="delimiter"&gt;"&lt;/span&gt;&lt;/span&gt;
-    require &lt;span class="string"&gt;&lt;span class="delimiter"&gt;"&lt;/span&gt;&lt;span class="content"&gt;json&lt;/span&gt;&lt;span class="delimiter"&gt;"&lt;/span&gt;&lt;/span&gt;
-    require &lt;span class="string"&gt;&lt;span class="delimiter"&gt;"&lt;/span&gt;&lt;span class="content"&gt;zimdb/movie&lt;/span&gt;&lt;span class="delimiter"&gt;"&lt;/span&gt;&lt;/span&gt;
-    
-    &lt;span class="keyword"&gt;module&lt;/span&gt; &lt;span class="class"&gt;Zimdb&lt;/span&gt;
-      include &lt;span class="constant"&gt;HTTParty&lt;/span&gt;
-    &lt;span class="keyword"&gt;end&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code class="language-ruby"&gt;require &lt;span class="string"&gt;&lt;span class="delimiter"&gt;"&lt;/span&gt;&lt;span class="content"&gt;rubygems&lt;/span&gt;&lt;span class="delimiter"&gt;"&lt;/span&gt;&lt;/span&gt;
+require &lt;span class="string"&gt;&lt;span class="delimiter"&gt;"&lt;/span&gt;&lt;span class="content"&gt;httparty&lt;/span&gt;&lt;span class="delimiter"&gt;"&lt;/span&gt;&lt;/span&gt;
+require &lt;span class="string"&gt;&lt;span class="delimiter"&gt;"&lt;/span&gt;&lt;span class="content"&gt;json&lt;/span&gt;&lt;span class="delimiter"&gt;"&lt;/span&gt;&lt;/span&gt;
+require &lt;span class="string"&gt;&lt;span class="delimiter"&gt;"&lt;/span&gt;&lt;span class="content"&gt;zimdb/movie&lt;/span&gt;&lt;span class="delimiter"&gt;"&lt;/span&gt;&lt;/span&gt;
+
+&lt;span class="keyword"&gt;module&lt;/span&gt; &lt;span class="class"&gt;Zimdb&lt;/span&gt;
+  include &lt;span class="constant"&gt;HTTParty&lt;/span&gt;
+&lt;span class="keyword"&gt;end&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
 
 &lt;p&gt;Now on to ‘lib/zimdb/movie.rb’:&lt;/p&gt;
 
-&lt;pre&gt;&lt;code class="language-ruby"&gt;    &lt;span class="keyword"&gt;module&lt;/span&gt; &lt;span class="class"&gt;Zimdb&lt;/span&gt;
-      &lt;span class="keyword"&gt;class&lt;/span&gt; &lt;span class="class"&gt;Movie&lt;/span&gt;
-        &lt;span class="keyword"&gt;def&lt;/span&gt; &lt;span class="function"&gt;initialize&lt;/span&gt;(params)
-          &lt;span class="instance-variable"&gt;@json&lt;/span&gt; = &lt;span class="constant"&gt;JSON&lt;/span&gt;.parse(&lt;span class="constant"&gt;HTTParty&lt;/span&gt;.get(&lt;span class="string"&gt;&lt;span class="delimiter"&gt;"&lt;/span&gt;&lt;span class="content"&gt;http://www.imdbapi.com/?t=&lt;/span&gt;&lt;span class="inline"&gt;&lt;span class="inline-delimiter"&gt;#{&lt;/span&gt;params[&lt;span class="symbol"&gt;:title&lt;/span&gt;]&lt;span class="inline-delimiter"&gt;}&lt;/span&gt;&lt;/span&gt;&lt;span class="delimiter"&gt;"&lt;/span&gt;&lt;/span&gt;))
-        &lt;span class="keyword"&gt;end&lt;/span&gt;
-      &lt;span class="keyword"&gt;end&lt;/span&gt;
-    &lt;span class="keyword"&gt;end&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code class="language-ruby"&gt;&lt;span class="keyword"&gt;module&lt;/span&gt; &lt;span class="class"&gt;Zimdb&lt;/span&gt;
+  &lt;span class="keyword"&gt;class&lt;/span&gt; &lt;span class="class"&gt;Movie&lt;/span&gt;
+    &lt;span class="keyword"&gt;def&lt;/span&gt; &lt;span class="function"&gt;initialize&lt;/span&gt;(params)
+      &lt;span class="instance-variable"&gt;@json&lt;/span&gt; = &lt;span class="constant"&gt;JSON&lt;/span&gt;.parse(&lt;span class="constant"&gt;HTTParty&lt;/span&gt;.get(&lt;span class="string"&gt;&lt;span class="delimiter"&gt;"&lt;/span&gt;&lt;span class="content"&gt;http://www.imdbapi.com/?t=&lt;/span&gt;&lt;span class="inline"&gt;&lt;span class="inline-delimiter"&gt;#{&lt;/span&gt;params[&lt;span class="symbol"&gt;:title&lt;/span&gt;]&lt;span class="inline-delimiter"&gt;}&lt;/span&gt;&lt;/span&gt;&lt;span class="delimiter"&gt;"&lt;/span&gt;&lt;/span&gt;))
+    &lt;span class="keyword"&gt;end&lt;/span&gt;
+  &lt;span class="keyword"&gt;end&lt;/span&gt;
+&lt;span class="keyword"&gt;end&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
 
 &lt;p&gt;It really couldn’t be much simpler. We now have &lt;code&gt;@json&lt;/code&gt;, which is a hash of the response of our call. This won’t make our tests pass, so let’s add a method to get the movie title:&lt;/p&gt;
 
-&lt;pre&gt;&lt;code class="language-ruby"&gt;    &lt;span class="keyword"&gt;def&lt;/span&gt; &lt;span class="function"&gt;title&lt;/span&gt;
-      &lt;span class="instance-variable"&gt;@json&lt;/span&gt;[&lt;span class="string"&gt;&lt;span class="delimiter"&gt;"&lt;/span&gt;&lt;span class="content"&gt;Title&lt;/span&gt;&lt;span class="delimiter"&gt;"&lt;/span&gt;&lt;/span&gt;]
-    &lt;span class="keyword"&gt;end&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code class="language-ruby"&gt;&lt;span class="keyword"&gt;def&lt;/span&gt; &lt;span class="function"&gt;title&lt;/span&gt;
+  &lt;span class="instance-variable"&gt;@json&lt;/span&gt;[&lt;span class="string"&gt;&lt;span class="delimiter"&gt;"&lt;/span&gt;&lt;span class="content"&gt;Title&lt;/span&gt;&lt;span class="delimiter"&gt;"&lt;/span&gt;&lt;/span&gt;]
+&lt;span class="keyword"&gt;end&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
 
 &lt;p&gt;Running the tests now yields the following output:&lt;/p&gt;
 
-&lt;pre&gt;&lt;code class="language-ruby"&gt;    .FF
-    
-    &lt;span class="constant"&gt;Failures&lt;/span&gt;:
-    
-      &lt;span class="integer"&gt;1&lt;/span&gt;) zimdb should &lt;span class="keyword"&gt;return&lt;/span&gt; the year
-         &lt;span class="constant"&gt;Failure&lt;/span&gt;/&lt;span class="constant"&gt;Error&lt;/span&gt;: &lt;span class="instance-variable"&gt;@movie&lt;/span&gt;.year.should == &lt;span class="integer"&gt;2009&lt;/span&gt;
-         &lt;span class="constant"&gt;NoMethodError&lt;/span&gt;:
-           undefined method &lt;span class="shell"&gt;&lt;span class="delimiter"&gt;`&lt;/span&gt;&lt;span class="content"&gt;year' for #
-         # ./spec/movie_spec.rb:30:in &lt;/span&gt;&lt;span class="delimiter"&gt;`&lt;/span&gt;&lt;/span&gt;block (&lt;span class="integer"&gt;2&lt;/span&gt; levels) &lt;span class="keyword"&gt;in&lt;/span&gt; &amp;lt;top (required)&amp;gt;&lt;span class="string"&gt;&lt;span class="delimiter"&gt;'&lt;/span&gt;&lt;span class="content"&gt;
-    
-      2) zimdb should return the rating
-         Failure/Error: @movie.rated.should == "R"
-         NoMethodError:
-           undefined method `rated&lt;/span&gt;&lt;span class="delimiter"&gt;'&lt;/span&gt;&lt;/span&gt; &lt;span class="keyword"&gt;for&lt;/span&gt; &lt;span class="comment"&gt;#&lt;/span&gt;
-         &lt;span class="comment"&gt;# ./spec/movie_spec.rb:34:in `block (2 levels) in &amp;lt;top (required)&amp;gt;'&lt;/span&gt;
-    
-    &lt;span class="constant"&gt;Finished&lt;/span&gt; &lt;span class="keyword"&gt;in&lt;/span&gt; &lt;span class="float"&gt;1.21&lt;/span&gt; seconds
-    &lt;span class="integer"&gt;3&lt;/span&gt; examples, &lt;span class="integer"&gt;2&lt;/span&gt; failures
-    
-    &lt;span class="constant"&gt;Failed&lt;/span&gt; examples:
-    
-    rspec ./spec/movie_spec.rb:&lt;span class="integer"&gt;29&lt;/span&gt; &lt;span class="comment"&gt;# zimdb should return the year&lt;/span&gt;
-    rspec ./spec/movie_spec.rb:&lt;span class="integer"&gt;33&lt;/span&gt; &lt;span class="comment"&gt;# zimdb should return the rating&lt;/span&gt;
+&lt;pre&gt;&lt;code class="language-sql"&gt;.FF
 
+Failures:
 
-&lt;span class="constant"&gt;Looking&lt;/span&gt; good! &lt;span class="constant"&gt;One&lt;/span&gt; test already passed. 
+  &lt;span class="integer"&gt;1&lt;/span&gt;) zimdb should &lt;span class="directive"&gt;return&lt;/span&gt; the &lt;span class="predefined-type"&gt;year&lt;/span&gt;
+     Failure/Error: &lt;span class="variable"&gt;@movie&lt;/span&gt;.year.should == &lt;span class="integer"&gt;2009&lt;/span&gt;
+     NoMethodError:
+       undefined method &lt;span class="string"&gt;&lt;span class="delimiter"&gt;`&lt;/span&gt;&lt;span class="content"&gt;year' for #&amp;lt;Zimdb::Movie:0x007fe204aa8a50&amp;gt;
+     # ./spec/movie_spec.rb:30:in &lt;/span&gt;&lt;span class="delimiter"&gt;`&lt;/span&gt;&lt;/span&gt;block (&lt;span class="integer"&gt;2&lt;/span&gt; levels) &lt;span class="keyword"&gt;in&lt;/span&gt; &amp;lt;top (required)&amp;gt;&lt;span class="string"&gt;&lt;span class="delimiter"&gt;'&lt;/span&gt;&lt;span class="content"&gt;
 
-&lt;span class="comment"&gt;###7. Make all tests pass&lt;/span&gt;
+  2) zimdb should return the rating
+     Failure/Error: @movie.rated.should == "R"
+     NoMethodError:
+       undefined method `rated&lt;/span&gt;&lt;span class="delimiter"&gt;'&lt;/span&gt;&lt;/span&gt; &lt;span class="keyword"&gt;for&lt;/span&gt; &lt;span class="comment"&gt;#&amp;lt;Zimdb::Movie:0x007fe203901108&amp;gt;&lt;/span&gt;
+     &lt;span class="comment"&gt;# ./spec/movie_spec.rb:34:in `block (2 levels) in &amp;lt;top (required)&amp;gt;'&lt;/span&gt;
 
-To make the other tests pass is just as simple. 
+Finished &lt;span class="keyword"&gt;in&lt;/span&gt; &lt;span class="float"&gt;1.21&lt;/span&gt; seconds
+&lt;span class="integer"&gt;3&lt;/span&gt; examples, &lt;span class="integer"&gt;2&lt;/span&gt; failures
 
+Failed examples:
 
-    def year
-      &lt;span class="instance-variable"&gt;@json&lt;/span&gt;[&lt;span class="string"&gt;&lt;span class="delimiter"&gt;"&lt;/span&gt;&lt;span class="content"&gt;Year&lt;/span&gt;&lt;span class="delimiter"&gt;"&lt;/span&gt;&lt;/span&gt;].to_i
-    &lt;span class="keyword"&gt;end&lt;/span&gt;
-    
-    &lt;span class="keyword"&gt;def&lt;/span&gt; &lt;span class="function"&gt;rated&lt;/span&gt;
-      &lt;span class="instance-variable"&gt;@json&lt;/span&gt;[&lt;span class="string"&gt;&lt;span class="delimiter"&gt;"&lt;/span&gt;&lt;span class="content"&gt;Rated&lt;/span&gt;&lt;span class="delimiter"&gt;"&lt;/span&gt;&lt;/span&gt;]
-    &lt;span class="keyword"&gt;end&lt;/span&gt;
+rspec ./spec/movie_spec.rb:&lt;span class="integer"&gt;29&lt;/span&gt; &lt;span class="comment"&gt;# zimdb should return the year&lt;/span&gt;
+rspec ./spec/movie_spec.rb:&lt;span class="integer"&gt;33&lt;/span&gt; &lt;span class="comment"&gt;# zimdb should return the rating&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
 
+&lt;p&gt;Looking good! One test already passed.&lt;/p&gt;
 
-&lt;span class="constant"&gt;All&lt;/span&gt; the tests pass! &lt;span class="constant"&gt;However&lt;/span&gt;, &lt;span class="constant"&gt;I&lt;/span&gt; &lt;span class="keyword"&gt;do&lt;/span&gt; &lt;span class="keyword"&gt;not&lt;/span&gt; like &lt;span class="shell"&gt;&lt;span class="delimiter"&gt;`&lt;/span&gt;&lt;span class="content"&gt;@json["Year"]&lt;/span&gt;&lt;span class="delimiter"&gt;`&lt;/span&gt;&lt;/span&gt;. In my opinion, something like &lt;span class="shell"&gt;&lt;span class="delimiter"&gt;`&lt;/span&gt;&lt;span class="content"&gt;@json[:year]&lt;/span&gt;&lt;span class="delimiter"&gt;`&lt;/span&gt;&lt;/span&gt; looks a lot cleaner &lt;span class="keyword"&gt;and&lt;/span&gt; opens up more possibilities. While we would normally just implement the least amount of code to make all the tests pass, &lt;span class="constant"&gt;I&lt;/span&gt; &lt;span class="keyword"&gt;do&lt;/span&gt; want to add a little method to &lt;span class="shell"&gt;&lt;span class="delimiter"&gt;`&lt;/span&gt;&lt;span class="content"&gt;Hash&lt;/span&gt;&lt;span class="delimiter"&gt;`&lt;/span&gt;&lt;/span&gt; that creates these symbolized keys. Let&lt;span class="string"&gt;&lt;span class="delimiter"&gt;'&lt;/span&gt;&lt;span class="content"&gt;s call it `symbolize_keys` and write a test in `spec/hash_spec.rb`:
+&lt;h3 id="make-all-tests-pass"&gt;7. Make all tests pass&lt;/h3&gt;
 
+&lt;p&gt;To make the other tests pass is just as simple.&lt;/p&gt;
 
-#!ruby
-    require &lt;/span&gt;&lt;span class="delimiter"&gt;'&lt;/span&gt;&lt;/span&gt;spec_helper&lt;span class="string"&gt;&lt;span class="delimiter"&gt;'&lt;/span&gt;&lt;span class="content"&gt;
-    
-    describe Hash do
-      it "should symbolize keys" do
-        hash_with_string_keys = { "Title" =&amp;gt; "The Hangover", "Year" =&amp;gt; "2009" }
-        hash_with_string_keys.symbolize_keys
-        hash_with_string_keys.should == { :title =&amp;gt; "The Hangover", :year =&amp;gt; "2009" }
-      end
-    end
+&lt;pre&gt;&lt;code class="language-ruby"&gt;&lt;span class="keyword"&gt;def&lt;/span&gt; &lt;span class="function"&gt;year&lt;/span&gt;
+  &lt;span class="instance-variable"&gt;@json&lt;/span&gt;[&lt;span class="string"&gt;&lt;span class="delimiter"&gt;"&lt;/span&gt;&lt;span class="content"&gt;Year&lt;/span&gt;&lt;span class="delimiter"&gt;"&lt;/span&gt;&lt;/span&gt;].to_i
+&lt;span class="keyword"&gt;end&lt;/span&gt;
 
+&lt;span class="keyword"&gt;def&lt;/span&gt; &lt;span class="function"&gt;rated&lt;/span&gt;
+  &lt;span class="instance-variable"&gt;@json&lt;/span&gt;[&lt;span class="string"&gt;&lt;span class="delimiter"&gt;"&lt;/span&gt;&lt;span class="content"&gt;Rated&lt;/span&gt;&lt;span class="delimiter"&gt;"&lt;/span&gt;&lt;/span&gt;]
+&lt;span class="keyword"&gt;end&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
 
-Basically, we have a hash with ugly strings as keys and want to transform the keys into nice Ruby-esque symbols by calling `symbolize_keys` on that hash. To do this, we extend the `Hash` class (in `lib/zimdb/hash.rb`)and implement this behavior:
+&lt;p&gt;All the tests pass! However, I do not like &lt;code&gt;@json["Year"]&lt;/code&gt;. In my opinion, something like &lt;code&gt;@json[:year]&lt;/code&gt; looks a lot cleaner and opens up more possibilities. While we would normally just implement the least amount of code to make all the tests pass, I do want to add a little method to &lt;code&gt;Hash&lt;/code&gt; that creates these symbolized keys. Let’s call it &lt;code&gt;symbolize_keys&lt;/code&gt; and write a test in &lt;code&gt;spec/hash_spec.rb&lt;/code&gt;:&lt;/p&gt;
 
+&lt;pre&gt;&lt;code class="language-ruby"&gt;require &lt;span class="string"&gt;&lt;span class="delimiter"&gt;'&lt;/span&gt;&lt;span class="content"&gt;spec_helper&lt;/span&gt;&lt;span class="delimiter"&gt;'&lt;/span&gt;&lt;/span&gt;
 
-#!ruby
-    class Hash
-      def symbolize_keys
-        hash = self.dup
-        self.clear
-        hash.each_pair{|k, v| self[k.downcase.to_sym] = v}
-        self
-      end
-    end
+describe &lt;span class="constant"&gt;Hash&lt;/span&gt; &lt;span class="keyword"&gt;do&lt;/span&gt;
+  it &lt;span class="string"&gt;&lt;span class="delimiter"&gt;"&lt;/span&gt;&lt;span class="content"&gt;should symbolize keys&lt;/span&gt;&lt;span class="delimiter"&gt;"&lt;/span&gt;&lt;/span&gt; &lt;span class="keyword"&gt;do&lt;/span&gt;
+    hash_with_string_keys = { &lt;span class="string"&gt;&lt;span class="delimiter"&gt;"&lt;/span&gt;&lt;span class="content"&gt;Title&lt;/span&gt;&lt;span class="delimiter"&gt;"&lt;/span&gt;&lt;/span&gt; =&amp;gt; &lt;span class="string"&gt;&lt;span class="delimiter"&gt;"&lt;/span&gt;&lt;span class="content"&gt;The Hangover&lt;/span&gt;&lt;span class="delimiter"&gt;"&lt;/span&gt;&lt;/span&gt;, &lt;span class="string"&gt;&lt;span class="delimiter"&gt;"&lt;/span&gt;&lt;span class="content"&gt;Year&lt;/span&gt;&lt;span class="delimiter"&gt;"&lt;/span&gt;&lt;/span&gt; =&amp;gt; &lt;span class="string"&gt;&lt;span class="delimiter"&gt;"&lt;/span&gt;&lt;span class="content"&gt;2009&lt;/span&gt;&lt;span class="delimiter"&gt;"&lt;/span&gt;&lt;/span&gt; }
+    hash_with_string_keys.symbolize_keys
+    hash_with_string_keys.should == { &lt;span class="symbol"&gt;:title&lt;/span&gt; =&amp;gt; &lt;span class="string"&gt;&lt;span class="delimiter"&gt;"&lt;/span&gt;&lt;span class="content"&gt;The Hangover&lt;/span&gt;&lt;span class="delimiter"&gt;"&lt;/span&gt;&lt;/span&gt;, &lt;span class="symbol"&gt;:year&lt;/span&gt; =&amp;gt; &lt;span class="string"&gt;&lt;span class="delimiter"&gt;"&lt;/span&gt;&lt;span class="content"&gt;2009&lt;/span&gt;&lt;span class="delimiter"&gt;"&lt;/span&gt;&lt;/span&gt; }
+  &lt;span class="keyword"&gt;end&lt;/span&gt;
+&lt;span class="keyword"&gt;end&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
 
+&lt;p&gt;Basically, we have a hash with ugly strings as keys and want to transform the keys into nice Ruby-esque symbols by calling &lt;code&gt;symbolize_keys&lt;/code&gt; on that hash. To do this, we extend the &lt;code&gt;Hash&lt;/code&gt; class (in &lt;code&gt;lib/zimdb/hash.rb&lt;/code&gt;)and implement this behavior:&lt;/p&gt;
 
-We require this in `lib/zimdb.rb` and add it to our Movie class:
+&lt;pre&gt;&lt;code class="language-ruby"&gt;&lt;span class="keyword"&gt;class&lt;/span&gt; &lt;span class="class"&gt;Hash&lt;/span&gt;
+  &lt;span class="keyword"&gt;def&lt;/span&gt; &lt;span class="function"&gt;symbolize_keys&lt;/span&gt;
+    hash = &lt;span class="predefined-constant"&gt;self&lt;/span&gt;.dup
+    &lt;span class="predefined-constant"&gt;self&lt;/span&gt;.clear
+    hash.each_pair{|k, v| &lt;span class="predefined-constant"&gt;self&lt;/span&gt;[k.downcase.to_sym] = v}
+    &lt;span class="predefined-constant"&gt;self&lt;/span&gt;
+  &lt;span class="keyword"&gt;end&lt;/span&gt;
+&lt;span class="keyword"&gt;end&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
 
+&lt;p&gt;We require this in &lt;code&gt;lib/zimdb.rb&lt;/code&gt; and add it to our Movie class:&lt;/p&gt;
 
-#!ruby
-    @json = JSON.parse(HTTParty.get("http://www.imdbapi.com/?t=#{params[:title]}")).symbolize_keys
+&lt;pre&gt;&lt;code class="language-ruby"&gt;&lt;span class="instance-variable"&gt;@json&lt;/span&gt; = &lt;span class="constant"&gt;JSON&lt;/span&gt;.parse(&lt;span class="constant"&gt;HTTParty&lt;/span&gt;.get(&lt;span class="string"&gt;&lt;span class="delimiter"&gt;"&lt;/span&gt;&lt;span class="content"&gt;http://www.imdbapi.com/?t=&lt;/span&gt;&lt;span class="inline"&gt;&lt;span class="inline-delimiter"&gt;#{&lt;/span&gt;params[&lt;span class="symbol"&gt;:title&lt;/span&gt;]&lt;span class="inline-delimiter"&gt;}&lt;/span&gt;&lt;/span&gt;&lt;span class="delimiter"&gt;"&lt;/span&gt;&lt;/span&gt;)).symbolize_keys&lt;/code&gt;&lt;/pre&gt;
 
+&lt;p&gt;Now we can rewrite our methods as follows:&lt;/p&gt;
 
-Now we can rewrite our methods as follows:
+&lt;pre&gt;&lt;code class="language-ruby"&gt;&lt;span class="keyword"&gt;def&lt;/span&gt; &lt;span class="function"&gt;year&lt;/span&gt;
+  &lt;span class="instance-variable"&gt;@json&lt;/span&gt;[&lt;span class="symbol"&gt;:year&lt;/span&gt;].to_i
+&lt;span class="keyword"&gt;end&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
 
+&lt;h3 id="and-where-is-the-gem"&gt;8. And where is the gem?&lt;/h3&gt;
 
-#!ruby
-    def year
-      @json[:year].to_i
-    end
+&lt;p&gt;Our code is implemented and our tests are passing. The next step would be to package it all into a gem using the &lt;code&gt;gem&lt;/code&gt; command-line tools. Read more about this in the &lt;a href="http://docs.rubygems.org/read/book/2"&gt;rubygems documentation&lt;/a&gt;. It would be wise to create a sample Ruby app that uses the gem, for example querying the user for a movie title and then spitting out some information about that movie. Or, we could just test it in the Ruby shell. Of course, adding the remaining attributes and handling empty responses (what happens when our movie wasn’t found?) should be taken care of as well.&lt;/p&gt;
 
+&lt;p&gt;To view the current state of the actual zimdb gem, check out on &lt;a href="https://github.com/indrode/zimdb"&gt;GitHub&lt;/a&gt; or browse the &lt;a href="http://rubydoc.info/gems/zimdb/0.0.1/frames"&gt;documentation&lt;/a&gt;. Install it the old-fashioned way:&lt;/p&gt;
 
-###8. And where is the gem?
+&lt;pre&gt;&lt;code class="language-sql"&gt;gem install zimdb&lt;/code&gt;&lt;/pre&gt;
 
-Our code is implemented and our tests are passing. The next step would be to package it all into a gem using the `gem` command-line tools. Read more about this in the [rubygems documentation](http://docs.rubygems.org/read/book/2). It would be wise to create a sample Ruby app that uses the gem, for example querying the user for a movie title and then spitting out some information about that movie. Or, we could just test it in the Ruby shell. Of course, adding the remaining attributes and handling empty responses (what happens when our movie wasn&lt;/span&gt;&lt;span class="delimiter"&gt;'&lt;/span&gt;&lt;/span&gt;t found?) should be taken care of as well.
+&lt;p&gt;You may also dump it into your &lt;code&gt;Gemfile&lt;/code&gt; if you are using Bundler.&lt;/p&gt;
 
-To view the current state of the actual zimdb gem, check out on [&lt;span class="constant"&gt;GitHub&lt;/span&gt;](https&lt;span class="symbol"&gt;:/&lt;/span&gt;/github.com/indrode/zimdb) &lt;span class="keyword"&gt;or&lt;/span&gt; browse the [documentation](http&lt;span class="symbol"&gt;:/&lt;/span&gt;/rubydoc.info/gems/zimdb/&lt;span class="float"&gt;0.0&lt;/span&gt;.&lt;span class="error"&gt;1&lt;/span&gt;/frames). Install it the old-fashioned way:
-
-
-    gem install zimdb
-
-
-&lt;span class="constant"&gt;You&lt;/span&gt; may also dump it into your &lt;span class="shell"&gt;&lt;span class="delimiter"&gt;`&lt;/span&gt;&lt;span class="content"&gt;Gemfile&lt;/span&gt;&lt;span class="delimiter"&gt;`&lt;/span&gt;&lt;/span&gt; &lt;span class="keyword"&gt;if&lt;/span&gt; you are using &lt;span class="constant"&gt;Bundler&lt;/span&gt;.
-
-
-    gem &lt;span class="string"&gt;&lt;span class="delimiter"&gt;"&lt;/span&gt;&lt;span class="content"&gt;zimdb&lt;/span&gt;&lt;span class="delimiter"&gt;"&lt;/span&gt;&lt;/span&gt;, &lt;span class="string"&gt;&lt;span class="delimiter"&gt;"&lt;/span&gt;&lt;span class="content"&gt;~&amp;gt; 0.0.1&lt;/span&gt;&lt;span class="delimiter"&gt;"&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;</content>
+&lt;pre&gt;&lt;code class="language-sql"&gt;gem &lt;span class="string"&gt;&lt;span class="delimiter"&gt;"&lt;/span&gt;&lt;span class="content"&gt;zimdb&lt;/span&gt;&lt;span class="delimiter"&gt;"&lt;/span&gt;&lt;/span&gt;, &lt;span class="string"&gt;&lt;span class="delimiter"&gt;"&lt;/span&gt;&lt;span class="content"&gt;~&amp;gt; 0.0.1&lt;/span&gt;&lt;span class="delimiter"&gt;"&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;</content>
   </entry>
   <entry>
     <id>tag:ms.indrode.com,2011-11-07:/i/nanoc/</id>
