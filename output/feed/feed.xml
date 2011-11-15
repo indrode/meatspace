@@ -38,7 +38,7 @@
     <div class="container">
       <div class="row">
         <div class="twelve columns">
-          <a href="/">meatspace</a> <span class="show-on-phones-inline">mobile</span> &nbsp; &middot; &nbsp; <code><a href="/about">about</a></code> <code><a href="/contents">contents</a></code>
+          <span class="meatspace"><a href="/">meatspace</a></span> <span class="show-on-phones-inline">mobile</span> (<a href="/about">about</a>)
         </div>
       </div>
     </div>
@@ -47,7 +47,7 @@
   <!-- container -->
   <div class="container">
     <div class="row">
-      <div class="twelve columns">
+      <div class="nine columns">
         <?xml version="1.0" encoding="UTF-8"?>
 <feed xmlns="http://www.w3.org/2005/Atom">
   <id>http://ms.indrode.com/</id>
@@ -205,6 +205,9 @@ git push origin master&lt;/code&gt;&lt;/pre&gt;
   </entry>
 </feed>
 
+      </div>
+      <div class="three columns show-on-desktops">
+        <p>This is Meatspace. I will find something to put in here. Until then, read the <a href="/about">about section</a> of this website to learn more on its raison d'être.</p>
       </div>
     </div>
   </div>

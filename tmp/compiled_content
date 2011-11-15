@@ -1,4 +1,4 @@
-{:	data{"/{:default{	:	lastI"ß"<!DOCTYPE html>
+{:	data{"/{:default{	:	lastI"¡#<!DOCTYPE html>
 
 <!-- paulirish.com/2008/conditional-stylesheets-vs-css-hacks-answer-neither/ -->
 <!--[if lt IE 7]> <html class="no-js lt-ie9 lt-ie8 lt-ie7" lang="en"> <![endif]-->
@@ -38,7 +38,7 @@
     <div class="container">
       <div class="row">
         <div class="twelve columns">
-          <span class="active" title="You're here.">meatspace</span> <span class="show-on-phones-inline">mobile</span> &nbsp; &middot; &nbsp; <code><a href="/about">about</a></code> <code><a href="/contents">contents</a></code>
+          <span class="meatspace"><span class="active" title="You're here.">meatspace</span></span> <span class="show-on-phones-inline">mobile</span> (<a href="/about">about</a>)
         </div>
       </div>
     </div>
@@ -47,7 +47,7 @@
   <!-- container -->
   <div class="container">
     <div class="row">
-      <div class="twelve columns">
+      <div class="nine columns">
         
 <h1 id="creating-static-sites-with-nanoc">Creating static sites with nanoc</h1>
 
@@ -128,6 +128,9 @@ nanoc create_item about</code></pre>
 <p>I will cut this short by, once again, referring to the very nice write-up on the <a href="http://nanoc.stoneship.org/docs/1-introduction/">nanoc homepage</a>. You can also view the <a href="https://github.com/indrode/meatspace">entire source of Meatspace on GitHub</a>.</p>
 <div class="infoline"><a href="/i/nanoc/">Permalink</a> &middot; Written on 2011-11-07</div>
 
+      </div>
+      <div class="three columns show-on-desktops">
+        <p>This is Meatspace. I will find something to put in here. Until then, read the <a href="/about">about section</a> of this website to learn more on its raison d'Ãªtre.</p>
       </div>
     </div>
   </div>
@@ -241,7 +244,7 @@ pre {
   margin: -5px 0 15px 0;
 }
 ;T;	@;
-@"/i/nanoc/{;{	;I"Ý"<!DOCTYPE html>
+@"/i/nanoc/{;{	;I"¬"<!DOCTYPE html>
 
 <!-- paulirish.com/2008/conditional-stylesheets-vs-css-hacks-answer-neither/ -->
 <!--[if lt IE 7]> <html class="no-js lt-ie9 lt-ie8 lt-ie7" lang="en"> <![endif]-->
@@ -281,7 +284,7 @@ pre {
     <div class="container">
       <div class="row">
         <div class="twelve columns">
-          <a href="/">meatspace</a> <span class="show-on-phones-inline">mobile</span> &nbsp; &middot; &nbsp; <code><a href="/about">about</a></code> <code><a href="/contents">contents</a></code>
+          <span class="meatspace"><a href="/">meatspace</a></span> <span class="show-on-phones-inline">mobile</span> (<a href="/about">about</a>)
         </div>
       </div>
     </div>
@@ -3996,7 +3999,7 @@ div.slider-nav span.left {
 	div.panel { border: 1px solid #ccc; };T;
 I"p/* This is for all IE specfific style less than IE9. We hate IE. */
 
-	div.panel { border: 1px solid #ccc; };T;@,"/stylesheets/app/{;{;I"§body {
+	div.panel { border: 1px solid #ccc; };T;@,"/stylesheets/app/{;{;I"Çbody {
   background-color:#C6C8C6;
 }
 
@@ -4014,6 +4017,10 @@ I"p/* This is for all IE specfific style less than IE9. We hate IE. */
 }
 
 .meatspace {
+  color:#000;
+}
+
+.meatspace a {
   color:#000;
 }
 
@@ -6281,7 +6288,7 @@ jQuery(document).ready(function ($) {
 </body>
 </html>
 ;T;	I"Hi, I'm a new item!;T;
-I"Hi, I'm a new item!;T;@J"/about/{;{	;I"r<!DOCTYPE html>
+I"Hi, I'm a new item!;T;@J"/about/{;{	;I"4<!DOCTYPE html>
 
 <!-- paulirish.com/2008/conditional-stylesheets-vs-css-hacks-answer-neither/ -->
 <!--[if lt IE 7]> <html class="no-js lt-ie9 lt-ie8 lt-ie7" lang="en"> <![endif]-->
@@ -6321,7 +6328,7 @@ I"Hi, I'm a new item!;T;@J"/about/{;{	;I"r<!DOCTYPE html>
     <div class="container">
       <div class="row">
         <div class="twelve columns">
-          <a href="/">meatspace</a> <span class="show-on-phones-inline">mobile</span> &nbsp; &middot; &nbsp; <code><a href="/about">about</a></code> <code><a href="/contents">contents</a></code>
+          <span class="meatspace"><a href="/">meatspace</a></span> <span class="show-on-phones-inline">mobile</span> (<a href="/about">about</a>)
         </div>
       </div>
     </div>
@@ -6330,7 +6337,7 @@ I"Hi, I'm a new item!;T;@J"/about/{;{	;I"r<!DOCTYPE html>
   <!-- container -->
   <div class="container">
     <div class="row">
-      <div class="twelve columns">
+      <div class="nine columns">
         <h2>About</h2>
 
 <p><strong>Meatspace</strong> is a personal project of <a href="http://indrode.com/">Indro De</a>. It will grow to contain pages for personal reference, picture galleries, and writings on other nonspecific topics. You may call it a hybrid between a blog, photo gallery, reference manual, and personal shoutbox.</p>
@@ -6348,6 +6355,9 @@ I"Hi, I'm a new item!;T;@J"/about/{;{	;I"r<!DOCTYPE html>
 
 <p><a href="http://ms.indrode.com/i/markdown/">Short Markdown, Jekyll, and Git reference</a></p>
 
+      </div>
+      <div class="three columns show-on-desktops">
+        <p>This is Meatspace. I will find something to put in here. Until then, read the <a href="/about">about section</a> of this website to learn more on its raison d'Ãªtre.</p>
       </div>
     </div>
   </div>
@@ -6394,7 +6404,7 @@ I"²<h2>About</h2>
 <p><a href="http://ms.indrode.com/i/nanoc/">Creating static sites with nanoc</a></p>
 
 <p><a href="http://ms.indrode.com/i/markdown/">Short Markdown, Jekyll, and Git reference</a></p>
-;T;@P"/i/markdown/{;{	;I"…<!DOCTYPE html>
+;T;@P"/i/markdown/{;{	;I"T<!DOCTYPE html>
 
 <!-- paulirish.com/2008/conditional-stylesheets-vs-css-hacks-answer-neither/ -->
 <!--[if lt IE 7]> <html class="no-js lt-ie9 lt-ie8 lt-ie7" lang="en"> <![endif]-->
@@ -6434,7 +6444,7 @@ I"²<h2>About</h2>
     <div class="container">
       <div class="row">
         <div class="twelve columns">
-          <a href="/">meatspace</a> <span class="show-on-phones-inline">mobile</span> &nbsp; &middot; &nbsp; <code><a href="/about">about</a></code> <code><a href="/contents">contents</a></code>
+          <span class="meatspace"><a href="/">meatspace</a></span> <span class="show-on-phones-inline">mobile</span> (<a href="/about">about</a>)
         </div>
       </div>
     </div>
@@ -6987,7 +6997,7 @@ git push origin master&lt;/code&gt;&lt;/pre&gt;
 &lt;p&gt;This is all that is needed to have GitHub serve your Jekyll implementation. This space may be updated in future to add some more worthwhile Jekyll / GitHub goodness.&lt;/p&gt;</content>
   </entry>
 </feed>
-;T;@\"/feed/feed/{;{	;I"†A<!DOCTYPE html>
+;T;@\"/feed/feed/{;{	;I"HB<!DOCTYPE html>
 
 <!-- paulirish.com/2008/conditional-stylesheets-vs-css-hacks-answer-neither/ -->
 <!--[if lt IE 7]> <html class="no-js lt-ie9 lt-ie8 lt-ie7" lang="en"> <![endif]-->
@@ -7027,7 +7037,7 @@ git push origin master&lt;/code&gt;&lt;/pre&gt;
     <div class="container">
       <div class="row">
         <div class="twelve columns">
-          <a href="/">meatspace</a> <span class="show-on-phones-inline">mobile</span> &nbsp; &middot; &nbsp; <code><a href="/about">about</a></code> <code><a href="/contents">contents</a></code>
+          <span class="meatspace"><a href="/">meatspace</a></span> <span class="show-on-phones-inline">mobile</span> (<a href="/about">about</a>)
         </div>
       </div>
     </div>
@@ -7036,7 +7046,7 @@ git push origin master&lt;/code&gt;&lt;/pre&gt;
   <!-- container -->
   <div class="container">
     <div class="row">
-      <div class="twelve columns">
+      <div class="nine columns">
         <?xml version="1.0" encoding="UTF-8"?>
 <feed xmlns="http://www.w3.org/2005/Atom">
   <id>http://ms.indrode.com/</id>
@@ -7194,6 +7204,9 @@ git push origin master&lt;/code&gt;&lt;/pre&gt;
   </entry>
 </feed>
 
+      </div>
+      <div class="three columns show-on-desktops">
+        <p>This is Meatspace. I will find something to put in here. Until then, read the <a href="/about">about section</a> of this website to learn more on its raison d'Ãªtre.</p>
       </div>
     </div>
   </div>
@@ -7366,7 +7379,7 @@ git push origin master&lt;/code&gt;&lt;/pre&gt;
 &lt;p&gt;This is all that is needed to have GitHub serve your Jekyll implementation. This space may be updated in future to add some more worthwhile Jekyll / GitHub goodness.&lt;/p&gt;</content>
   </entry>
 </feed>
-;T;@b"/contents/{;{	;I"Ô<!DOCTYPE html>
+;T;@b"/contents/{;{	;I"Œ<!DOCTYPE html>
 
 <!-- paulirish.com/2008/conditional-stylesheets-vs-css-hacks-answer-neither/ -->
 <!--[if lt IE 7]> <html class="no-js lt-ie9 lt-ie8 lt-ie7" lang="en"> <![endif]-->
@@ -7379,7 +7392,7 @@ git push origin master&lt;/code&gt;&lt;/pre&gt;
   <!-- Set the viewport width to device width for mobile -->
   <meta name="viewport" content="width=device-width,max-scale=1" />
   
-  <title>A New Item</title>
+  <title>meatspace</title>
   <link href="/feed.xml" rel="alternate" title="meatspace RSS" type="application/atom+xml">
   
   <!-- Included CSS Files -->
@@ -7406,7 +7419,7 @@ git push origin master&lt;/code&gt;&lt;/pre&gt;
     <div class="container">
       <div class="row">
         <div class="twelve columns">
-          <a href="/">meatspace</a> <span class="show-on-phones-inline">mobile</span> &nbsp; &middot; &nbsp; <code><a href="/about">about</a></code> <code><a href="/contents">contents</a></code>
+          <span class="meatspace"><a href="/">meatspace</a></span> <span class="show-on-phones-inline">mobile</span> (<a href="/about">about</a>)
         </div>
       </div>
     </div>
@@ -7415,8 +7428,30 @@ git push origin master&lt;/code&gt;&lt;/pre&gt;
   <!-- container -->
   <div class="container">
     <div class="row">
-      <div class="twelve columns">
-        Hi, I'm a new item!
+      <div class="nine columns">
+        <dl class="tabs">
+  <dd><a href="#simple1" class="active">Simple Tab 1</a></dd>
+  <dd><a href="#simple2">Simple Tab 2</a></dd>
+  <dd><a href="#simple3">Simple Tab 3</a></dd>
+</dl>
+
+<ul class="tabs-content">
+  <li class="active" id="simple1Tab">This is simple tab 1's content. Pretty neat, huh?</li>
+  <li id="simple2Tab">This is simple tab 2's content. Now you see it!</li>
+  <li id="simple3Tab">This is simple tab 3's content. It's, you know...okay.</li>
+</ul>
+
+<p>This section will contain a tabbed navigation with 1. Articles, 2. Photos, (3. maybe more later)</p>
+
+
+
+<p><a href="http://ms.indrode.com/i/nanoc/">Creating static sites with nanoc</a></p>
+
+<p><a href="http://ms.indrode.com/i/markdown/">Short Markdown, Jekyll, and Git reference</a></p>
+
+      </div>
+      <div class="three columns show-on-desktops">
+        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
       </div>
     </div>
   </div>
@@ -7432,5 +7467,41 @@ git push origin master&lt;/code&gt;&lt;/pre&gt;
 </body>
 </html>
 
-;T;	I"Hi, I'm a new item!;T;
-I"Hi, I'm a new item!;T;@h:versioni
+;T;	I"©<dl class="tabs">
+  <dd><a href="#simple1" class="active">Simple Tab 1</a></dd>
+  <dd><a href="#simple2">Simple Tab 2</a></dd>
+  <dd><a href="#simple3">Simple Tab 3</a></dd>
+</dl>
+
+<ul class="tabs-content">
+  <li class="active" id="simple1Tab">This is simple tab 1's content. Pretty neat, huh?</li>
+  <li id="simple2Tab">This is simple tab 2's content. Now you see it!</li>
+  <li id="simple3Tab">This is simple tab 3's content. It's, you know...okay.</li>
+</ul>
+
+<p>This section will contain a tabbed navigation with 1. Articles, 2. Photos, (3. maybe more later)</p>
+
+
+<% @site.sorted_articles.each do |article| %>
+<p><%= link_to(article[:title], url_for(article)) %></p>
+<% end %>;T;
+I"ñ<dl class="tabs">
+  <dd><a href="#simple1" class="active">Simple Tab 1</a></dd>
+  <dd><a href="#simple2">Simple Tab 2</a></dd>
+  <dd><a href="#simple3">Simple Tab 3</a></dd>
+</dl>
+
+<ul class="tabs-content">
+  <li class="active" id="simple1Tab">This is simple tab 1's content. Pretty neat, huh?</li>
+  <li id="simple2Tab">This is simple tab 2's content. Now you see it!</li>
+  <li id="simple3Tab">This is simple tab 3's content. It's, you know...okay.</li>
+</ul>
+
+<p>This section will contain a tabbed navigation with 1. Articles, 2. Photos, (3. maybe more later)</p>
+
+
+
+<p><a href="http://ms.indrode.com/i/nanoc/">Creating static sites with nanoc</a></p>
+
+<p><a href="http://ms.indrode.com/i/markdown/">Short Markdown, Jekyll, and Git reference</a></p>
+;T;@h:versioni
