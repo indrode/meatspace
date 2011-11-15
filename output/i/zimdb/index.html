@@ -11,7 +11,7 @@
   <!-- Set the viewport width to device width for mobile -->
   <meta name="viewport" content="width=device-width,max-scale=1" />
   
-  <title>meatspace</title>
+  <title>Writing an API wrapper in Ruby with HTTParty and Fakeweb</title>
   <link href="/feed.xml" rel="alternate" title="meatspace RSS" type="application/atom+xml">
   
   <!-- Included CSS Files -->
@@ -38,7 +38,7 @@
     <div class="container">
       <div class="row">
         <div class="twelve columns">
-          <span class="meatspace"><span class="active" title="You're here.">meatspace</span></span> <span class="show-on-phones-inline">mobile</span> (<a href="/about">about</a>)
+          <span class="meatspace"><a href="/">meatspace</a></span> <span class="show-on-phones-inline">mobile</span> (<a href="/about">about</a>)
         </div>
       </div>
     </div>
@@ -47,9 +47,8 @@
   <!-- container -->
   <div class="container">
     <div class="row">
-      <div class="nine columns">
-        
-<h1 id="writing-an-api-wrapper-in-ruby-with-httparty-and-fakeweb">Writing an API wrapper in Ruby with HTTParty and Fakeweb</h1>
+      <div class="twelve columns">
+        <h1 id="writing-an-api-wrapper-in-ruby-with-httparty-and-fakeweb">Writing an API wrapper in Ruby with HTTParty and Fakeweb</h1>
 
 <p>This is a quick tutorial on writing a fully-tested API wrapper in Ruby. As example, I am taking <a href="https://github.com/indrode/zimdb">zimdb</a>, a small gem that I developed the other day. First, I’ll cover the (test-driven) implementation of the functionality. To top it off, I’ll explain the process of creating a gem that can be used by other developers.</p>
 
@@ -66,8 +65,7 @@
   <li>define what we want to fetch (via tests)</li>
   <li>implement it!</li>
   <li>transform it into a gem (we may do that earlier in the process)</li>
-</ol>
-<h3 id="the-call">1. The Call</h3>
+</ol><h3 id="the-call">1. The Call</h3>
 
 <p><a href="http://www.imdbapi.com/">imdbapi.com</a> provides a nice interface to make sample calls. It is also very convenient that responses are nicely packed in a JSON. For now, we’ll just search for movies by title, but we could additionally allow searching movies by IMDb-ID and year. Here is how a sample response looks like:</p>
 
@@ -316,11 +314,7 @@ To view the current state of the actual zimdb gem, check out on [<span class="co
 
 
     gem <span class="string"><span class="delimiter">"</span><span class="content">zimdb</span><span class="delimiter">"</span></span>, <span class="string"><span class="delimiter">"</span><span class="content">~&gt; 0.0.1</span><span class="delimiter">"</span></span></code></pre>
-<div class="infoline"><a href="/i/zimdb/">Permalink</a> &middot; Written on 2011-11-15</div>
-
-      </div>
-      <div class="three columns show-on-desktops">
-        <p>This is Meatspace. I will find something to put in here. Until then, read the <a href="/about">about section</a> of this website to learn more on its raison d'être.</p>
+        <div class="infoline"><a href="/i/zimdb/">Permalink</a> &middot; Written on 2011-11-15</class>
       </div>
     </div>
   </div>

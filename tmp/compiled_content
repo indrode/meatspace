@@ -1,4 +1,4 @@
-{:	data{"/{:default{	:	lastI"�#<!DOCTYPE html>
+{:	data{"/{:default{	:	lastI"�K<!DOCTYPE html>
 
 <!-- paulirish.com/2008/conditional-stylesheets-vs-css-hacks-answer-neither/ -->
 <!--[if lt IE 7]> <html class="no-js lt-ie9 lt-ie8 lt-ie7" lang="en"> <![endif]-->
@@ -49,84 +49,274 @@
     <div class="row">
       <div class="nine columns">
         
-<h1 id="creating-static-sites-with-nanoc">Creating static sites with nanoc</h1>
+<h1 id="writing-an-api-wrapper-in-ruby-with-httparty-and-fakeweb">Writing an API wrapper in Ruby with HTTParty and Fakeweb</h1>
 
-<p>Meatspace is a nanoc-powered static website that displays Markdown- and CodeRay-formatted content. The following is a quick tutorial and reference on the nanoc installation process and usage workflow. Nanoc is light-weight, flexible, and completely written in Ruby, which we all love. To find out more, check out <a href="http://nanoc.stoneship.org/">the nanoc website</a>.</p>
+<p>This is a quick tutorial on writing a fully-tested API wrapper in Ruby. As example, I am taking <a href="https://github.com/indrode/zimdb">zimdb</a>, a small gem that I developed the other day. First, I’ll cover the (test-driven) implementation of the functionality. To top it off, I’ll explain the process of creating a gem that can be used by other developers.</p>
 
-<h2 id="install">Install</h2>
+<h2 id="what-does-zimdb-do">What does zimdb do?</h2>
 
-<p>All important nanoc generators and commands can be triggered via the command line, so we launch our favorite terminal emulator and start off by installing some required gems for our implementation of nanoc.</p>
+<p>Zimdb is a wrapper for <a href="http://www.imdbapi.com/">imdbapi.com</a>, a service that provides content from the vast movie database <a href="http://www.imdb.com/">IMDB</a> which I am sure everyone has heard of. IMDb doesn’t provide it’s own open API to developers, so in order to access information, we’ll have to resort to 3rd party providers. Right now, zimdb only fetches information about a single movie and the only way to access information for a specific movie is to search it by its title. For the scope of this article, that should be all we need.</p>
 
-<pre><code class="language-sql">gem install nanoc
-gem install asdf
-gem install kramdown
-gem install coderay</code></pre>
+<h2 id="a-simple-approach">A simple approach</h2>
 
-<p>Next up, we will set up a basic scaffold of the nanoc site.</p>
+<p>The imdbapi.com “API” (it’s basically just one call) is very straight-forward. Still, it’s always good to have a general idea of what we want to do, before daftly jumping into the code. Here are the different steps of this approach: </p>
 
-<pre><code class="language-sql"><span class="comment"># creates new nanoc site</span>
-nanoc create_site meatspace</code></pre>
+<ol>
+<li>trigger a sample call and examine the result</li>
+  <li>define what we want to fetch (via tests)</li>
+  <li>implement it!</li>
+  <li>transform it into a gem (we may do that earlier in the process)</li>
+</ol>
+<h3 id="the-call">1. The Call</h3>
 
-<p>If you wish, you could create a new GitHub repository for the nanoc site. Although, unlike Jekyll sites, which can be updated via a simple <code>git push</code> if used as GitHub Pages, this would be just for general revision control. If you do, initialize the git repository in the <code>meatspace</code> folder, add the generated files and folders, commit, and push this first commit to master.</p>
+<p><a href="http://www.imdbapi.com/">imdbapi.com</a> provides a nice interface to make sample calls. It is also very convenient that responses are nicely packed in a JSON. For now, we’ll just search for movies by title, but we could additionally allow searching movies by IMDb-ID and year. Here is how a sample response looks like:</p>
 
-<pre><code class="language-sql">cd meatspace
-nanoc compile</code></pre>
+<pre><code>{"Title":"The Godfather","Year":"1972","Rated":"R","Released":"24 Mar 1972","Genre":"Crime, Drama","Director":"Francis Ford Coppola","Writer":"Mario Puzo, Mario Puzo","Actors":"Marlon Brando, Al Pacino, James Caan, Diane Keaton","Plot":"The aging patriarch of an organized crime dynasty transfers control of his clandestine empire to his reluctant son.","Poster":"http://ia.media-imdb.com/images/M/MV5BMTIyMTIxNjI5NF5BMl5BanBnXkFtZTcwNzQzNDM5MQ@@._V1._SX320.jpg","Runtime":"2 hrs 55 mins","Rating":"9.2","Votes":"436305","ID":"tt0068646","Response":"True"}
+</code></pre>
 
-<p>The last command compiles the site (the shortcut is <code>nanoc co</code>). Repeat this step after you made changes and are ready to deploy or if you want to view the current state of your site in your browser. For the latter, we start a WEBrick server in order to view the site under <code>http://localhost:3000/</code>.</p>
+<p>For our API wrapper, we would like to fetch all of these movie attributes. So let’s fire up your favorite text editor and create a new file. We’ll create a new folder and some subfolders too while we’re at it.</p>
 
-<pre><code class="language-sql"><span class="comment"># starts server on localhost:3000</span>
-nanoc <span class="type">view</span></code></pre>
+<pre><code>mkdir zimdb
+cd zimdb
+mkdir lib
+mkdir spec
+mate spec/movie_spec.rb
+</code></pre>
 
-<p>Your most basic nanoc setup is now complete! Before we continue to hack around with nanoc items, layouts, and rules, we want to deploy what we have to a remote web server. The nanoc way to do this is via a rake task that calls rsync for lightning-fast deploys.</p>
+<h3 id="a-first-test">2. A first test</h3>
 
-<h2 id="deploy">Deploy</h2>
+<p>We will use <code>rspec</code> to test our gem, so make sure it is installed (<code>gem install rspec</code>). In <code>movie_spec.rb</code>, we can then add a first test for a very common task we want the gem to achieve.</p>
 
-<p>Just add this block to the <code>config.yml</code> in the root of your site, where <code>dst</code> is the location on your remote web server.</p>
+<pre><code>describe "zimdb" do
+  it "should fetch a movie title" do
+    movie = Zimdb::Movie.new(:title =&gt; "Hangover")
+    movie.title.should == "The Godfather"
+  end
+end
+</code></pre>
 
-<pre><code class="language-ruby">deploy:
-  default:
-    dst: <span class="string"><span class="delimiter">"</span><span class="content">indrode.com:/home/bandito/meatspace</span><span class="delimiter">"</span></span></code></pre>
+<p>This already does more than one step at once, but I will keep this tutorial rather brief, so let’s this this file with <code>rspec spec/movie_spec.rb</code> and see what’s happening.</p>
 
-<p>ss64’s rsync page <a href="http://ss64.com/bash/rsync.html">http://ss64.com/bash/rsync.html</a> tells you all the different options to set up the rsync connection, and much more. The rake task to deploy is:</p>
+<pre><code>F
 
-<pre><code class="language-sql">rake deploy:rsync</code></pre>
+Failures:
 
-<p>For Meatspace, I am using a different approach because of some customized server security configurations. Also, I want to deploy to different environments (staging, production) so instead of rsync, a simple secure copy triggered by a <a href="https://github.com/wycats/thor">Thor script</a> gets the nanoc deployed just as fast:</p>
+  1) zimdb should fetch a movie title
+     Failure/Error: movie = Zimdb::Movie.new(:title =&gt; "Hangover")
+     NameError:
+       uninitialized constant Zimdb
+     # ./spec/movie_spec.rb:5:in `block (2 levels) in &lt;top (required)&gt;'
 
-<pre><code class="language-sql">thor nanoc:deploy staging</code></pre>
+Finished in 0.47559 seconds
+1 example, 1 failure
 
-<p>I do keep the Thor script outside of revision control as it includes some server specific configurations. Now that we know how to locally view our site and how to quickly deploy any changes to production, we can start configuring and customizing.</p>
+Failed examples:
 
-<h2 id="customize">Customize</h2>
+rspec ./spec/movie_spec.rb:4 # zimdb should fetch a movie title
+</code></pre>
 
-<p>The nanoc documenation is pretty good (<a href="http://nanoc.stoneship.org/docs/3-getting-started/">http://nanoc.stoneship.org/docs/3-getting-started/</a>), so this will just cover some reminders and notes.</p>
+<p>Nothing unexpected here, considering that we haven’t written a single line of actual code. In our test, we already made a couple of assumptions. First, we want to create a module called <code>Zimdb</code> because we want to pack it into a gem later. Then, we need a class <code>Movie</code> which can be instantiated by passing it the param <code>:title</code>. Maybe, at some later point in time, we’ll also want to fetch movies via the IMDb-ID, which is why we are passing the movie title via the <code>:title</code> symbol. Finally, we have a <code>title</code> method for each Movie object that returns the movie’s title.</p>
 
-<pre><code class="language-sql"><span class="comment"># creating a new static page</span>
-nanoc create_item about</code></pre>
+<h3 id="some-more-tests">3. Some more tests</h3>
 
-<p>I want to use Markdown to write my pages (at least the articles), so nanoc will have to know that certain item types should go through the <code>kramdown</code> filter. On top of that, I want to be able to highlight any source code that I may include in an article using <code>coderay</code>. All these configurations are called rules and exist in the <code>Rules</code> file.</p>
+<p>Because we wanted to define the attributes we wanted to fetch (for sake of brevity, let’s just get a few of them), let’s add these to our spec file as well. We will still implement them one by one. Since we are aways instantiating a new movie object, we’ll put that into a <code>before(:each)</code> block. Here is our movie_spec.rb:</p>
 
-<pre><code class="language-ruby">compile <span class="string"><span class="delimiter">'</span><span class="content">/i/*</span><span class="delimiter">'</span></span> <span class="keyword">do</span>
-  filter <span class="symbol">:kramdown</span>
-  filter <span class="symbol">:colorize_syntax</span>,
-         <span class="symbol">:colorizers</span> =&gt; { <span class="symbol">:ruby</span> =&gt; <span class="symbol">:coderay</span> }
-  layout <span class="string"><span class="delimiter">'</span><span class="content">default</span><span class="delimiter">'</span></span>
-<span class="keyword">end</span></code></pre>
+<pre><code>describe "zimdb" do
+  before(:each) do
+    @movie = Zimdb::Movie.new(:title =&gt; "Godfather")
+  end
 
-<p>The <code>compile</code> blocks specify how items are processed. The <code>route</code> blocks set all the necessary routing settings. All in all, a lot of the concepts and implementations look very familiar if you know your way around Ruby and some Ruby-based frameworks.</p>
+  it "should return the title" do
+    @movie.title.should == "The Hangover"
+  end
+  
+  it "should return the year" do
+    @movie.year.should == 1972
+  end
+  
+  it "should return the rating" do
+    @movie.rated.should == "R"
+  end
+end
+</code></pre>
 
-<p>Meatspace uses <a href="http://foundation.zurb.com/">Foundation</a>, a boilerplate framework, so I replaced the existing layout and styles. I also added a CodeRay-specific stylesheet. Nanoc is perfect for websites with static pages, but it can easily work as a blog or really anything else you throw at it. For example, displaying all blog entries on one page would be achieved through a simple Ruby enumeration:</p>
+<h3 id="setting-up-the-gem-with-bundler">4. Setting up the Gem with Bundler</h3>
 
-<pre><code class="language-haml">- <span class="instance-variable">@site</span>.sorted_articles.each |article| <span class="keyword">do</span>
-  <span class="tag">%p</span>= article.compiled_content
-  <span class="tag">%p</span>
-    = <span class="string"><span class="delimiter">"</span><span class="content">Written on </span><span class="inline"><span class="inline-delimiter">#{</span>article[<span class="symbol">:created_at</span>]<span class="inline-delimiter">}</span></span><span class="content">.</span><span class="delimiter">"</span></span>
-    <span class="tag">%a</span>{<span class="symbol">:href</span> =&gt; article.path} Permalink</code></pre>
+<p>Okay, now let’s get going and start to code? Not quite yet. Since we want to create a new gem anyway, why not set it up now, so we can start developing in the right places and don’t have to move too many files around later. We will use <code>Bundler</code> to set up our gem.</p>
 
-<p>The above code snippet is in Haml, but you can easily use ERB instead. Just specify in the compile filters of the <code>Rules</code> file, how you want to process your code.</p>
+<pre><code>bundle gem zimdb
+</code></pre>
 
-<p>I will cut this short by, once again, referring to the very nice write-up on the <a href="http://nanoc.stoneship.org/docs/1-introduction/">nanoc homepage</a>. You can also view the <a href="https://github.com/indrode/meatspace">entire source of Meatspace on GitHub</a>.</p>
-<div class="infoline"><a href="/i/nanoc/">Permalink</a> &middot; Written on 2011-11-07</div>
+<p>Run this from the level below the <code>/zimdb</code> folder and it will create a couple of useful files, such as the gemspec file <code>zimdb.gemspec</code>. There are various tutorials on the web on how to customize this gemspec file to I will make this short. We only need to add two dependencies apart from rspec: <code>httparty</code> (for runtime) and <code>fakeweb</code> (for development). More on these in a second.</p>
+
+<pre><code>s.add_runtime_dependency "httparty"
+s.add_development_dependency "rspec", "~&gt; 2.6"
+s.add_development_dependency "fakeweb", "~&gt; 1.3"
+</code></pre>
+
+<p>We can also use this moment to setup a <code>spec_helper.rb</code> to use for testing (we will need it later). In <code>/spec</code> we create that file and add some code to it:</p>
+
+<pre><code>require 'rubygems'
+require 'bundler/setup'
+require 'zimdb'
+require 'fakeweb'
+
+RSpec.configure do |config|
+  # we'll add more here later
+end
+</code></pre>
+
+<p>In our <code>movie_spec.rb</code> we can now <code>require 'spec_helper'</code> instead of requiring rspec.</p>
+
+<h3 id="fakeweb">5. Fakeweb</h3>
+
+<p>In our final code, we will make calls to imdbapi.com, but we don’t want to do that for testing. To fake these web requests, we will take advantage of a neat little gem called <code>fakeweb</code> (see <a href="https://github.com/chrisk/fakeweb">https://github.com/chrisk/fakeweb</a>). Let’s just drop the response we got earlier and drop it into <code>spec/fixtures</code>. For testing purposes, we will read the contents of that file, whenever a test tries to make such a request. Still in <code>spec_helper.rb</code> we can add the following code to the RSpec configure-block:</p>
+
+<pre><code>RSpec.configure do |config|
+  def fixture(filename)
+    File.dirname(__FILE__) + '/fixtures/' + filename
+  end
+
+  FakeWeb.register_uri(:get, "http://www.imdbapi.com/?t=hangover", :body =&gt; open(fixture("godfather.json")).read)
+end
+</code></pre>
+
+<p>This assumed that we called the file <code>godfather.json</code>.</p>
+
+<h3 id="httparty">6. HTTParty</h3>
+
+<p>Now that we have set up everything we need, we can finally start coding. There isn’t really too much to do thanks to the great <code>httparty</code> gem (see <a href="https://github.com/jnunemaker/httparty">https://github.com/jnunemaker/httparty</a>).</p>
+
+<p>But first let’s see where we want to put our code. In <code>lib/zimdb.rb</code> we will have to require some dependencies and include httparty while we’re at it to make it available to all the classes which we define under <code>lib/zimdb/</code>. In our example, we only have the <code>Movie</code> class, but it’s still a good idea to separate the files. This leaves us with a very simple zimdb.rb:</p>
+
+<pre><code class="language-ruby">    require <span class="string"><span class="delimiter">"</span><span class="content">rubygems</span><span class="delimiter">"</span></span>
+    require <span class="string"><span class="delimiter">"</span><span class="content">httparty</span><span class="delimiter">"</span></span>
+    require <span class="string"><span class="delimiter">"</span><span class="content">json</span><span class="delimiter">"</span></span>
+    require <span class="string"><span class="delimiter">"</span><span class="content">zimdb/movie</span><span class="delimiter">"</span></span>
+    
+    <span class="keyword">module</span> <span class="class">Zimdb</span>
+      include <span class="constant">HTTParty</span>
+    <span class="keyword">end</span></code></pre>
+
+<p>Now on to ‘lib/zimdb/movie.rb’:</p>
+
+<pre><code class="language-ruby">    <span class="keyword">module</span> <span class="class">Zimdb</span>
+      <span class="keyword">class</span> <span class="class">Movie</span>
+        <span class="keyword">def</span> <span class="function">initialize</span>(params)
+          <span class="instance-variable">@json</span> = <span class="constant">JSON</span>.parse(<span class="constant">HTTParty</span>.get(<span class="string"><span class="delimiter">"</span><span class="content">http://www.imdbapi.com/?t=</span><span class="inline"><span class="inline-delimiter">#{</span>params[<span class="symbol">:title</span>]<span class="inline-delimiter">}</span></span><span class="delimiter">"</span></span>))
+        <span class="keyword">end</span>
+      <span class="keyword">end</span>
+    <span class="keyword">end</span></code></pre>
+
+<p>It really couldn’t be much simpler. We now have <code>@json</code>, which is a hash of the response of our call. This won’t make our tests pass, so let’s add a method to get the movie title:</p>
+
+<pre><code class="language-ruby">    <span class="keyword">def</span> <span class="function">title</span>
+      <span class="instance-variable">@json</span>[<span class="string"><span class="delimiter">"</span><span class="content">Title</span><span class="delimiter">"</span></span>]
+    <span class="keyword">end</span></code></pre>
+
+<p>Running the tests now yields the following output:</p>
+
+<pre><code class="language-ruby">    .FF
+    
+    <span class="constant">Failures</span>:
+    
+      <span class="integer">1</span>) zimdb should <span class="keyword">return</span> the year
+         <span class="constant">Failure</span>/<span class="constant">Error</span>: <span class="instance-variable">@movie</span>.year.should == <span class="integer">2009</span>
+         <span class="constant">NoMethodError</span>:
+           undefined method <span class="shell"><span class="delimiter">`</span><span class="content">year' for #
+         # ./spec/movie_spec.rb:30:in </span><span class="delimiter">`</span></span>block (<span class="integer">2</span> levels) <span class="keyword">in</span> &lt;top (required)&gt;<span class="string"><span class="delimiter">'</span><span class="content">
+    
+      2) zimdb should return the rating
+         Failure/Error: @movie.rated.should == "R"
+         NoMethodError:
+           undefined method `rated</span><span class="delimiter">'</span></span> <span class="keyword">for</span> <span class="comment">#</span>
+         <span class="comment"># ./spec/movie_spec.rb:34:in `block (2 levels) in &lt;top (required)&gt;'</span>
+    
+    <span class="constant">Finished</span> <span class="keyword">in</span> <span class="float">1.21</span> seconds
+    <span class="integer">3</span> examples, <span class="integer">2</span> failures
+    
+    <span class="constant">Failed</span> examples:
+    
+    rspec ./spec/movie_spec.rb:<span class="integer">29</span> <span class="comment"># zimdb should return the year</span>
+    rspec ./spec/movie_spec.rb:<span class="integer">33</span> <span class="comment"># zimdb should return the rating</span>
+
+
+<span class="constant">Looking</span> good! <span class="constant">One</span> test already passed. 
+
+<span class="comment">###7. Make all tests pass</span>
+
+To make the other tests pass is just as simple. 
+
+
+    def year
+      <span class="instance-variable">@json</span>[<span class="string"><span class="delimiter">"</span><span class="content">Year</span><span class="delimiter">"</span></span>].to_i
+    <span class="keyword">end</span>
+    
+    <span class="keyword">def</span> <span class="function">rated</span>
+      <span class="instance-variable">@json</span>[<span class="string"><span class="delimiter">"</span><span class="content">Rated</span><span class="delimiter">"</span></span>]
+    <span class="keyword">end</span>
+
+
+<span class="constant">All</span> the tests pass! <span class="constant">However</span>, <span class="constant">I</span> <span class="keyword">do</span> <span class="keyword">not</span> like <span class="shell"><span class="delimiter">`</span><span class="content">@json["Year"]</span><span class="delimiter">`</span></span>. In my opinion, something like <span class="shell"><span class="delimiter">`</span><span class="content">@json[:year]</span><span class="delimiter">`</span></span> looks a lot cleaner <span class="keyword">and</span> opens up more possibilities. While we would normally just implement the least amount of code to make all the tests pass, <span class="constant">I</span> <span class="keyword">do</span> want to add a little method to <span class="shell"><span class="delimiter">`</span><span class="content">Hash</span><span class="delimiter">`</span></span> that creates these symbolized keys. Let<span class="string"><span class="delimiter">'</span><span class="content">s call it `symbolize_keys` and write a test in `spec/hash_spec.rb`:
+
+
+#!ruby
+    require </span><span class="delimiter">'</span></span>spec_helper<span class="string"><span class="delimiter">'</span><span class="content">
+    
+    describe Hash do
+      it "should symbolize keys" do
+        hash_with_string_keys = { "Title" =&gt; "The Hangover", "Year" =&gt; "2009" }
+        hash_with_string_keys.symbolize_keys
+        hash_with_string_keys.should == { :title =&gt; "The Hangover", :year =&gt; "2009" }
+      end
+    end
+
+
+Basically, we have a hash with ugly strings as keys and want to transform the keys into nice Ruby-esque symbols by calling `symbolize_keys` on that hash. To do this, we extend the `Hash` class (in `lib/zimdb/hash.rb`)and implement this behavior:
+
+
+#!ruby
+    class Hash
+      def symbolize_keys
+        hash = self.dup
+        self.clear
+        hash.each_pair{|k, v| self[k.downcase.to_sym] = v}
+        self
+      end
+    end
+
+
+We require this in `lib/zimdb.rb` and add it to our Movie class:
+
+
+#!ruby
+    @json = JSON.parse(HTTParty.get("http://www.imdbapi.com/?t=#{params[:title]}")).symbolize_keys
+
+
+Now we can rewrite our methods as follows:
+
+
+#!ruby
+    def year
+      @json[:year].to_i
+    end
+
+
+###8. And where is the gem?
+
+Our code is implemented and our tests are passing. The next step would be to package it all into a gem using the `gem` command-line tools. Read more about this in the [rubygems documentation](http://docs.rubygems.org/read/book/2). It would be wise to create a sample Ruby app that uses the gem, for example querying the user for a movie title and then spitting out some information about that movie. Or, we could just test it in the Ruby shell. Of course, adding the remaining attributes and handling empty responses (what happens when our movie wasn</span><span class="delimiter">'</span></span>t found?) should be taken care of as well.
+
+To view the current state of the actual zimdb gem, check out on [<span class="constant">GitHub</span>](https<span class="symbol">:/</span>/github.com/indrode/zimdb) <span class="keyword">or</span> browse the [documentation](http<span class="symbol">:/</span>/rubydoc.info/gems/zimdb/<span class="float">0.0</span>.<span class="error">1</span>/frames). Install it the old-fashioned way:
+
+
+    gem install zimdb
+
+
+<span class="constant">You</span> may also dump it into your <span class="shell"><span class="delimiter">`</span><span class="content">Gemfile</span><span class="delimiter">`</span></span> <span class="keyword">if</span> you are using <span class="constant">Bundler</span>.
+
+
+    gem <span class="string"><span class="delimiter">"</span><span class="content">zimdb</span><span class="delimiter">"</span></span>, <span class="string"><span class="delimiter">"</span><span class="content">~&gt; 0.0.1</span><span class="delimiter">"</span></span></code></pre>
+<div class="infoline"><a href="/i/zimdb/">Permalink</a> &middot; Written on 2011-11-15</div>
 
       </div>
       <div class="three columns show-on-desktops">
@@ -149,85 +339,275 @@ nanoc create_item about</code></pre>
 :ET:rawI"�<% article = @site.sorted_articles.first %>
 <%= article.compiled_content %>
 <div class="infoline"><a href="<%= article.path %>">Permalink</a> &middot; Written on <%= Date.strptime("#{article[:created_at]}", "%d.%m.%Y") %></div>
-;T:preI"�
-<h1 id="creating-static-sites-with-nanoc">Creating static sites with nanoc</h1>
+;T:preI".C
+<h1 id="writing-an-api-wrapper-in-ruby-with-httparty-and-fakeweb">Writing an API wrapper in Ruby with HTTParty and Fakeweb</h1>
 
-<p>Meatspace is a nanoc-powered static website that displays Markdown- and CodeRay-formatted content. The following is a quick tutorial and reference on the nanoc installation process and usage workflow. Nanoc is light-weight, flexible, and completely written in Ruby, which we all love. To find out more, check out <a href="http://nanoc.stoneship.org/">the nanoc website</a>.</p>
+<p>This is a quick tutorial on writing a fully-tested API wrapper in Ruby. As example, I am taking <a href="https://github.com/indrode/zimdb">zimdb</a>, a small gem that I developed the other day. First, I’ll cover the (test-driven) implementation of the functionality. To top it off, I’ll explain the process of creating a gem that can be used by other developers.</p>
 
-<h2 id="install">Install</h2>
+<h2 id="what-does-zimdb-do">What does zimdb do?</h2>
 
-<p>All important nanoc generators and commands can be triggered via the command line, so we launch our favorite terminal emulator and start off by installing some required gems for our implementation of nanoc.</p>
+<p>Zimdb is a wrapper for <a href="http://www.imdbapi.com/">imdbapi.com</a>, a service that provides content from the vast movie database <a href="http://www.imdb.com/">IMDB</a> which I am sure everyone has heard of. IMDb doesn’t provide it’s own open API to developers, so in order to access information, we’ll have to resort to 3rd party providers. Right now, zimdb only fetches information about a single movie and the only way to access information for a specific movie is to search it by its title. For the scope of this article, that should be all we need.</p>
 
-<pre><code class="language-sql">gem install nanoc
-gem install asdf
-gem install kramdown
-gem install coderay</code></pre>
+<h2 id="a-simple-approach">A simple approach</h2>
 
-<p>Next up, we will set up a basic scaffold of the nanoc site.</p>
+<p>The imdbapi.com “API” (it’s basically just one call) is very straight-forward. Still, it’s always good to have a general idea of what we want to do, before daftly jumping into the code. Here are the different steps of this approach: </p>
 
-<pre><code class="language-sql"><span class="comment"># creates new nanoc site</span>
-nanoc create_site meatspace</code></pre>
+<ol>
+<li>trigger a sample call and examine the result</li>
+  <li>define what we want to fetch (via tests)</li>
+  <li>implement it!</li>
+  <li>transform it into a gem (we may do that earlier in the process)</li>
+</ol>
+<h3 id="the-call">1. The Call</h3>
 
-<p>If you wish, you could create a new GitHub repository for the nanoc site. Although, unlike Jekyll sites, which can be updated via a simple <code>git push</code> if used as GitHub Pages, this would be just for general revision control. If you do, initialize the git repository in the <code>meatspace</code> folder, add the generated files and folders, commit, and push this first commit to master.</p>
+<p><a href="http://www.imdbapi.com/">imdbapi.com</a> provides a nice interface to make sample calls. It is also very convenient that responses are nicely packed in a JSON. For now, we’ll just search for movies by title, but we could additionally allow searching movies by IMDb-ID and year. Here is how a sample response looks like:</p>
 
-<pre><code class="language-sql">cd meatspace
-nanoc compile</code></pre>
+<pre><code>{"Title":"The Godfather","Year":"1972","Rated":"R","Released":"24 Mar 1972","Genre":"Crime, Drama","Director":"Francis Ford Coppola","Writer":"Mario Puzo, Mario Puzo","Actors":"Marlon Brando, Al Pacino, James Caan, Diane Keaton","Plot":"The aging patriarch of an organized crime dynasty transfers control of his clandestine empire to his reluctant son.","Poster":"http://ia.media-imdb.com/images/M/MV5BMTIyMTIxNjI5NF5BMl5BanBnXkFtZTcwNzQzNDM5MQ@@._V1._SX320.jpg","Runtime":"2 hrs 55 mins","Rating":"9.2","Votes":"436305","ID":"tt0068646","Response":"True"}
+</code></pre>
 
-<p>The last command compiles the site (the shortcut is <code>nanoc co</code>). Repeat this step after you made changes and are ready to deploy or if you want to view the current state of your site in your browser. For the latter, we start a WEBrick server in order to view the site under <code>http://localhost:3000/</code>.</p>
+<p>For our API wrapper, we would like to fetch all of these movie attributes. So let’s fire up your favorite text editor and create a new file. We’ll create a new folder and some subfolders too while we’re at it.</p>
 
-<pre><code class="language-sql"><span class="comment"># starts server on localhost:3000</span>
-nanoc <span class="type">view</span></code></pre>
+<pre><code>mkdir zimdb
+cd zimdb
+mkdir lib
+mkdir spec
+mate spec/movie_spec.rb
+</code></pre>
 
-<p>Your most basic nanoc setup is now complete! Before we continue to hack around with nanoc items, layouts, and rules, we want to deploy what we have to a remote web server. The nanoc way to do this is via a rake task that calls rsync for lightning-fast deploys.</p>
+<h3 id="a-first-test">2. A first test</h3>
 
-<h2 id="deploy">Deploy</h2>
+<p>We will use <code>rspec</code> to test our gem, so make sure it is installed (<code>gem install rspec</code>). In <code>movie_spec.rb</code>, we can then add a first test for a very common task we want the gem to achieve.</p>
 
-<p>Just add this block to the <code>config.yml</code> in the root of your site, where <code>dst</code> is the location on your remote web server.</p>
+<pre><code>describe "zimdb" do
+  it "should fetch a movie title" do
+    movie = Zimdb::Movie.new(:title =&gt; "Hangover")
+    movie.title.should == "The Godfather"
+  end
+end
+</code></pre>
 
-<pre><code class="language-ruby">deploy:
-  default:
-    dst: <span class="string"><span class="delimiter">"</span><span class="content">indrode.com:/home/bandito/meatspace</span><span class="delimiter">"</span></span></code></pre>
+<p>This already does more than one step at once, but I will keep this tutorial rather brief, so let’s this this file with <code>rspec spec/movie_spec.rb</code> and see what’s happening.</p>
 
-<p>ss64’s rsync page <a href="http://ss64.com/bash/rsync.html">http://ss64.com/bash/rsync.html</a> tells you all the different options to set up the rsync connection, and much more. The rake task to deploy is:</p>
+<pre><code>F
 
-<pre><code class="language-sql">rake deploy:rsync</code></pre>
+Failures:
 
-<p>For Meatspace, I am using a different approach because of some customized server security configurations. Also, I want to deploy to different environments (staging, production) so instead of rsync, a simple secure copy triggered by a <a href="https://github.com/wycats/thor">Thor script</a> gets the nanoc deployed just as fast:</p>
+  1) zimdb should fetch a movie title
+     Failure/Error: movie = Zimdb::Movie.new(:title =&gt; "Hangover")
+     NameError:
+       uninitialized constant Zimdb
+     # ./spec/movie_spec.rb:5:in `block (2 levels) in &lt;top (required)&gt;'
 
-<pre><code class="language-sql">thor nanoc:deploy staging</code></pre>
+Finished in 0.47559 seconds
+1 example, 1 failure
 
-<p>I do keep the Thor script outside of revision control as it includes some server specific configurations. Now that we know how to locally view our site and how to quickly deploy any changes to production, we can start configuring and customizing.</p>
+Failed examples:
 
-<h2 id="customize">Customize</h2>
+rspec ./spec/movie_spec.rb:4 # zimdb should fetch a movie title
+</code></pre>
 
-<p>The nanoc documenation is pretty good (<a href="http://nanoc.stoneship.org/docs/3-getting-started/">http://nanoc.stoneship.org/docs/3-getting-started/</a>), so this will just cover some reminders and notes.</p>
+<p>Nothing unexpected here, considering that we haven’t written a single line of actual code. In our test, we already made a couple of assumptions. First, we want to create a module called <code>Zimdb</code> because we want to pack it into a gem later. Then, we need a class <code>Movie</code> which can be instantiated by passing it the param <code>:title</code>. Maybe, at some later point in time, we’ll also want to fetch movies via the IMDb-ID, which is why we are passing the movie title via the <code>:title</code> symbol. Finally, we have a <code>title</code> method for each Movie object that returns the movie’s title.</p>
 
-<pre><code class="language-sql"><span class="comment"># creating a new static page</span>
-nanoc create_item about</code></pre>
+<h3 id="some-more-tests">3. Some more tests</h3>
 
-<p>I want to use Markdown to write my pages (at least the articles), so nanoc will have to know that certain item types should go through the <code>kramdown</code> filter. On top of that, I want to be able to highlight any source code that I may include in an article using <code>coderay</code>. All these configurations are called rules and exist in the <code>Rules</code> file.</p>
+<p>Because we wanted to define the attributes we wanted to fetch (for sake of brevity, let’s just get a few of them), let’s add these to our spec file as well. We will still implement them one by one. Since we are aways instantiating a new movie object, we’ll put that into a <code>before(:each)</code> block. Here is our movie_spec.rb:</p>
 
-<pre><code class="language-ruby">compile <span class="string"><span class="delimiter">'</span><span class="content">/i/*</span><span class="delimiter">'</span></span> <span class="keyword">do</span>
-  filter <span class="symbol">:kramdown</span>
-  filter <span class="symbol">:colorize_syntax</span>,
-         <span class="symbol">:colorizers</span> =&gt; { <span class="symbol">:ruby</span> =&gt; <span class="symbol">:coderay</span> }
-  layout <span class="string"><span class="delimiter">'</span><span class="content">default</span><span class="delimiter">'</span></span>
-<span class="keyword">end</span></code></pre>
+<pre><code>describe "zimdb" do
+  before(:each) do
+    @movie = Zimdb::Movie.new(:title =&gt; "Godfather")
+  end
 
-<p>The <code>compile</code> blocks specify how items are processed. The <code>route</code> blocks set all the necessary routing settings. All in all, a lot of the concepts and implementations look very familiar if you know your way around Ruby and some Ruby-based frameworks.</p>
+  it "should return the title" do
+    @movie.title.should == "The Hangover"
+  end
+  
+  it "should return the year" do
+    @movie.year.should == 1972
+  end
+  
+  it "should return the rating" do
+    @movie.rated.should == "R"
+  end
+end
+</code></pre>
 
-<p>Meatspace uses <a href="http://foundation.zurb.com/">Foundation</a>, a boilerplate framework, so I replaced the existing layout and styles. I also added a CodeRay-specific stylesheet. Nanoc is perfect for websites with static pages, but it can easily work as a blog or really anything else you throw at it. For example, displaying all blog entries on one page would be achieved through a simple Ruby enumeration:</p>
+<h3 id="setting-up-the-gem-with-bundler">4. Setting up the Gem with Bundler</h3>
 
-<pre><code class="language-haml">- <span class="instance-variable">@site</span>.sorted_articles.each |article| <span class="keyword">do</span>
-  <span class="tag">%p</span>= article.compiled_content
-  <span class="tag">%p</span>
-    = <span class="string"><span class="delimiter">"</span><span class="content">Written on </span><span class="inline"><span class="inline-delimiter">#{</span>article[<span class="symbol">:created_at</span>]<span class="inline-delimiter">}</span></span><span class="content">.</span><span class="delimiter">"</span></span>
-    <span class="tag">%a</span>{<span class="symbol">:href</span> =&gt; article.path} Permalink</code></pre>
+<p>Okay, now let’s get going and start to code? Not quite yet. Since we want to create a new gem anyway, why not set it up now, so we can start developing in the right places and don’t have to move too many files around later. We will use <code>Bundler</code> to set up our gem.</p>
 
-<p>The above code snippet is in Haml, but you can easily use ERB instead. Just specify in the compile filters of the <code>Rules</code> file, how you want to process your code.</p>
+<pre><code>bundle gem zimdb
+</code></pre>
 
-<p>I will cut this short by, once again, referring to the very nice write-up on the <a href="http://nanoc.stoneship.org/docs/1-introduction/">nanoc homepage</a>. You can also view the <a href="https://github.com/indrode/meatspace">entire source of Meatspace on GitHub</a>.</p>
-<div class="infoline"><a href="/i/nanoc/">Permalink</a> &middot; Written on 2011-11-07</div>
+<p>Run this from the level below the <code>/zimdb</code> folder and it will create a couple of useful files, such as the gemspec file <code>zimdb.gemspec</code>. There are various tutorials on the web on how to customize this gemspec file to I will make this short. We only need to add two dependencies apart from rspec: <code>httparty</code> (for runtime) and <code>fakeweb</code> (for development). More on these in a second.</p>
+
+<pre><code>s.add_runtime_dependency "httparty"
+s.add_development_dependency "rspec", "~&gt; 2.6"
+s.add_development_dependency "fakeweb", "~&gt; 1.3"
+</code></pre>
+
+<p>We can also use this moment to setup a <code>spec_helper.rb</code> to use for testing (we will need it later). In <code>/spec</code> we create that file and add some code to it:</p>
+
+<pre><code>require 'rubygems'
+require 'bundler/setup'
+require 'zimdb'
+require 'fakeweb'
+
+RSpec.configure do |config|
+  # we'll add more here later
+end
+</code></pre>
+
+<p>In our <code>movie_spec.rb</code> we can now <code>require 'spec_helper'</code> instead of requiring rspec.</p>
+
+<h3 id="fakeweb">5. Fakeweb</h3>
+
+<p>In our final code, we will make calls to imdbapi.com, but we don’t want to do that for testing. To fake these web requests, we will take advantage of a neat little gem called <code>fakeweb</code> (see <a href="https://github.com/chrisk/fakeweb">https://github.com/chrisk/fakeweb</a>). Let’s just drop the response we got earlier and drop it into <code>spec/fixtures</code>. For testing purposes, we will read the contents of that file, whenever a test tries to make such a request. Still in <code>spec_helper.rb</code> we can add the following code to the RSpec configure-block:</p>
+
+<pre><code>RSpec.configure do |config|
+  def fixture(filename)
+    File.dirname(__FILE__) + '/fixtures/' + filename
+  end
+
+  FakeWeb.register_uri(:get, "http://www.imdbapi.com/?t=hangover", :body =&gt; open(fixture("godfather.json")).read)
+end
+</code></pre>
+
+<p>This assumed that we called the file <code>godfather.json</code>.</p>
+
+<h3 id="httparty">6. HTTParty</h3>
+
+<p>Now that we have set up everything we need, we can finally start coding. There isn’t really too much to do thanks to the great <code>httparty</code> gem (see <a href="https://github.com/jnunemaker/httparty">https://github.com/jnunemaker/httparty</a>).</p>
+
+<p>But first let’s see where we want to put our code. In <code>lib/zimdb.rb</code> we will have to require some dependencies and include httparty while we’re at it to make it available to all the classes which we define under <code>lib/zimdb/</code>. In our example, we only have the <code>Movie</code> class, but it’s still a good idea to separate the files. This leaves us with a very simple zimdb.rb:</p>
+
+<pre><code class="language-ruby">    require <span class="string"><span class="delimiter">"</span><span class="content">rubygems</span><span class="delimiter">"</span></span>
+    require <span class="string"><span class="delimiter">"</span><span class="content">httparty</span><span class="delimiter">"</span></span>
+    require <span class="string"><span class="delimiter">"</span><span class="content">json</span><span class="delimiter">"</span></span>
+    require <span class="string"><span class="delimiter">"</span><span class="content">zimdb/movie</span><span class="delimiter">"</span></span>
+    
+    <span class="keyword">module</span> <span class="class">Zimdb</span>
+      include <span class="constant">HTTParty</span>
+    <span class="keyword">end</span></code></pre>
+
+<p>Now on to ‘lib/zimdb/movie.rb’:</p>
+
+<pre><code class="language-ruby">    <span class="keyword">module</span> <span class="class">Zimdb</span>
+      <span class="keyword">class</span> <span class="class">Movie</span>
+        <span class="keyword">def</span> <span class="function">initialize</span>(params)
+          <span class="instance-variable">@json</span> = <span class="constant">JSON</span>.parse(<span class="constant">HTTParty</span>.get(<span class="string"><span class="delimiter">"</span><span class="content">http://www.imdbapi.com/?t=</span><span class="inline"><span class="inline-delimiter">#{</span>params[<span class="symbol">:title</span>]<span class="inline-delimiter">}</span></span><span class="delimiter">"</span></span>))
+        <span class="keyword">end</span>
+      <span class="keyword">end</span>
+    <span class="keyword">end</span></code></pre>
+
+<p>It really couldn’t be much simpler. We now have <code>@json</code>, which is a hash of the response of our call. This won’t make our tests pass, so let’s add a method to get the movie title:</p>
+
+<pre><code class="language-ruby">    <span class="keyword">def</span> <span class="function">title</span>
+      <span class="instance-variable">@json</span>[<span class="string"><span class="delimiter">"</span><span class="content">Title</span><span class="delimiter">"</span></span>]
+    <span class="keyword">end</span></code></pre>
+
+<p>Running the tests now yields the following output:</p>
+
+<pre><code class="language-ruby">    .FF
+    
+    <span class="constant">Failures</span>:
+    
+      <span class="integer">1</span>) zimdb should <span class="keyword">return</span> the year
+         <span class="constant">Failure</span>/<span class="constant">Error</span>: <span class="instance-variable">@movie</span>.year.should == <span class="integer">2009</span>
+         <span class="constant">NoMethodError</span>:
+           undefined method <span class="shell"><span class="delimiter">`</span><span class="content">year' for #
+         # ./spec/movie_spec.rb:30:in </span><span class="delimiter">`</span></span>block (<span class="integer">2</span> levels) <span class="keyword">in</span> &lt;top (required)&gt;<span class="string"><span class="delimiter">'</span><span class="content">
+    
+      2) zimdb should return the rating
+         Failure/Error: @movie.rated.should == "R"
+         NoMethodError:
+           undefined method `rated</span><span class="delimiter">'</span></span> <span class="keyword">for</span> <span class="comment">#</span>
+         <span class="comment"># ./spec/movie_spec.rb:34:in `block (2 levels) in &lt;top (required)&gt;'</span>
+    
+    <span class="constant">Finished</span> <span class="keyword">in</span> <span class="float">1.21</span> seconds
+    <span class="integer">3</span> examples, <span class="integer">2</span> failures
+    
+    <span class="constant">Failed</span> examples:
+    
+    rspec ./spec/movie_spec.rb:<span class="integer">29</span> <span class="comment"># zimdb should return the year</span>
+    rspec ./spec/movie_spec.rb:<span class="integer">33</span> <span class="comment"># zimdb should return the rating</span>
+
+
+<span class="constant">Looking</span> good! <span class="constant">One</span> test already passed. 
+
+<span class="comment">###7. Make all tests pass</span>
+
+To make the other tests pass is just as simple. 
+
+
+    def year
+      <span class="instance-variable">@json</span>[<span class="string"><span class="delimiter">"</span><span class="content">Year</span><span class="delimiter">"</span></span>].to_i
+    <span class="keyword">end</span>
+    
+    <span class="keyword">def</span> <span class="function">rated</span>
+      <span class="instance-variable">@json</span>[<span class="string"><span class="delimiter">"</span><span class="content">Rated</span><span class="delimiter">"</span></span>]
+    <span class="keyword">end</span>
+
+
+<span class="constant">All</span> the tests pass! <span class="constant">However</span>, <span class="constant">I</span> <span class="keyword">do</span> <span class="keyword">not</span> like <span class="shell"><span class="delimiter">`</span><span class="content">@json["Year"]</span><span class="delimiter">`</span></span>. In my opinion, something like <span class="shell"><span class="delimiter">`</span><span class="content">@json[:year]</span><span class="delimiter">`</span></span> looks a lot cleaner <span class="keyword">and</span> opens up more possibilities. While we would normally just implement the least amount of code to make all the tests pass, <span class="constant">I</span> <span class="keyword">do</span> want to add a little method to <span class="shell"><span class="delimiter">`</span><span class="content">Hash</span><span class="delimiter">`</span></span> that creates these symbolized keys. Let<span class="string"><span class="delimiter">'</span><span class="content">s call it `symbolize_keys` and write a test in `spec/hash_spec.rb`:
+
+
+#!ruby
+    require </span><span class="delimiter">'</span></span>spec_helper<span class="string"><span class="delimiter">'</span><span class="content">
+    
+    describe Hash do
+      it "should symbolize keys" do
+        hash_with_string_keys = { "Title" =&gt; "The Hangover", "Year" =&gt; "2009" }
+        hash_with_string_keys.symbolize_keys
+        hash_with_string_keys.should == { :title =&gt; "The Hangover", :year =&gt; "2009" }
+      end
+    end
+
+
+Basically, we have a hash with ugly strings as keys and want to transform the keys into nice Ruby-esque symbols by calling `symbolize_keys` on that hash. To do this, we extend the `Hash` class (in `lib/zimdb/hash.rb`)and implement this behavior:
+
+
+#!ruby
+    class Hash
+      def symbolize_keys
+        hash = self.dup
+        self.clear
+        hash.each_pair{|k, v| self[k.downcase.to_sym] = v}
+        self
+      end
+    end
+
+
+We require this in `lib/zimdb.rb` and add it to our Movie class:
+
+
+#!ruby
+    @json = JSON.parse(HTTParty.get("http://www.imdbapi.com/?t=#{params[:title]}")).symbolize_keys
+
+
+Now we can rewrite our methods as follows:
+
+
+#!ruby
+    def year
+      @json[:year].to_i
+    end
+
+
+###8. And where is the gem?
+
+Our code is implemented and our tests are passing. The next step would be to package it all into a gem using the `gem` command-line tools. Read more about this in the [rubygems documentation](http://docs.rubygems.org/read/book/2). It would be wise to create a sample Ruby app that uses the gem, for example querying the user for a movie title and then spitting out some information about that movie. Or, we could just test it in the Ruby shell. Of course, adding the remaining attributes and handling empty responses (what happens when our movie wasn</span><span class="delimiter">'</span></span>t found?) should be taken care of as well.
+
+To view the current state of the actual zimdb gem, check out on [<span class="constant">GitHub</span>](https<span class="symbol">:/</span>/github.com/indrode/zimdb) <span class="keyword">or</span> browse the [documentation](http<span class="symbol">:/</span>/rubydoc.info/gems/zimdb/<span class="float">0.0</span>.<span class="error">1</span>/frames). Install it the old-fashioned way:
+
+
+    gem install zimdb
+
+
+<span class="constant">You</span> may also dump it into your <span class="shell"><span class="delimiter">`</span><span class="content">Gemfile</span><span class="delimiter">`</span></span> <span class="keyword">if</span> you are using <span class="constant">Bundler</span>.
+
+
+    gem <span class="string"><span class="delimiter">"</span><span class="content">zimdb</span><span class="delimiter">"</span></span>, <span class="string"><span class="delimiter">"</span><span class="content">~&gt; 0.0.1</span><span class="delimiter">"</span></span></code></pre>
+<div class="infoline"><a href="/i/zimdb/">Permalink</a> &middot; Written on 2011-11-15</div>
 ;T:	post@
 "/stylesheet/{;{;I"�
 
@@ -6288,7 +6668,7 @@ jQuery(document).ready(function ($) {
 </body>
 </html>
 ;T;	I"Hi, I'm a new item!;T;
-I"Hi, I'm a new item!;T;@J"/about/{;{	;I"4<!DOCTYPE html>
+I"Hi, I'm a new item!;T;@J"/about/{;{	;I"�<!DOCTYPE html>
 
 <!-- paulirish.com/2008/conditional-stylesheets-vs-css-hacks-answer-neither/ -->
 <!--[if lt IE 7]> <html class="no-js lt-ie9 lt-ie8 lt-ie7" lang="en"> <![endif]-->
@@ -6351,6 +6731,8 @@ I"Hi, I'm a new item!;T;@J"/about/{;{	;I"4<!DOCTYPE html>
 <p>The following articles have been posted on Meatspace so far:</p>
 
 
+<p><a href="http://ms.indrode.com/i/zimdb/">Writing an API wrapper in Ruby with HTTParty and Fakeweb</a></p>
+
 <p><a href="http://ms.indrode.com/i/nanoc/">Creating static sites with nanoc</a></p>
 
 <p><a href="http://ms.indrode.com/i/markdown/">Short Markdown, Jekyll, and Git reference</a></p>
@@ -6388,7 +6770,7 @@ I"Hi, I'm a new item!;T;@J"/about/{;{	;I"4<!DOCTYPE html>
 <% @site.sorted_articles.each do |article| %>
 <p><%= link_to(article[:title], url_for(article)) %></p>
 <% end %>;T;
-I"�<h2>About</h2>
+I" <h2>About</h2>
 
 <p><strong>Meatspace</strong> is a personal project of <a href="http://indrode.com/">Indro De</a>. It will grow to contain pages for personal reference, picture galleries, and writings on other nonspecific topics. You may call it a hybrid between a blog, photo gallery, reference manual, and personal shoutbox.</p>
 
@@ -6400,6 +6782,8 @@ I"�<h2>About</h2>
 
 <p>The following articles have been posted on Meatspace so far:</p>
 
+
+<p><a href="http://ms.indrode.com/i/zimdb/">Writing an API wrapper in Ruby with HTTParty and Fakeweb</a></p>
 
 <p><a href="http://ms.indrode.com/i/nanoc/">Creating static sites with nanoc</a></p>
 
@@ -6997,7 +7381,7 @@ git push origin master&lt;/code&gt;&lt;/pre&gt;
 &lt;p&gt;This is all that is needed to have GitHub serve your Jekyll implementation. This space may be updated in future to add some more worthwhile Jekyll / GitHub goodness.&lt;/p&gt;</content>
   </entry>
 </feed>
-;T;@\"/feed/feed/{;{	;I"HB<!DOCTYPE html>
+;T;@\"/feed/feed/{;{	;I"�<!DOCTYPE html>
 
 <!-- paulirish.com/2008/conditional-stylesheets-vs-css-hacks-answer-neither/ -->
 <!--[if lt IE 7]> <html class="no-js lt-ie9 lt-ie8 lt-ie7" lang="en"> <![endif]-->
@@ -7051,13 +7435,286 @@ git push origin master&lt;/code&gt;&lt;/pre&gt;
 <feed xmlns="http://www.w3.org/2005/Atom">
   <id>http://ms.indrode.com/</id>
   <title>meatspace RSS</title>
-  <updated>2011-11-06T23:00:00Z</updated>
+  <updated>2011-11-14T23:00:00Z</updated>
   <link rel="alternate" href="http://ms.indrode.com/"/>
   <link rel="self" href="http://ms.indrode.com/feed/feed.xml"/>
   <author>
     <name>Indro De</name>
     <uri>http://indrode.com/</uri>
   </author>
+  <entry>
+    <id>tag:ms.indrode.com,2011-11-15:/i/zimdb/</id>
+    <title type="html">Writing an API wrapper in Ruby with HTTParty and Fakeweb</title>
+    <published>2011-11-14T23:00:00Z</published>
+    <updated>2011-11-14T23:00:00Z</updated>
+    <link rel="alternate" href="http://ms.indrode.com/i/zimdb/"/>
+    <content type="html">&lt;h1 id="writing-an-api-wrapper-in-ruby-with-httparty-and-fakeweb"&gt;Writing an API wrapper in Ruby with HTTParty and Fakeweb&lt;/h1&gt;
+
+&lt;p&gt;This is a quick tutorial on writing a fully-tested API wrapper in Ruby. As example, I am taking &lt;a href="https://github.com/indrode/zimdb"&gt;zimdb&lt;/a&gt;, a small gem that I developed the other day. First, I’ll cover the (test-driven) implementation of the functionality. To top it off, I’ll explain the process of creating a gem that can be used by other developers.&lt;/p&gt;
+
+&lt;h2 id="what-does-zimdb-do"&gt;What does zimdb do?&lt;/h2&gt;
+
+&lt;p&gt;Zimdb is a wrapper for &lt;a href="http://www.imdbapi.com/"&gt;imdbapi.com&lt;/a&gt;, a service that provides content from the vast movie database &lt;a href="http://www.imdb.com/"&gt;IMDB&lt;/a&gt; which I am sure everyone has heard of. IMDb doesn’t provide it’s own open API to developers, so in order to access information, we’ll have to resort to 3rd party providers. Right now, zimdb only fetches information about a single movie and the only way to access information for a specific movie is to search it by its title. For the scope of this article, that should be all we need.&lt;/p&gt;
+
+&lt;h2 id="a-simple-approach"&gt;A simple approach&lt;/h2&gt;
+
+&lt;p&gt;The imdbapi.com “API” (it’s basically just one call) is very straight-forward. Still, it’s always good to have a general idea of what we want to do, before daftly jumping into the code. Here are the different steps of this approach: &lt;/p&gt;
+
+&lt;ol&gt;
+&lt;li&gt;trigger a sample call and examine the result&lt;/li&gt;
+  &lt;li&gt;define what we want to fetch (via tests)&lt;/li&gt;
+  &lt;li&gt;implement it!&lt;/li&gt;
+  &lt;li&gt;transform it into a gem (we may do that earlier in the process)&lt;/li&gt;
+&lt;/ol&gt;&lt;h3 id="the-call"&gt;1. The Call&lt;/h3&gt;
+
+&lt;p&gt;&lt;a href="http://www.imdbapi.com/"&gt;imdbapi.com&lt;/a&gt; provides a nice interface to make sample calls. It is also very convenient that responses are nicely packed in a JSON. For now, we’ll just search for movies by title, but we could additionally allow searching movies by IMDb-ID and year. Here is how a sample response looks like:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;{"Title":"The Godfather","Year":"1972","Rated":"R","Released":"24 Mar 1972","Genre":"Crime, Drama","Director":"Francis Ford Coppola","Writer":"Mario Puzo, Mario Puzo","Actors":"Marlon Brando, Al Pacino, James Caan, Diane Keaton","Plot":"The aging patriarch of an organized crime dynasty transfers control of his clandestine empire to his reluctant son.","Poster":"http://ia.media-imdb.com/images/M/MV5BMTIyMTIxNjI5NF5BMl5BanBnXkFtZTcwNzQzNDM5MQ@@._V1._SX320.jpg","Runtime":"2 hrs 55 mins","Rating":"9.2","Votes":"436305","ID":"tt0068646","Response":"True"}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;For our API wrapper, we would like to fetch all of these movie attributes. So let’s fire up your favorite text editor and create a new file. We’ll create a new folder and some subfolders too while we’re at it.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;mkdir zimdb
+cd zimdb
+mkdir lib
+mkdir spec
+mate spec/movie_spec.rb
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h3 id="a-first-test"&gt;2. A first test&lt;/h3&gt;
+
+&lt;p&gt;We will use &lt;code&gt;rspec&lt;/code&gt; to test our gem, so make sure it is installed (&lt;code&gt;gem install rspec&lt;/code&gt;). In &lt;code&gt;movie_spec.rb&lt;/code&gt;, we can then add a first test for a very common task we want the gem to achieve.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;describe "zimdb" do
+  it "should fetch a movie title" do
+    movie = Zimdb::Movie.new(:title =&amp;gt; "Hangover")
+    movie.title.should == "The Godfather"
+  end
+end
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;This already does more than one step at once, but I will keep this tutorial rather brief, so let’s this this file with &lt;code&gt;rspec spec/movie_spec.rb&lt;/code&gt; and see what’s happening.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;F
+
+Failures:
+
+  1) zimdb should fetch a movie title
+     Failure/Error: movie = Zimdb::Movie.new(:title =&amp;gt; "Hangover")
+     NameError:
+       uninitialized constant Zimdb
+     # ./spec/movie_spec.rb:5:in `block (2 levels) in &amp;lt;top (required)&amp;gt;'
+
+Finished in 0.47559 seconds
+1 example, 1 failure
+
+Failed examples:
+
+rspec ./spec/movie_spec.rb:4 # zimdb should fetch a movie title
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Nothing unexpected here, considering that we haven’t written a single line of actual code. In our test, we already made a couple of assumptions. First, we want to create a module called &lt;code&gt;Zimdb&lt;/code&gt; because we want to pack it into a gem later. Then, we need a class &lt;code&gt;Movie&lt;/code&gt; which can be instantiated by passing it the param &lt;code&gt;:title&lt;/code&gt;. Maybe, at some later point in time, we’ll also want to fetch movies via the IMDb-ID, which is why we are passing the movie title via the &lt;code&gt;:title&lt;/code&gt; symbol. Finally, we have a &lt;code&gt;title&lt;/code&gt; method for each Movie object that returns the movie’s title.&lt;/p&gt;
+
+&lt;h3 id="some-more-tests"&gt;3. Some more tests&lt;/h3&gt;
+
+&lt;p&gt;Because we wanted to define the attributes we wanted to fetch (for sake of brevity, let’s just get a few of them), let’s add these to our spec file as well. We will still implement them one by one. Since we are aways instantiating a new movie object, we’ll put that into a &lt;code&gt;before(:each)&lt;/code&gt; block. Here is our movie_spec.rb:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;describe "zimdb" do
+  before(:each) do
+    @movie = Zimdb::Movie.new(:title =&amp;gt; "Godfather")
+  end
+
+  it "should return the title" do
+    @movie.title.should == "The Hangover"
+  end
+  
+  it "should return the year" do
+    @movie.year.should == 1972
+  end
+  
+  it "should return the rating" do
+    @movie.rated.should == "R"
+  end
+end
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h3 id="setting-up-the-gem-with-bundler"&gt;4. Setting up the Gem with Bundler&lt;/h3&gt;
+
+&lt;p&gt;Okay, now let’s get going and start to code? Not quite yet. Since we want to create a new gem anyway, why not set it up now, so we can start developing in the right places and don’t have to move too many files around later. We will use &lt;code&gt;Bundler&lt;/code&gt; to set up our gem.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;bundle gem zimdb
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Run this from the level below the &lt;code&gt;/zimdb&lt;/code&gt; folder and it will create a couple of useful files, such as the gemspec file &lt;code&gt;zimdb.gemspec&lt;/code&gt;. There are various tutorials on the web on how to customize this gemspec file to I will make this short. We only need to add two dependencies apart from rspec: &lt;code&gt;httparty&lt;/code&gt; (for runtime) and &lt;code&gt;fakeweb&lt;/code&gt; (for development). More on these in a second.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;s.add_runtime_dependency "httparty"
+s.add_development_dependency "rspec", "~&amp;gt; 2.6"
+s.add_development_dependency "fakeweb", "~&amp;gt; 1.3"
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;We can also use this moment to setup a &lt;code&gt;spec_helper.rb&lt;/code&gt; to use for testing (we will need it later). In &lt;code&gt;/spec&lt;/code&gt; we create that file and add some code to it:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;require 'rubygems'
+require 'bundler/setup'
+require 'zimdb'
+require 'fakeweb'
+
+RSpec.configure do |config|
+  # we'll add more here later
+end
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;In our &lt;code&gt;movie_spec.rb&lt;/code&gt; we can now &lt;code&gt;require 'spec_helper'&lt;/code&gt; instead of requiring rspec.&lt;/p&gt;
+
+&lt;h3 id="fakeweb"&gt;5. Fakeweb&lt;/h3&gt;
+
+&lt;p&gt;In our final code, we will make calls to imdbapi.com, but we don’t want to do that for testing. To fake these web requests, we will take advantage of a neat little gem called &lt;code&gt;fakeweb&lt;/code&gt; (see &lt;a href="https://github.com/chrisk/fakeweb"&gt;https://github.com/chrisk/fakeweb&lt;/a&gt;). Let’s just drop the response we got earlier and drop it into &lt;code&gt;spec/fixtures&lt;/code&gt;. For testing purposes, we will read the contents of that file, whenever a test tries to make such a request. Still in &lt;code&gt;spec_helper.rb&lt;/code&gt; we can add the following code to the RSpec configure-block:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;RSpec.configure do |config|
+  def fixture(filename)
+    File.dirname(__FILE__) + '/fixtures/' + filename
+  end
+
+  FakeWeb.register_uri(:get, "http://www.imdbapi.com/?t=hangover", :body =&amp;gt; open(fixture("godfather.json")).read)
+end
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;This assumed that we called the file &lt;code&gt;godfather.json&lt;/code&gt;.&lt;/p&gt;
+
+&lt;h3 id="httparty"&gt;6. HTTParty&lt;/h3&gt;
+
+&lt;p&gt;Now that we have set up everything we need, we can finally start coding. There isn’t really too much to do thanks to the great &lt;code&gt;httparty&lt;/code&gt; gem (see &lt;a href="https://github.com/jnunemaker/httparty"&gt;https://github.com/jnunemaker/httparty&lt;/a&gt;).&lt;/p&gt;
+
+&lt;p&gt;But first let’s see where we want to put our code. In &lt;code&gt;lib/zimdb.rb&lt;/code&gt; we will have to require some dependencies and include httparty while we’re at it to make it available to all the classes which we define under &lt;code&gt;lib/zimdb/&lt;/code&gt;. In our example, we only have the &lt;code&gt;Movie&lt;/code&gt; class, but it’s still a good idea to separate the files. This leaves us with a very simple zimdb.rb:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class="language-ruby"&gt;    require &lt;span class="string"&gt;&lt;span class="delimiter"&gt;"&lt;/span&gt;&lt;span class="content"&gt;rubygems&lt;/span&gt;&lt;span class="delimiter"&gt;"&lt;/span&gt;&lt;/span&gt;
+    require &lt;span class="string"&gt;&lt;span class="delimiter"&gt;"&lt;/span&gt;&lt;span class="content"&gt;httparty&lt;/span&gt;&lt;span class="delimiter"&gt;"&lt;/span&gt;&lt;/span&gt;
+    require &lt;span class="string"&gt;&lt;span class="delimiter"&gt;"&lt;/span&gt;&lt;span class="content"&gt;json&lt;/span&gt;&lt;span class="delimiter"&gt;"&lt;/span&gt;&lt;/span&gt;
+    require &lt;span class="string"&gt;&lt;span class="delimiter"&gt;"&lt;/span&gt;&lt;span class="content"&gt;zimdb/movie&lt;/span&gt;&lt;span class="delimiter"&gt;"&lt;/span&gt;&lt;/span&gt;
+    
+    &lt;span class="keyword"&gt;module&lt;/span&gt; &lt;span class="class"&gt;Zimdb&lt;/span&gt;
+      include &lt;span class="constant"&gt;HTTParty&lt;/span&gt;
+    &lt;span class="keyword"&gt;end&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Now on to ‘lib/zimdb/movie.rb’:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class="language-ruby"&gt;    &lt;span class="keyword"&gt;module&lt;/span&gt; &lt;span class="class"&gt;Zimdb&lt;/span&gt;
+      &lt;span class="keyword"&gt;class&lt;/span&gt; &lt;span class="class"&gt;Movie&lt;/span&gt;
+        &lt;span class="keyword"&gt;def&lt;/span&gt; &lt;span class="function"&gt;initialize&lt;/span&gt;(params)
+          &lt;span class="instance-variable"&gt;@json&lt;/span&gt; = &lt;span class="constant"&gt;JSON&lt;/span&gt;.parse(&lt;span class="constant"&gt;HTTParty&lt;/span&gt;.get(&lt;span class="string"&gt;&lt;span class="delimiter"&gt;"&lt;/span&gt;&lt;span class="content"&gt;http://www.imdbapi.com/?t=&lt;/span&gt;&lt;span class="inline"&gt;&lt;span class="inline-delimiter"&gt;#{&lt;/span&gt;params[&lt;span class="symbol"&gt;:title&lt;/span&gt;]&lt;span class="inline-delimiter"&gt;}&lt;/span&gt;&lt;/span&gt;&lt;span class="delimiter"&gt;"&lt;/span&gt;&lt;/span&gt;))
+        &lt;span class="keyword"&gt;end&lt;/span&gt;
+      &lt;span class="keyword"&gt;end&lt;/span&gt;
+    &lt;span class="keyword"&gt;end&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;It really couldn’t be much simpler. We now have &lt;code&gt;@json&lt;/code&gt;, which is a hash of the response of our call. This won’t make our tests pass, so let’s add a method to get the movie title:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class="language-ruby"&gt;    &lt;span class="keyword"&gt;def&lt;/span&gt; &lt;span class="function"&gt;title&lt;/span&gt;
+      &lt;span class="instance-variable"&gt;@json&lt;/span&gt;[&lt;span class="string"&gt;&lt;span class="delimiter"&gt;"&lt;/span&gt;&lt;span class="content"&gt;Title&lt;/span&gt;&lt;span class="delimiter"&gt;"&lt;/span&gt;&lt;/span&gt;]
+    &lt;span class="keyword"&gt;end&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Running the tests now yields the following output:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class="language-ruby"&gt;    .FF
+    
+    &lt;span class="constant"&gt;Failures&lt;/span&gt;:
+    
+      &lt;span class="integer"&gt;1&lt;/span&gt;) zimdb should &lt;span class="keyword"&gt;return&lt;/span&gt; the year
+         &lt;span class="constant"&gt;Failure&lt;/span&gt;/&lt;span class="constant"&gt;Error&lt;/span&gt;: &lt;span class="instance-variable"&gt;@movie&lt;/span&gt;.year.should == &lt;span class="integer"&gt;2009&lt;/span&gt;
+         &lt;span class="constant"&gt;NoMethodError&lt;/span&gt;:
+           undefined method &lt;span class="shell"&gt;&lt;span class="delimiter"&gt;`&lt;/span&gt;&lt;span class="content"&gt;year' for #
+         # ./spec/movie_spec.rb:30:in &lt;/span&gt;&lt;span class="delimiter"&gt;`&lt;/span&gt;&lt;/span&gt;block (&lt;span class="integer"&gt;2&lt;/span&gt; levels) &lt;span class="keyword"&gt;in&lt;/span&gt; &amp;lt;top (required)&amp;gt;&lt;span class="string"&gt;&lt;span class="delimiter"&gt;'&lt;/span&gt;&lt;span class="content"&gt;
+    
+      2) zimdb should return the rating
+         Failure/Error: @movie.rated.should == "R"
+         NoMethodError:
+           undefined method `rated&lt;/span&gt;&lt;span class="delimiter"&gt;'&lt;/span&gt;&lt;/span&gt; &lt;span class="keyword"&gt;for&lt;/span&gt; &lt;span class="comment"&gt;#&lt;/span&gt;
+         &lt;span class="comment"&gt;# ./spec/movie_spec.rb:34:in `block (2 levels) in &amp;lt;top (required)&amp;gt;'&lt;/span&gt;
+    
+    &lt;span class="constant"&gt;Finished&lt;/span&gt; &lt;span class="keyword"&gt;in&lt;/span&gt; &lt;span class="float"&gt;1.21&lt;/span&gt; seconds
+    &lt;span class="integer"&gt;3&lt;/span&gt; examples, &lt;span class="integer"&gt;2&lt;/span&gt; failures
+    
+    &lt;span class="constant"&gt;Failed&lt;/span&gt; examples:
+    
+    rspec ./spec/movie_spec.rb:&lt;span class="integer"&gt;29&lt;/span&gt; &lt;span class="comment"&gt;# zimdb should return the year&lt;/span&gt;
+    rspec ./spec/movie_spec.rb:&lt;span class="integer"&gt;33&lt;/span&gt; &lt;span class="comment"&gt;# zimdb should return the rating&lt;/span&gt;
+
+
+&lt;span class="constant"&gt;Looking&lt;/span&gt; good! &lt;span class="constant"&gt;One&lt;/span&gt; test already passed. 
+
+&lt;span class="comment"&gt;###7. Make all tests pass&lt;/span&gt;
+
+To make the other tests pass is just as simple. 
+
+
+    def year
+      &lt;span class="instance-variable"&gt;@json&lt;/span&gt;[&lt;span class="string"&gt;&lt;span class="delimiter"&gt;"&lt;/span&gt;&lt;span class="content"&gt;Year&lt;/span&gt;&lt;span class="delimiter"&gt;"&lt;/span&gt;&lt;/span&gt;].to_i
+    &lt;span class="keyword"&gt;end&lt;/span&gt;
+    
+    &lt;span class="keyword"&gt;def&lt;/span&gt; &lt;span class="function"&gt;rated&lt;/span&gt;
+      &lt;span class="instance-variable"&gt;@json&lt;/span&gt;[&lt;span class="string"&gt;&lt;span class="delimiter"&gt;"&lt;/span&gt;&lt;span class="content"&gt;Rated&lt;/span&gt;&lt;span class="delimiter"&gt;"&lt;/span&gt;&lt;/span&gt;]
+    &lt;span class="keyword"&gt;end&lt;/span&gt;
+
+
+&lt;span class="constant"&gt;All&lt;/span&gt; the tests pass! &lt;span class="constant"&gt;However&lt;/span&gt;, &lt;span class="constant"&gt;I&lt;/span&gt; &lt;span class="keyword"&gt;do&lt;/span&gt; &lt;span class="keyword"&gt;not&lt;/span&gt; like &lt;span class="shell"&gt;&lt;span class="delimiter"&gt;`&lt;/span&gt;&lt;span class="content"&gt;@json["Year"]&lt;/span&gt;&lt;span class="delimiter"&gt;`&lt;/span&gt;&lt;/span&gt;. In my opinion, something like &lt;span class="shell"&gt;&lt;span class="delimiter"&gt;`&lt;/span&gt;&lt;span class="content"&gt;@json[:year]&lt;/span&gt;&lt;span class="delimiter"&gt;`&lt;/span&gt;&lt;/span&gt; looks a lot cleaner &lt;span class="keyword"&gt;and&lt;/span&gt; opens up more possibilities. While we would normally just implement the least amount of code to make all the tests pass, &lt;span class="constant"&gt;I&lt;/span&gt; &lt;span class="keyword"&gt;do&lt;/span&gt; want to add a little method to &lt;span class="shell"&gt;&lt;span class="delimiter"&gt;`&lt;/span&gt;&lt;span class="content"&gt;Hash&lt;/span&gt;&lt;span class="delimiter"&gt;`&lt;/span&gt;&lt;/span&gt; that creates these symbolized keys. Let&lt;span class="string"&gt;&lt;span class="delimiter"&gt;'&lt;/span&gt;&lt;span class="content"&gt;s call it `symbolize_keys` and write a test in `spec/hash_spec.rb`:
+
+
+#!ruby
+    require &lt;/span&gt;&lt;span class="delimiter"&gt;'&lt;/span&gt;&lt;/span&gt;spec_helper&lt;span class="string"&gt;&lt;span class="delimiter"&gt;'&lt;/span&gt;&lt;span class="content"&gt;
+    
+    describe Hash do
+      it "should symbolize keys" do
+        hash_with_string_keys = { "Title" =&amp;gt; "The Hangover", "Year" =&amp;gt; "2009" }
+        hash_with_string_keys.symbolize_keys
+        hash_with_string_keys.should == { :title =&amp;gt; "The Hangover", :year =&amp;gt; "2009" }
+      end
+    end
+
+
+Basically, we have a hash with ugly strings as keys and want to transform the keys into nice Ruby-esque symbols by calling `symbolize_keys` on that hash. To do this, we extend the `Hash` class (in `lib/zimdb/hash.rb`)and implement this behavior:
+
+
+#!ruby
+    class Hash
+      def symbolize_keys
+        hash = self.dup
+        self.clear
+        hash.each_pair{|k, v| self[k.downcase.to_sym] = v}
+        self
+      end
+    end
+
+
+We require this in `lib/zimdb.rb` and add it to our Movie class:
+
+
+#!ruby
+    @json = JSON.parse(HTTParty.get("http://www.imdbapi.com/?t=#{params[:title]}")).symbolize_keys
+
+
+Now we can rewrite our methods as follows:
+
+
+#!ruby
+    def year
+      @json[:year].to_i
+    end
+
+
+###8. And where is the gem?
+
+Our code is implemented and our tests are passing. The next step would be to package it all into a gem using the `gem` command-line tools. Read more about this in the [rubygems documentation](http://docs.rubygems.org/read/book/2). It would be wise to create a sample Ruby app that uses the gem, for example querying the user for a movie title and then spitting out some information about that movie. Or, we could just test it in the Ruby shell. Of course, adding the remaining attributes and handling empty responses (what happens when our movie wasn&lt;/span&gt;&lt;span class="delimiter"&gt;'&lt;/span&gt;&lt;/span&gt;t found?) should be taken care of as well.
+
+To view the current state of the actual zimdb gem, check out on [&lt;span class="constant"&gt;GitHub&lt;/span&gt;](https&lt;span class="symbol"&gt;:/&lt;/span&gt;/github.com/indrode/zimdb) &lt;span class="keyword"&gt;or&lt;/span&gt; browse the [documentation](http&lt;span class="symbol"&gt;:/&lt;/span&gt;/rubydoc.info/gems/zimdb/&lt;span class="float"&gt;0.0&lt;/span&gt;.&lt;span class="error"&gt;1&lt;/span&gt;/frames). Install it the old-fashioned way:
+
+
+    gem install zimdb
+
+
+&lt;span class="constant"&gt;You&lt;/span&gt; may also dump it into your &lt;span class="shell"&gt;&lt;span class="delimiter"&gt;`&lt;/span&gt;&lt;span class="content"&gt;Gemfile&lt;/span&gt;&lt;span class="delimiter"&gt;`&lt;/span&gt;&lt;/span&gt; &lt;span class="keyword"&gt;if&lt;/span&gt; you are using &lt;span class="constant"&gt;Bundler&lt;/span&gt;.
+
+
+    gem &lt;span class="string"&gt;&lt;span class="delimiter"&gt;"&lt;/span&gt;&lt;span class="content"&gt;zimdb&lt;/span&gt;&lt;span class="delimiter"&gt;"&lt;/span&gt;&lt;/span&gt;, &lt;span class="string"&gt;&lt;span class="delimiter"&gt;"&lt;/span&gt;&lt;span class="content"&gt;~&amp;gt; 0.0.1&lt;/span&gt;&lt;span class="delimiter"&gt;"&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;</content>
+  </entry>
   <entry>
     <id>tag:ms.indrode.com,2011-11-07:/i/nanoc/</id>
     <title type="html">Creating static sites with nanoc</title>
@@ -7223,17 +7880,290 @@ git push origin master&lt;/code&gt;&lt;/pre&gt;
 </html>
 
 ;T;	I"<%= atom_feed %>;T;
-I"�9<?xml version="1.0" encoding="UTF-8"?>
+I"l�<?xml version="1.0" encoding="UTF-8"?>
 <feed xmlns="http://www.w3.org/2005/Atom">
   <id>http://ms.indrode.com/</id>
   <title>meatspace RSS</title>
-  <updated>2011-11-06T23:00:00Z</updated>
+  <updated>2011-11-14T23:00:00Z</updated>
   <link rel="alternate" href="http://ms.indrode.com/"/>
   <link rel="self" href="http://ms.indrode.com/feed/feed.xml"/>
   <author>
     <name>Indro De</name>
     <uri>http://indrode.com/</uri>
   </author>
+  <entry>
+    <id>tag:ms.indrode.com,2011-11-15:/i/zimdb/</id>
+    <title type="html">Writing an API wrapper in Ruby with HTTParty and Fakeweb</title>
+    <published>2011-11-14T23:00:00Z</published>
+    <updated>2011-11-14T23:00:00Z</updated>
+    <link rel="alternate" href="http://ms.indrode.com/i/zimdb/"/>
+    <content type="html">&lt;h1 id="writing-an-api-wrapper-in-ruby-with-httparty-and-fakeweb"&gt;Writing an API wrapper in Ruby with HTTParty and Fakeweb&lt;/h1&gt;
+
+&lt;p&gt;This is a quick tutorial on writing a fully-tested API wrapper in Ruby. As example, I am taking &lt;a href="https://github.com/indrode/zimdb"&gt;zimdb&lt;/a&gt;, a small gem that I developed the other day. First, I’ll cover the (test-driven) implementation of the functionality. To top it off, I’ll explain the process of creating a gem that can be used by other developers.&lt;/p&gt;
+
+&lt;h2 id="what-does-zimdb-do"&gt;What does zimdb do?&lt;/h2&gt;
+
+&lt;p&gt;Zimdb is a wrapper for &lt;a href="http://www.imdbapi.com/"&gt;imdbapi.com&lt;/a&gt;, a service that provides content from the vast movie database &lt;a href="http://www.imdb.com/"&gt;IMDB&lt;/a&gt; which I am sure everyone has heard of. IMDb doesn’t provide it’s own open API to developers, so in order to access information, we’ll have to resort to 3rd party providers. Right now, zimdb only fetches information about a single movie and the only way to access information for a specific movie is to search it by its title. For the scope of this article, that should be all we need.&lt;/p&gt;
+
+&lt;h2 id="a-simple-approach"&gt;A simple approach&lt;/h2&gt;
+
+&lt;p&gt;The imdbapi.com “API” (it’s basically just one call) is very straight-forward. Still, it’s always good to have a general idea of what we want to do, before daftly jumping into the code. Here are the different steps of this approach: &lt;/p&gt;
+
+&lt;ol&gt;
+&lt;li&gt;trigger a sample call and examine the result&lt;/li&gt;
+  &lt;li&gt;define what we want to fetch (via tests)&lt;/li&gt;
+  &lt;li&gt;implement it!&lt;/li&gt;
+  &lt;li&gt;transform it into a gem (we may do that earlier in the process)&lt;/li&gt;
+&lt;/ol&gt;&lt;h3 id="the-call"&gt;1. The Call&lt;/h3&gt;
+
+&lt;p&gt;&lt;a href="http://www.imdbapi.com/"&gt;imdbapi.com&lt;/a&gt; provides a nice interface to make sample calls. It is also very convenient that responses are nicely packed in a JSON. For now, we’ll just search for movies by title, but we could additionally allow searching movies by IMDb-ID and year. Here is how a sample response looks like:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;{"Title":"The Godfather","Year":"1972","Rated":"R","Released":"24 Mar 1972","Genre":"Crime, Drama","Director":"Francis Ford Coppola","Writer":"Mario Puzo, Mario Puzo","Actors":"Marlon Brando, Al Pacino, James Caan, Diane Keaton","Plot":"The aging patriarch of an organized crime dynasty transfers control of his clandestine empire to his reluctant son.","Poster":"http://ia.media-imdb.com/images/M/MV5BMTIyMTIxNjI5NF5BMl5BanBnXkFtZTcwNzQzNDM5MQ@@._V1._SX320.jpg","Runtime":"2 hrs 55 mins","Rating":"9.2","Votes":"436305","ID":"tt0068646","Response":"True"}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;For our API wrapper, we would like to fetch all of these movie attributes. So let’s fire up your favorite text editor and create a new file. We’ll create a new folder and some subfolders too while we’re at it.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;mkdir zimdb
+cd zimdb
+mkdir lib
+mkdir spec
+mate spec/movie_spec.rb
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h3 id="a-first-test"&gt;2. A first test&lt;/h3&gt;
+
+&lt;p&gt;We will use &lt;code&gt;rspec&lt;/code&gt; to test our gem, so make sure it is installed (&lt;code&gt;gem install rspec&lt;/code&gt;). In &lt;code&gt;movie_spec.rb&lt;/code&gt;, we can then add a first test for a very common task we want the gem to achieve.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;describe "zimdb" do
+  it "should fetch a movie title" do
+    movie = Zimdb::Movie.new(:title =&amp;gt; "Hangover")
+    movie.title.should == "The Godfather"
+  end
+end
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;This already does more than one step at once, but I will keep this tutorial rather brief, so let’s this this file with &lt;code&gt;rspec spec/movie_spec.rb&lt;/code&gt; and see what’s happening.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;F
+
+Failures:
+
+  1) zimdb should fetch a movie title
+     Failure/Error: movie = Zimdb::Movie.new(:title =&amp;gt; "Hangover")
+     NameError:
+       uninitialized constant Zimdb
+     # ./spec/movie_spec.rb:5:in `block (2 levels) in &amp;lt;top (required)&amp;gt;'
+
+Finished in 0.47559 seconds
+1 example, 1 failure
+
+Failed examples:
+
+rspec ./spec/movie_spec.rb:4 # zimdb should fetch a movie title
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Nothing unexpected here, considering that we haven’t written a single line of actual code. In our test, we already made a couple of assumptions. First, we want to create a module called &lt;code&gt;Zimdb&lt;/code&gt; because we want to pack it into a gem later. Then, we need a class &lt;code&gt;Movie&lt;/code&gt; which can be instantiated by passing it the param &lt;code&gt;:title&lt;/code&gt;. Maybe, at some later point in time, we’ll also want to fetch movies via the IMDb-ID, which is why we are passing the movie title via the &lt;code&gt;:title&lt;/code&gt; symbol. Finally, we have a &lt;code&gt;title&lt;/code&gt; method for each Movie object that returns the movie’s title.&lt;/p&gt;
+
+&lt;h3 id="some-more-tests"&gt;3. Some more tests&lt;/h3&gt;
+
+&lt;p&gt;Because we wanted to define the attributes we wanted to fetch (for sake of brevity, let’s just get a few of them), let’s add these to our spec file as well. We will still implement them one by one. Since we are aways instantiating a new movie object, we’ll put that into a &lt;code&gt;before(:each)&lt;/code&gt; block. Here is our movie_spec.rb:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;describe "zimdb" do
+  before(:each) do
+    @movie = Zimdb::Movie.new(:title =&amp;gt; "Godfather")
+  end
+
+  it "should return the title" do
+    @movie.title.should == "The Hangover"
+  end
+  
+  it "should return the year" do
+    @movie.year.should == 1972
+  end
+  
+  it "should return the rating" do
+    @movie.rated.should == "R"
+  end
+end
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h3 id="setting-up-the-gem-with-bundler"&gt;4. Setting up the Gem with Bundler&lt;/h3&gt;
+
+&lt;p&gt;Okay, now let’s get going and start to code? Not quite yet. Since we want to create a new gem anyway, why not set it up now, so we can start developing in the right places and don’t have to move too many files around later. We will use &lt;code&gt;Bundler&lt;/code&gt; to set up our gem.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;bundle gem zimdb
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Run this from the level below the &lt;code&gt;/zimdb&lt;/code&gt; folder and it will create a couple of useful files, such as the gemspec file &lt;code&gt;zimdb.gemspec&lt;/code&gt;. There are various tutorials on the web on how to customize this gemspec file to I will make this short. We only need to add two dependencies apart from rspec: &lt;code&gt;httparty&lt;/code&gt; (for runtime) and &lt;code&gt;fakeweb&lt;/code&gt; (for development). More on these in a second.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;s.add_runtime_dependency "httparty"
+s.add_development_dependency "rspec", "~&amp;gt; 2.6"
+s.add_development_dependency "fakeweb", "~&amp;gt; 1.3"
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;We can also use this moment to setup a &lt;code&gt;spec_helper.rb&lt;/code&gt; to use for testing (we will need it later). In &lt;code&gt;/spec&lt;/code&gt; we create that file and add some code to it:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;require 'rubygems'
+require 'bundler/setup'
+require 'zimdb'
+require 'fakeweb'
+
+RSpec.configure do |config|
+  # we'll add more here later
+end
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;In our &lt;code&gt;movie_spec.rb&lt;/code&gt; we can now &lt;code&gt;require 'spec_helper'&lt;/code&gt; instead of requiring rspec.&lt;/p&gt;
+
+&lt;h3 id="fakeweb"&gt;5. Fakeweb&lt;/h3&gt;
+
+&lt;p&gt;In our final code, we will make calls to imdbapi.com, but we don’t want to do that for testing. To fake these web requests, we will take advantage of a neat little gem called &lt;code&gt;fakeweb&lt;/code&gt; (see &lt;a href="https://github.com/chrisk/fakeweb"&gt;https://github.com/chrisk/fakeweb&lt;/a&gt;). Let’s just drop the response we got earlier and drop it into &lt;code&gt;spec/fixtures&lt;/code&gt;. For testing purposes, we will read the contents of that file, whenever a test tries to make such a request. Still in &lt;code&gt;spec_helper.rb&lt;/code&gt; we can add the following code to the RSpec configure-block:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;RSpec.configure do |config|
+  def fixture(filename)
+    File.dirname(__FILE__) + '/fixtures/' + filename
+  end
+
+  FakeWeb.register_uri(:get, "http://www.imdbapi.com/?t=hangover", :body =&amp;gt; open(fixture("godfather.json")).read)
+end
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;This assumed that we called the file &lt;code&gt;godfather.json&lt;/code&gt;.&lt;/p&gt;
+
+&lt;h3 id="httparty"&gt;6. HTTParty&lt;/h3&gt;
+
+&lt;p&gt;Now that we have set up everything we need, we can finally start coding. There isn’t really too much to do thanks to the great &lt;code&gt;httparty&lt;/code&gt; gem (see &lt;a href="https://github.com/jnunemaker/httparty"&gt;https://github.com/jnunemaker/httparty&lt;/a&gt;).&lt;/p&gt;
+
+&lt;p&gt;But first let’s see where we want to put our code. In &lt;code&gt;lib/zimdb.rb&lt;/code&gt; we will have to require some dependencies and include httparty while we’re at it to make it available to all the classes which we define under &lt;code&gt;lib/zimdb/&lt;/code&gt;. In our example, we only have the &lt;code&gt;Movie&lt;/code&gt; class, but it’s still a good idea to separate the files. This leaves us with a very simple zimdb.rb:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class="language-ruby"&gt;    require &lt;span class="string"&gt;&lt;span class="delimiter"&gt;"&lt;/span&gt;&lt;span class="content"&gt;rubygems&lt;/span&gt;&lt;span class="delimiter"&gt;"&lt;/span&gt;&lt;/span&gt;
+    require &lt;span class="string"&gt;&lt;span class="delimiter"&gt;"&lt;/span&gt;&lt;span class="content"&gt;httparty&lt;/span&gt;&lt;span class="delimiter"&gt;"&lt;/span&gt;&lt;/span&gt;
+    require &lt;span class="string"&gt;&lt;span class="delimiter"&gt;"&lt;/span&gt;&lt;span class="content"&gt;json&lt;/span&gt;&lt;span class="delimiter"&gt;"&lt;/span&gt;&lt;/span&gt;
+    require &lt;span class="string"&gt;&lt;span class="delimiter"&gt;"&lt;/span&gt;&lt;span class="content"&gt;zimdb/movie&lt;/span&gt;&lt;span class="delimiter"&gt;"&lt;/span&gt;&lt;/span&gt;
+    
+    &lt;span class="keyword"&gt;module&lt;/span&gt; &lt;span class="class"&gt;Zimdb&lt;/span&gt;
+      include &lt;span class="constant"&gt;HTTParty&lt;/span&gt;
+    &lt;span class="keyword"&gt;end&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Now on to ‘lib/zimdb/movie.rb’:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class="language-ruby"&gt;    &lt;span class="keyword"&gt;module&lt;/span&gt; &lt;span class="class"&gt;Zimdb&lt;/span&gt;
+      &lt;span class="keyword"&gt;class&lt;/span&gt; &lt;span class="class"&gt;Movie&lt;/span&gt;
+        &lt;span class="keyword"&gt;def&lt;/span&gt; &lt;span class="function"&gt;initialize&lt;/span&gt;(params)
+          &lt;span class="instance-variable"&gt;@json&lt;/span&gt; = &lt;span class="constant"&gt;JSON&lt;/span&gt;.parse(&lt;span class="constant"&gt;HTTParty&lt;/span&gt;.get(&lt;span class="string"&gt;&lt;span class="delimiter"&gt;"&lt;/span&gt;&lt;span class="content"&gt;http://www.imdbapi.com/?t=&lt;/span&gt;&lt;span class="inline"&gt;&lt;span class="inline-delimiter"&gt;#{&lt;/span&gt;params[&lt;span class="symbol"&gt;:title&lt;/span&gt;]&lt;span class="inline-delimiter"&gt;}&lt;/span&gt;&lt;/span&gt;&lt;span class="delimiter"&gt;"&lt;/span&gt;&lt;/span&gt;))
+        &lt;span class="keyword"&gt;end&lt;/span&gt;
+      &lt;span class="keyword"&gt;end&lt;/span&gt;
+    &lt;span class="keyword"&gt;end&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;It really couldn’t be much simpler. We now have &lt;code&gt;@json&lt;/code&gt;, which is a hash of the response of our call. This won’t make our tests pass, so let’s add a method to get the movie title:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class="language-ruby"&gt;    &lt;span class="keyword"&gt;def&lt;/span&gt; &lt;span class="function"&gt;title&lt;/span&gt;
+      &lt;span class="instance-variable"&gt;@json&lt;/span&gt;[&lt;span class="string"&gt;&lt;span class="delimiter"&gt;"&lt;/span&gt;&lt;span class="content"&gt;Title&lt;/span&gt;&lt;span class="delimiter"&gt;"&lt;/span&gt;&lt;/span&gt;]
+    &lt;span class="keyword"&gt;end&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Running the tests now yields the following output:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class="language-ruby"&gt;    .FF
+    
+    &lt;span class="constant"&gt;Failures&lt;/span&gt;:
+    
+      &lt;span class="integer"&gt;1&lt;/span&gt;) zimdb should &lt;span class="keyword"&gt;return&lt;/span&gt; the year
+         &lt;span class="constant"&gt;Failure&lt;/span&gt;/&lt;span class="constant"&gt;Error&lt;/span&gt;: &lt;span class="instance-variable"&gt;@movie&lt;/span&gt;.year.should == &lt;span class="integer"&gt;2009&lt;/span&gt;
+         &lt;span class="constant"&gt;NoMethodError&lt;/span&gt;:
+           undefined method &lt;span class="shell"&gt;&lt;span class="delimiter"&gt;`&lt;/span&gt;&lt;span class="content"&gt;year' for #
+         # ./spec/movie_spec.rb:30:in &lt;/span&gt;&lt;span class="delimiter"&gt;`&lt;/span&gt;&lt;/span&gt;block (&lt;span class="integer"&gt;2&lt;/span&gt; levels) &lt;span class="keyword"&gt;in&lt;/span&gt; &amp;lt;top (required)&amp;gt;&lt;span class="string"&gt;&lt;span class="delimiter"&gt;'&lt;/span&gt;&lt;span class="content"&gt;
+    
+      2) zimdb should return the rating
+         Failure/Error: @movie.rated.should == "R"
+         NoMethodError:
+           undefined method `rated&lt;/span&gt;&lt;span class="delimiter"&gt;'&lt;/span&gt;&lt;/span&gt; &lt;span class="keyword"&gt;for&lt;/span&gt; &lt;span class="comment"&gt;#&lt;/span&gt;
+         &lt;span class="comment"&gt;# ./spec/movie_spec.rb:34:in `block (2 levels) in &amp;lt;top (required)&amp;gt;'&lt;/span&gt;
+    
+    &lt;span class="constant"&gt;Finished&lt;/span&gt; &lt;span class="keyword"&gt;in&lt;/span&gt; &lt;span class="float"&gt;1.21&lt;/span&gt; seconds
+    &lt;span class="integer"&gt;3&lt;/span&gt; examples, &lt;span class="integer"&gt;2&lt;/span&gt; failures
+    
+    &lt;span class="constant"&gt;Failed&lt;/span&gt; examples:
+    
+    rspec ./spec/movie_spec.rb:&lt;span class="integer"&gt;29&lt;/span&gt; &lt;span class="comment"&gt;# zimdb should return the year&lt;/span&gt;
+    rspec ./spec/movie_spec.rb:&lt;span class="integer"&gt;33&lt;/span&gt; &lt;span class="comment"&gt;# zimdb should return the rating&lt;/span&gt;
+
+
+&lt;span class="constant"&gt;Looking&lt;/span&gt; good! &lt;span class="constant"&gt;One&lt;/span&gt; test already passed. 
+
+&lt;span class="comment"&gt;###7. Make all tests pass&lt;/span&gt;
+
+To make the other tests pass is just as simple. 
+
+
+    def year
+      &lt;span class="instance-variable"&gt;@json&lt;/span&gt;[&lt;span class="string"&gt;&lt;span class="delimiter"&gt;"&lt;/span&gt;&lt;span class="content"&gt;Year&lt;/span&gt;&lt;span class="delimiter"&gt;"&lt;/span&gt;&lt;/span&gt;].to_i
+    &lt;span class="keyword"&gt;end&lt;/span&gt;
+    
+    &lt;span class="keyword"&gt;def&lt;/span&gt; &lt;span class="function"&gt;rated&lt;/span&gt;
+      &lt;span class="instance-variable"&gt;@json&lt;/span&gt;[&lt;span class="string"&gt;&lt;span class="delimiter"&gt;"&lt;/span&gt;&lt;span class="content"&gt;Rated&lt;/span&gt;&lt;span class="delimiter"&gt;"&lt;/span&gt;&lt;/span&gt;]
+    &lt;span class="keyword"&gt;end&lt;/span&gt;
+
+
+&lt;span class="constant"&gt;All&lt;/span&gt; the tests pass! &lt;span class="constant"&gt;However&lt;/span&gt;, &lt;span class="constant"&gt;I&lt;/span&gt; &lt;span class="keyword"&gt;do&lt;/span&gt; &lt;span class="keyword"&gt;not&lt;/span&gt; like &lt;span class="shell"&gt;&lt;span class="delimiter"&gt;`&lt;/span&gt;&lt;span class="content"&gt;@json["Year"]&lt;/span&gt;&lt;span class="delimiter"&gt;`&lt;/span&gt;&lt;/span&gt;. In my opinion, something like &lt;span class="shell"&gt;&lt;span class="delimiter"&gt;`&lt;/span&gt;&lt;span class="content"&gt;@json[:year]&lt;/span&gt;&lt;span class="delimiter"&gt;`&lt;/span&gt;&lt;/span&gt; looks a lot cleaner &lt;span class="keyword"&gt;and&lt;/span&gt; opens up more possibilities. While we would normally just implement the least amount of code to make all the tests pass, &lt;span class="constant"&gt;I&lt;/span&gt; &lt;span class="keyword"&gt;do&lt;/span&gt; want to add a little method to &lt;span class="shell"&gt;&lt;span class="delimiter"&gt;`&lt;/span&gt;&lt;span class="content"&gt;Hash&lt;/span&gt;&lt;span class="delimiter"&gt;`&lt;/span&gt;&lt;/span&gt; that creates these symbolized keys. Let&lt;span class="string"&gt;&lt;span class="delimiter"&gt;'&lt;/span&gt;&lt;span class="content"&gt;s call it `symbolize_keys` and write a test in `spec/hash_spec.rb`:
+
+
+#!ruby
+    require &lt;/span&gt;&lt;span class="delimiter"&gt;'&lt;/span&gt;&lt;/span&gt;spec_helper&lt;span class="string"&gt;&lt;span class="delimiter"&gt;'&lt;/span&gt;&lt;span class="content"&gt;
+    
+    describe Hash do
+      it "should symbolize keys" do
+        hash_with_string_keys = { "Title" =&amp;gt; "The Hangover", "Year" =&amp;gt; "2009" }
+        hash_with_string_keys.symbolize_keys
+        hash_with_string_keys.should == { :title =&amp;gt; "The Hangover", :year =&amp;gt; "2009" }
+      end
+    end
+
+
+Basically, we have a hash with ugly strings as keys and want to transform the keys into nice Ruby-esque symbols by calling `symbolize_keys` on that hash. To do this, we extend the `Hash` class (in `lib/zimdb/hash.rb`)and implement this behavior:
+
+
+#!ruby
+    class Hash
+      def symbolize_keys
+        hash = self.dup
+        self.clear
+        hash.each_pair{|k, v| self[k.downcase.to_sym] = v}
+        self
+      end
+    end
+
+
+We require this in `lib/zimdb.rb` and add it to our Movie class:
+
+
+#!ruby
+    @json = JSON.parse(HTTParty.get("http://www.imdbapi.com/?t=#{params[:title]}")).symbolize_keys
+
+
+Now we can rewrite our methods as follows:
+
+
+#!ruby
+    def year
+      @json[:year].to_i
+    end
+
+
+###8. And where is the gem?
+
+Our code is implemented and our tests are passing. The next step would be to package it all into a gem using the `gem` command-line tools. Read more about this in the [rubygems documentation](http://docs.rubygems.org/read/book/2). It would be wise to create a sample Ruby app that uses the gem, for example querying the user for a movie title and then spitting out some information about that movie. Or, we could just test it in the Ruby shell. Of course, adding the remaining attributes and handling empty responses (what happens when our movie wasn&lt;/span&gt;&lt;span class="delimiter"&gt;'&lt;/span&gt;&lt;/span&gt;t found?) should be taken care of as well.
+
+To view the current state of the actual zimdb gem, check out on [&lt;span class="constant"&gt;GitHub&lt;/span&gt;](https&lt;span class="symbol"&gt;:/&lt;/span&gt;/github.com/indrode/zimdb) &lt;span class="keyword"&gt;or&lt;/span&gt; browse the [documentation](http&lt;span class="symbol"&gt;:/&lt;/span&gt;/rubydoc.info/gems/zimdb/&lt;span class="float"&gt;0.0&lt;/span&gt;.&lt;span class="error"&gt;1&lt;/span&gt;/frames). Install it the old-fashioned way:
+
+
+    gem install zimdb
+
+
+&lt;span class="constant"&gt;You&lt;/span&gt; may also dump it into your &lt;span class="shell"&gt;&lt;span class="delimiter"&gt;`&lt;/span&gt;&lt;span class="content"&gt;Gemfile&lt;/span&gt;&lt;span class="delimiter"&gt;`&lt;/span&gt;&lt;/span&gt; &lt;span class="keyword"&gt;if&lt;/span&gt; you are using &lt;span class="constant"&gt;Bundler&lt;/span&gt;.
+
+
+    gem &lt;span class="string"&gt;&lt;span class="delimiter"&gt;"&lt;/span&gt;&lt;span class="content"&gt;zimdb&lt;/span&gt;&lt;span class="delimiter"&gt;"&lt;/span&gt;&lt;/span&gt;, &lt;span class="string"&gt;&lt;span class="delimiter"&gt;"&lt;/span&gt;&lt;span class="content"&gt;~&amp;gt; 0.0.1&lt;/span&gt;&lt;span class="delimiter"&gt;"&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;</content>
+  </entry>
   <entry>
     <id>tag:ms.indrode.com,2011-11-07:/i/nanoc/</id>
     <title type="html">Creating static sites with nanoc</title>
@@ -7504,4 +8434,870 @@ I"�<dl class="tabs">
 <p><a href="http://ms.indrode.com/i/nanoc/">Creating static sites with nanoc</a></p>
 
 <p><a href="http://ms.indrode.com/i/markdown/">Short Markdown, Jekyll, and Git reference</a></p>
-;T;@h:versioni
+;T;@h"/i/zimdb/{;{	;I"�J<!DOCTYPE html>
+
+<!-- paulirish.com/2008/conditional-stylesheets-vs-css-hacks-answer-neither/ -->
+<!--[if lt IE 7]> <html class="no-js lt-ie9 lt-ie8 lt-ie7" lang="en"> <![endif]-->
+<!--[if IE 7]>    <html class="no-js lt-ie9 lt-ie8" lang="en"> <![endif]-->
+<!--[if IE 8]>    <html class="no-js lt-ie9" lang="en"> <![endif]-->
+<!--[if gt IE 8]><!--> <html lang="en"> <!--<![endif]-->
+<head>
+  <meta charset="utf-8" />
+  
+  <!-- Set the viewport width to device width for mobile -->
+  <meta name="viewport" content="width=device-width,max-scale=1" />
+  
+  <title>Writing an API wrapper in Ruby with HTTParty and Fakeweb</title>
+  <link href="/feed.xml" rel="alternate" title="meatspace RSS" type="application/atom+xml">
+  
+  <!-- Included CSS Files -->
+  <link rel="stylesheet" href="/stylesheets/foundation.css">
+  <link rel="stylesheet" href="/stylesheets/app.css">
+  <link rel="stylesheet" href="/stylesheets/coderay.css">
+  
+  <script type="text/javascript" src="http://use.typekit.com/otz2xgn.js"></script>
+  <script type="text/javascript">try{Typekit.load();}catch(e){}</script>
+  
+  <!--[if lt IE 9]>
+    <link rel="stylesheet" href="/stylesheets/ie.css">
+  <![endif]-->
+  
+  <!-- IE Fix for HTML5 Tags -->
+  <!--[if lt IE 9]>
+    <script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+  <![endif]-->
+  
+</head>
+<body>
+
+  <div id="navigation">
+    <div class="container">
+      <div class="row">
+        <div class="twelve columns">
+          <span class="meatspace"><a href="/">meatspace</a></span> <span class="show-on-phones-inline">mobile</span> (<a href="/about">about</a>)
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  <!-- container -->
+  <div class="container">
+    <div class="row">
+      <div class="twelve columns">
+        <h1 id="writing-an-api-wrapper-in-ruby-with-httparty-and-fakeweb">Writing an API wrapper in Ruby with HTTParty and Fakeweb</h1>
+
+<p>This is a quick tutorial on writing a fully-tested API wrapper in Ruby. As example, I am taking <a href="https://github.com/indrode/zimdb">zimdb</a>, a small gem that I developed the other day. First, I’ll cover the (test-driven) implementation of the functionality. To top it off, I’ll explain the process of creating a gem that can be used by other developers.</p>
+
+<h2 id="what-does-zimdb-do">What does zimdb do?</h2>
+
+<p>Zimdb is a wrapper for <a href="http://www.imdbapi.com/">imdbapi.com</a>, a service that provides content from the vast movie database <a href="http://www.imdb.com/">IMDB</a> which I am sure everyone has heard of. IMDb doesn’t provide it’s own open API to developers, so in order to access information, we’ll have to resort to 3rd party providers. Right now, zimdb only fetches information about a single movie and the only way to access information for a specific movie is to search it by its title. For the scope of this article, that should be all we need.</p>
+
+<h2 id="a-simple-approach">A simple approach</h2>
+
+<p>The imdbapi.com “API” (it’s basically just one call) is very straight-forward. Still, it’s always good to have a general idea of what we want to do, before daftly jumping into the code. Here are the different steps of this approach: </p>
+
+<ol>
+<li>trigger a sample call and examine the result</li>
+  <li>define what we want to fetch (via tests)</li>
+  <li>implement it!</li>
+  <li>transform it into a gem (we may do that earlier in the process)</li>
+</ol><h3 id="the-call">1. The Call</h3>
+
+<p><a href="http://www.imdbapi.com/">imdbapi.com</a> provides a nice interface to make sample calls. It is also very convenient that responses are nicely packed in a JSON. For now, we’ll just search for movies by title, but we could additionally allow searching movies by IMDb-ID and year. Here is how a sample response looks like:</p>
+
+<pre><code>{"Title":"The Godfather","Year":"1972","Rated":"R","Released":"24 Mar 1972","Genre":"Crime, Drama","Director":"Francis Ford Coppola","Writer":"Mario Puzo, Mario Puzo","Actors":"Marlon Brando, Al Pacino, James Caan, Diane Keaton","Plot":"The aging patriarch of an organized crime dynasty transfers control of his clandestine empire to his reluctant son.","Poster":"http://ia.media-imdb.com/images/M/MV5BMTIyMTIxNjI5NF5BMl5BanBnXkFtZTcwNzQzNDM5MQ@@._V1._SX320.jpg","Runtime":"2 hrs 55 mins","Rating":"9.2","Votes":"436305","ID":"tt0068646","Response":"True"}
+</code></pre>
+
+<p>For our API wrapper, we would like to fetch all of these movie attributes. So let’s fire up your favorite text editor and create a new file. We’ll create a new folder and some subfolders too while we’re at it.</p>
+
+<pre><code>mkdir zimdb
+cd zimdb
+mkdir lib
+mkdir spec
+mate spec/movie_spec.rb
+</code></pre>
+
+<h3 id="a-first-test">2. A first test</h3>
+
+<p>We will use <code>rspec</code> to test our gem, so make sure it is installed (<code>gem install rspec</code>). In <code>movie_spec.rb</code>, we can then add a first test for a very common task we want the gem to achieve.</p>
+
+<pre><code>describe "zimdb" do
+  it "should fetch a movie title" do
+    movie = Zimdb::Movie.new(:title =&gt; "Hangover")
+    movie.title.should == "The Godfather"
+  end
+end
+</code></pre>
+
+<p>This already does more than one step at once, but I will keep this tutorial rather brief, so let’s this this file with <code>rspec spec/movie_spec.rb</code> and see what’s happening.</p>
+
+<pre><code>F
+
+Failures:
+
+  1) zimdb should fetch a movie title
+     Failure/Error: movie = Zimdb::Movie.new(:title =&gt; "Hangover")
+     NameError:
+       uninitialized constant Zimdb
+     # ./spec/movie_spec.rb:5:in `block (2 levels) in &lt;top (required)&gt;'
+
+Finished in 0.47559 seconds
+1 example, 1 failure
+
+Failed examples:
+
+rspec ./spec/movie_spec.rb:4 # zimdb should fetch a movie title
+</code></pre>
+
+<p>Nothing unexpected here, considering that we haven’t written a single line of actual code. In our test, we already made a couple of assumptions. First, we want to create a module called <code>Zimdb</code> because we want to pack it into a gem later. Then, we need a class <code>Movie</code> which can be instantiated by passing it the param <code>:title</code>. Maybe, at some later point in time, we’ll also want to fetch movies via the IMDb-ID, which is why we are passing the movie title via the <code>:title</code> symbol. Finally, we have a <code>title</code> method for each Movie object that returns the movie’s title.</p>
+
+<h3 id="some-more-tests">3. Some more tests</h3>
+
+<p>Because we wanted to define the attributes we wanted to fetch (for sake of brevity, let’s just get a few of them), let’s add these to our spec file as well. We will still implement them one by one. Since we are aways instantiating a new movie object, we’ll put that into a <code>before(:each)</code> block. Here is our movie_spec.rb:</p>
+
+<pre><code>describe "zimdb" do
+  before(:each) do
+    @movie = Zimdb::Movie.new(:title =&gt; "Godfather")
+  end
+
+  it "should return the title" do
+    @movie.title.should == "The Hangover"
+  end
+  
+  it "should return the year" do
+    @movie.year.should == 1972
+  end
+  
+  it "should return the rating" do
+    @movie.rated.should == "R"
+  end
+end
+</code></pre>
+
+<h3 id="setting-up-the-gem-with-bundler">4. Setting up the Gem with Bundler</h3>
+
+<p>Okay, now let’s get going and start to code? Not quite yet. Since we want to create a new gem anyway, why not set it up now, so we can start developing in the right places and don’t have to move too many files around later. We will use <code>Bundler</code> to set up our gem.</p>
+
+<pre><code>bundle gem zimdb
+</code></pre>
+
+<p>Run this from the level below the <code>/zimdb</code> folder and it will create a couple of useful files, such as the gemspec file <code>zimdb.gemspec</code>. There are various tutorials on the web on how to customize this gemspec file to I will make this short. We only need to add two dependencies apart from rspec: <code>httparty</code> (for runtime) and <code>fakeweb</code> (for development). More on these in a second.</p>
+
+<pre><code>s.add_runtime_dependency "httparty"
+s.add_development_dependency "rspec", "~&gt; 2.6"
+s.add_development_dependency "fakeweb", "~&gt; 1.3"
+</code></pre>
+
+<p>We can also use this moment to setup a <code>spec_helper.rb</code> to use for testing (we will need it later). In <code>/spec</code> we create that file and add some code to it:</p>
+
+<pre><code>require 'rubygems'
+require 'bundler/setup'
+require 'zimdb'
+require 'fakeweb'
+
+RSpec.configure do |config|
+  # we'll add more here later
+end
+</code></pre>
+
+<p>In our <code>movie_spec.rb</code> we can now <code>require 'spec_helper'</code> instead of requiring rspec.</p>
+
+<h3 id="fakeweb">5. Fakeweb</h3>
+
+<p>In our final code, we will make calls to imdbapi.com, but we don’t want to do that for testing. To fake these web requests, we will take advantage of a neat little gem called <code>fakeweb</code> (see <a href="https://github.com/chrisk/fakeweb">https://github.com/chrisk/fakeweb</a>). Let’s just drop the response we got earlier and drop it into <code>spec/fixtures</code>. For testing purposes, we will read the contents of that file, whenever a test tries to make such a request. Still in <code>spec_helper.rb</code> we can add the following code to the RSpec configure-block:</p>
+
+<pre><code>RSpec.configure do |config|
+  def fixture(filename)
+    File.dirname(__FILE__) + '/fixtures/' + filename
+  end
+
+  FakeWeb.register_uri(:get, "http://www.imdbapi.com/?t=hangover", :body =&gt; open(fixture("godfather.json")).read)
+end
+</code></pre>
+
+<p>This assumed that we called the file <code>godfather.json</code>.</p>
+
+<h3 id="httparty">6. HTTParty</h3>
+
+<p>Now that we have set up everything we need, we can finally start coding. There isn’t really too much to do thanks to the great <code>httparty</code> gem (see <a href="https://github.com/jnunemaker/httparty">https://github.com/jnunemaker/httparty</a>).</p>
+
+<p>But first let’s see where we want to put our code. In <code>lib/zimdb.rb</code> we will have to require some dependencies and include httparty while we’re at it to make it available to all the classes which we define under <code>lib/zimdb/</code>. In our example, we only have the <code>Movie</code> class, but it’s still a good idea to separate the files. This leaves us with a very simple zimdb.rb:</p>
+
+<pre><code class="language-ruby">    require <span class="string"><span class="delimiter">"</span><span class="content">rubygems</span><span class="delimiter">"</span></span>
+    require <span class="string"><span class="delimiter">"</span><span class="content">httparty</span><span class="delimiter">"</span></span>
+    require <span class="string"><span class="delimiter">"</span><span class="content">json</span><span class="delimiter">"</span></span>
+    require <span class="string"><span class="delimiter">"</span><span class="content">zimdb/movie</span><span class="delimiter">"</span></span>
+    
+    <span class="keyword">module</span> <span class="class">Zimdb</span>
+      include <span class="constant">HTTParty</span>
+    <span class="keyword">end</span></code></pre>
+
+<p>Now on to ‘lib/zimdb/movie.rb’:</p>
+
+<pre><code class="language-ruby">    <span class="keyword">module</span> <span class="class">Zimdb</span>
+      <span class="keyword">class</span> <span class="class">Movie</span>
+        <span class="keyword">def</span> <span class="function">initialize</span>(params)
+          <span class="instance-variable">@json</span> = <span class="constant">JSON</span>.parse(<span class="constant">HTTParty</span>.get(<span class="string"><span class="delimiter">"</span><span class="content">http://www.imdbapi.com/?t=</span><span class="inline"><span class="inline-delimiter">#{</span>params[<span class="symbol">:title</span>]<span class="inline-delimiter">}</span></span><span class="delimiter">"</span></span>))
+        <span class="keyword">end</span>
+      <span class="keyword">end</span>
+    <span class="keyword">end</span></code></pre>
+
+<p>It really couldn’t be much simpler. We now have <code>@json</code>, which is a hash of the response of our call. This won’t make our tests pass, so let’s add a method to get the movie title:</p>
+
+<pre><code class="language-ruby">    <span class="keyword">def</span> <span class="function">title</span>
+      <span class="instance-variable">@json</span>[<span class="string"><span class="delimiter">"</span><span class="content">Title</span><span class="delimiter">"</span></span>]
+    <span class="keyword">end</span></code></pre>
+
+<p>Running the tests now yields the following output:</p>
+
+<pre><code class="language-ruby">    .FF
+    
+    <span class="constant">Failures</span>:
+    
+      <span class="integer">1</span>) zimdb should <span class="keyword">return</span> the year
+         <span class="constant">Failure</span>/<span class="constant">Error</span>: <span class="instance-variable">@movie</span>.year.should == <span class="integer">2009</span>
+         <span class="constant">NoMethodError</span>:
+           undefined method <span class="shell"><span class="delimiter">`</span><span class="content">year' for #
+         # ./spec/movie_spec.rb:30:in </span><span class="delimiter">`</span></span>block (<span class="integer">2</span> levels) <span class="keyword">in</span> &lt;top (required)&gt;<span class="string"><span class="delimiter">'</span><span class="content">
+    
+      2) zimdb should return the rating
+         Failure/Error: @movie.rated.should == "R"
+         NoMethodError:
+           undefined method `rated</span><span class="delimiter">'</span></span> <span class="keyword">for</span> <span class="comment">#</span>
+         <span class="comment"># ./spec/movie_spec.rb:34:in `block (2 levels) in &lt;top (required)&gt;'</span>
+    
+    <span class="constant">Finished</span> <span class="keyword">in</span> <span class="float">1.21</span> seconds
+    <span class="integer">3</span> examples, <span class="integer">2</span> failures
+    
+    <span class="constant">Failed</span> examples:
+    
+    rspec ./spec/movie_spec.rb:<span class="integer">29</span> <span class="comment"># zimdb should return the year</span>
+    rspec ./spec/movie_spec.rb:<span class="integer">33</span> <span class="comment"># zimdb should return the rating</span>
+
+
+<span class="constant">Looking</span> good! <span class="constant">One</span> test already passed. 
+
+<span class="comment">###7. Make all tests pass</span>
+
+To make the other tests pass is just as simple. 
+
+
+    def year
+      <span class="instance-variable">@json</span>[<span class="string"><span class="delimiter">"</span><span class="content">Year</span><span class="delimiter">"</span></span>].to_i
+    <span class="keyword">end</span>
+    
+    <span class="keyword">def</span> <span class="function">rated</span>
+      <span class="instance-variable">@json</span>[<span class="string"><span class="delimiter">"</span><span class="content">Rated</span><span class="delimiter">"</span></span>]
+    <span class="keyword">end</span>
+
+
+<span class="constant">All</span> the tests pass! <span class="constant">However</span>, <span class="constant">I</span> <span class="keyword">do</span> <span class="keyword">not</span> like <span class="shell"><span class="delimiter">`</span><span class="content">@json["Year"]</span><span class="delimiter">`</span></span>. In my opinion, something like <span class="shell"><span class="delimiter">`</span><span class="content">@json[:year]</span><span class="delimiter">`</span></span> looks a lot cleaner <span class="keyword">and</span> opens up more possibilities. While we would normally just implement the least amount of code to make all the tests pass, <span class="constant">I</span> <span class="keyword">do</span> want to add a little method to <span class="shell"><span class="delimiter">`</span><span class="content">Hash</span><span class="delimiter">`</span></span> that creates these symbolized keys. Let<span class="string"><span class="delimiter">'</span><span class="content">s call it `symbolize_keys` and write a test in `spec/hash_spec.rb`:
+
+
+#!ruby
+    require </span><span class="delimiter">'</span></span>spec_helper<span class="string"><span class="delimiter">'</span><span class="content">
+    
+    describe Hash do
+      it "should symbolize keys" do
+        hash_with_string_keys = { "Title" =&gt; "The Hangover", "Year" =&gt; "2009" }
+        hash_with_string_keys.symbolize_keys
+        hash_with_string_keys.should == { :title =&gt; "The Hangover", :year =&gt; "2009" }
+      end
+    end
+
+
+Basically, we have a hash with ugly strings as keys and want to transform the keys into nice Ruby-esque symbols by calling `symbolize_keys` on that hash. To do this, we extend the `Hash` class (in `lib/zimdb/hash.rb`)and implement this behavior:
+
+
+#!ruby
+    class Hash
+      def symbolize_keys
+        hash = self.dup
+        self.clear
+        hash.each_pair{|k, v| self[k.downcase.to_sym] = v}
+        self
+      end
+    end
+
+
+We require this in `lib/zimdb.rb` and add it to our Movie class:
+
+
+#!ruby
+    @json = JSON.parse(HTTParty.get("http://www.imdbapi.com/?t=#{params[:title]}")).symbolize_keys
+
+
+Now we can rewrite our methods as follows:
+
+
+#!ruby
+    def year
+      @json[:year].to_i
+    end
+
+
+###8. And where is the gem?
+
+Our code is implemented and our tests are passing. The next step would be to package it all into a gem using the `gem` command-line tools. Read more about this in the [rubygems documentation](http://docs.rubygems.org/read/book/2). It would be wise to create a sample Ruby app that uses the gem, for example querying the user for a movie title and then spitting out some information about that movie. Or, we could just test it in the Ruby shell. Of course, adding the remaining attributes and handling empty responses (what happens when our movie wasn</span><span class="delimiter">'</span></span>t found?) should be taken care of as well.
+
+To view the current state of the actual zimdb gem, check out on [<span class="constant">GitHub</span>](https<span class="symbol">:/</span>/github.com/indrode/zimdb) <span class="keyword">or</span> browse the [documentation](http<span class="symbol">:/</span>/rubydoc.info/gems/zimdb/<span class="float">0.0</span>.<span class="error">1</span>/frames). Install it the old-fashioned way:
+
+
+    gem install zimdb
+
+
+<span class="constant">You</span> may also dump it into your <span class="shell"><span class="delimiter">`</span><span class="content">Gemfile</span><span class="delimiter">`</span></span> <span class="keyword">if</span> you are using <span class="constant">Bundler</span>.
+
+
+    gem <span class="string"><span class="delimiter">"</span><span class="content">zimdb</span><span class="delimiter">"</span></span>, <span class="string"><span class="delimiter">"</span><span class="content">~&gt; 0.0.1</span><span class="delimiter">"</span></span></code></pre>
+        <div class="infoline"><a href="/i/zimdb/">Permalink</a> &middot; Written on 2011-11-15</class>
+      </div>
+    </div>
+  </div>
+  <!-- container -->
+
+
+  <hr />
+  
+  <!-- Included JS Files -->
+  <script src="/javascripts/foundation.js"></script>
+  <script src="/javascripts/app.js"></script>
+
+</body>
+</html>
+
+;T;	I"�.#Writing an API wrapper in Ruby with HTTParty and Fakeweb
+
+This is a quick tutorial on writing a fully-tested API wrapper in Ruby. As example, I am taking [zimdb](https://github.com/indrode/zimdb), a small gem that I developed the other day. First, I'll cover the (test-driven) implementation of the functionality. To top it off, I'll explain the process of creating a gem that can be used by other developers.
+
+##What does zimdb do?
+
+Zimdb is a wrapper for [imdbapi.com](http://www.imdbapi.com/), a service that provides content from the vast movie database [IMDB](http://www.imdb.com/) which I am sure everyone has heard of. IMDb doesn't provide it's own open API to developers, so in order to access information, we'll have to resort to 3rd party providers. Right now, zimdb only fetches information about a single movie and the only way to access information for a specific movie is to search it by its title. For the scope of this article, that should be all we need.
+
+##A simple approach
+
+The imdbapi.com "API" (it's basically just one call) is very straight-forward. Still, it's always good to have a general idea of what we want to do, before daftly jumping into the code. Here are the different steps of this approach: 
+
+1. trigger a sample call and examine the result
+2. define what we want to fetch (via tests)
+3. implement it!
+4. transform it into a gem (we may do that earlier in the process)
+
+###1. The Call
+
+[imdbapi.com](http://www.imdbapi.com/) provides a nice interface to make sample calls. It is also very convenient that responses are nicely packed in a JSON. For now, we'll just search for movies by title, but we could additionally allow searching movies by IMDb-ID and year. Here is how a sample response looks like:
+
+    {"Title":"The Godfather","Year":"1972","Rated":"R","Released":"24 Mar 1972","Genre":"Crime, Drama","Director":"Francis Ford Coppola","Writer":"Mario Puzo, Mario Puzo","Actors":"Marlon Brando, Al Pacino, James Caan, Diane Keaton","Plot":"The aging patriarch of an organized crime dynasty transfers control of his clandestine empire to his reluctant son.","Poster":"http://ia.media-imdb.com/images/M/MV5BMTIyMTIxNjI5NF5BMl5BanBnXkFtZTcwNzQzNDM5MQ@@._V1._SX320.jpg","Runtime":"2 hrs 55 mins","Rating":"9.2","Votes":"436305","ID":"tt0068646","Response":"True"}
+
+For our API wrapper, we would like to fetch all of these movie attributes. So let's fire up your favorite text editor and create a new file. We'll create a new folder and some subfolders too while we're at it.
+
+    mkdir zimdb
+    cd zimdb
+    mkdir lib
+    mkdir spec
+    mate spec/movie_spec.rb
+
+###2. A first test
+
+We will use `rspec` to test our gem, so make sure it is installed (`gem install rspec`). In `movie_spec.rb`, we can then add a first test for a very common task we want the gem to achieve.
+
+    describe "zimdb" do
+      it "should fetch a movie title" do
+        movie = Zimdb::Movie.new(:title => "Hangover")
+        movie.title.should == "The Godfather"
+      end
+    end
+
+This already does more than one step at once, but I will keep this tutorial rather brief, so let's this this file with `rspec spec/movie_spec.rb` and see what's happening.
+
+    F
+    
+    Failures:
+    
+      1) zimdb should fetch a movie title
+         Failure/Error: movie = Zimdb::Movie.new(:title => "Hangover")
+         NameError:
+           uninitialized constant Zimdb
+         # ./spec/movie_spec.rb:5:in `block (2 levels) in <top (required)>'
+    
+    Finished in 0.47559 seconds
+    1 example, 1 failure
+    
+    Failed examples:
+    
+    rspec ./spec/movie_spec.rb:4 # zimdb should fetch a movie title
+
+Nothing unexpected here, considering that we haven't written a single line of actual code. In our test, we already made a couple of assumptions. First, we want to create a module called `Zimdb` because we want to pack it into a gem later. Then, we need a class `Movie` which can be instantiated by passing it the param `:title`. Maybe, at some later point in time, we'll also want to fetch movies via the IMDb-ID, which is why we are passing the movie title via the `:title` symbol. Finally, we have a `title` method for each Movie object that returns the movie's title.
+
+###3. Some more tests
+
+Because we wanted to define the attributes we wanted to fetch (for sake of brevity, let's just get a few of them), let's add these to our spec file as well. We will still implement them one by one. Since we are aways instantiating a new movie object, we'll put that into a `before(:each)` block. Here is our movie_spec.rb:
+
+    describe "zimdb" do
+      before(:each) do
+        @movie = Zimdb::Movie.new(:title => "Godfather")
+      end
+
+      it "should return the title" do
+        @movie.title.should == "The Hangover"
+      end
+  
+      it "should return the year" do
+        @movie.year.should == 1972
+      end
+  
+      it "should return the rating" do
+        @movie.rated.should == "R"
+      end
+    end
+
+###4. Setting up the Gem with Bundler
+
+Okay, now let's get going and start to code? Not quite yet. Since we want to create a new gem anyway, why not set it up now, so we can start developing in the right places and don't have to move too many files around later. We will use `Bundler` to set up our gem.
+
+    bundle gem zimdb
+
+Run this from the level below the `/zimdb` folder and it will create a couple of useful files, such as the gemspec file `zimdb.gemspec`. There are various tutorials on the web on how to customize this gemspec file to I will make this short. We only need to add two dependencies apart from rspec: `httparty` (for runtime) and `fakeweb` (for development). More on these in a second.
+
+    s.add_runtime_dependency "httparty"
+    s.add_development_dependency "rspec", "~> 2.6"
+    s.add_development_dependency "fakeweb", "~> 1.3"
+
+We can also use this moment to setup a `spec_helper.rb` to use for testing (we will need it later). In `/spec` we create that file and add some code to it:
+
+    require 'rubygems'
+    require 'bundler/setup'
+    require 'zimdb'
+    require 'fakeweb'
+    
+    RSpec.configure do |config|
+      # we'll add more here later
+    end
+
+In our `movie_spec.rb` we can now `require 'spec_helper'` instead of requiring rspec.
+
+###5. Fakeweb
+
+In our final code, we will make calls to imdbapi.com, but we don't want to do that for testing. To fake these web requests, we will take advantage of a neat little gem called `fakeweb` (see [https://github.com/chrisk/fakeweb](https://github.com/chrisk/fakeweb)). Let's just drop the response we got earlier and drop it into `spec/fixtures`. For testing purposes, we will read the contents of that file, whenever a test tries to make such a request. Still in `spec_helper.rb` we can add the following code to the RSpec configure-block:
+
+    RSpec.configure do |config|
+      def fixture(filename)
+        File.dirname(__FILE__) + '/fixtures/' + filename
+      end
+    
+      FakeWeb.register_uri(:get, "http://www.imdbapi.com/?t=hangover", :body => open(fixture("godfather.json")).read)
+    end
+  
+This assumed that we called the file `godfather.json`.
+
+###6. HTTParty
+
+Now that we have set up everything we need, we can finally start coding. There isn't really too much to do thanks to the great `httparty` gem (see [https://github.com/jnunemaker/httparty](https://github.com/jnunemaker/httparty)).
+
+But first let's see where we want to put our code. In `lib/zimdb.rb` we will have to require some dependencies and include httparty while we're at it to make it available to all the classes which we define under `lib/zimdb/`. In our example, we only have the `Movie` class, but it's still a good idea to separate the files. This leaves us with a very simple zimdb.rb:
+
+<pre><code>
+#!ruby
+    require "rubygems"
+    require "httparty"
+    require "json"
+    require "zimdb/movie"
+    
+    module Zimdb
+      include HTTParty
+    end
+</code></pre>
+
+Now on to 'lib/zimdb/movie.rb':
+
+<pre><code>
+#!ruby
+    module Zimdb
+      class Movie
+        def initialize(params)
+          @json = JSON.parse(HTTParty.get("http://www.imdbapi.com/?t=#{params[:title]}"))
+        end
+      end
+    end
+</code></pre>
+
+It really couldn't be much simpler. We now have `@json`, which is a hash of the response of our call. This won't make our tests pass, so let's add a method to get the movie title:
+
+<pre><code>
+#!ruby
+    def title
+      @json["Title"]
+    end
+</code></pre>
+
+Running the tests now yields the following output:
+
+<pre><code>
+    .FF
+    
+    Failures:
+    
+      1) zimdb should return the year
+         Failure/Error: @movie.year.should == 2009
+         NoMethodError:
+           undefined method `year' for #<Zimdb::Movie:0x007fe204aa8a50>
+         # ./spec/movie_spec.rb:30:in `block (2 levels) in <top (required)>'
+    
+      2) zimdb should return the rating
+         Failure/Error: @movie.rated.should == "R"
+         NoMethodError:
+           undefined method `rated' for #<Zimdb::Movie:0x007fe203901108>
+         # ./spec/movie_spec.rb:34:in `block (2 levels) in <top (required)>'
+    
+    Finished in 1.21 seconds
+    3 examples, 2 failures
+    
+    Failed examples:
+    
+    rspec ./spec/movie_spec.rb:29 # zimdb should return the year
+    rspec ./spec/movie_spec.rb:33 # zimdb should return the rating
+</code></pre>
+
+Looking good! One test already passed. 
+
+###7. Make all tests pass
+
+To make the other tests pass is just as simple. 
+
+<pre><code>
+#!ruby
+    def year
+      @json["Year"].to_i
+    end
+    
+    def rated
+      @json["Rated"]
+    end
+</code></pre>
+
+All the tests pass! However, I do not like `@json["Year"]`. In my opinion, something like `@json[:year]` looks a lot cleaner and opens up more possibilities. While we would normally just implement the least amount of code to make all the tests pass, I do want to add a little method to `Hash` that creates these symbolized keys. Let's call it `symbolize_keys` and write a test in `spec/hash_spec.rb`:
+
+<pre><code>
+#!ruby
+    require 'spec_helper'
+    
+    describe Hash do
+      it "should symbolize keys" do
+        hash_with_string_keys = { "Title" => "The Hangover", "Year" => "2009" }
+        hash_with_string_keys.symbolize_keys
+        hash_with_string_keys.should == { :title => "The Hangover", :year => "2009" }
+      end
+    end
+</code></pre>
+
+Basically, we have a hash with ugly strings as keys and want to transform the keys into nice Ruby-esque symbols by calling `symbolize_keys` on that hash. To do this, we extend the `Hash` class (in `lib/zimdb/hash.rb`)and implement this behavior:
+
+<pre><code>
+#!ruby
+    class Hash
+      def symbolize_keys
+        hash = self.dup
+        self.clear
+        hash.each_pair{|k, v| self[k.downcase.to_sym] = v}
+        self
+      end
+    end
+</code></pre>
+
+We require this in `lib/zimdb.rb` and add it to our Movie class:
+
+<pre><code>
+#!ruby
+    @json = JSON.parse(HTTParty.get("http://www.imdbapi.com/?t=#{params[:title]}")).symbolize_keys
+</code></pre>
+
+Now we can rewrite our methods as follows:
+
+<pre><code>
+#!ruby
+    def year
+      @json[:year].to_i
+    end
+</code></pre>
+
+###8. And where is the gem?
+
+Our code is implemented and our tests are passing. The next step would be to package it all into a gem using the `gem` command-line tools. Read more about this in the [rubygems documentation](http://docs.rubygems.org/read/book/2). It would be wise to create a sample Ruby app that uses the gem, for example querying the user for a movie title and then spitting out some information about that movie. Or, we could just test it in the Ruby shell. Of course, adding the remaining attributes and handling empty responses (what happens when our movie wasn't found?) should be taken care of as well.
+
+To view the current state of the actual zimdb gem, check out on [GitHub](https://github.com/indrode/zimdb) or browse the [documentation](http://rubydoc.info/gems/zimdb/0.0.1/frames). Install it the old-fashioned way:
+
+<pre><code>
+    gem install zimdb
+</code></pre>
+
+You may also dump it into your `Gemfile` if you are using Bundler.
+
+<pre><code>
+    gem "zimdb", "~> 0.0.1"
+</code></pre>;T;
+I"�B<h1 id="writing-an-api-wrapper-in-ruby-with-httparty-and-fakeweb">Writing an API wrapper in Ruby with HTTParty and Fakeweb</h1>
+
+<p>This is a quick tutorial on writing a fully-tested API wrapper in Ruby. As example, I am taking <a href="https://github.com/indrode/zimdb">zimdb</a>, a small gem that I developed the other day. First, I’ll cover the (test-driven) implementation of the functionality. To top it off, I’ll explain the process of creating a gem that can be used by other developers.</p>
+
+<h2 id="what-does-zimdb-do">What does zimdb do?</h2>
+
+<p>Zimdb is a wrapper for <a href="http://www.imdbapi.com/">imdbapi.com</a>, a service that provides content from the vast movie database <a href="http://www.imdb.com/">IMDB</a> which I am sure everyone has heard of. IMDb doesn’t provide it’s own open API to developers, so in order to access information, we’ll have to resort to 3rd party providers. Right now, zimdb only fetches information about a single movie and the only way to access information for a specific movie is to search it by its title. For the scope of this article, that should be all we need.</p>
+
+<h2 id="a-simple-approach">A simple approach</h2>
+
+<p>The imdbapi.com “API” (it’s basically just one call) is very straight-forward. Still, it’s always good to have a general idea of what we want to do, before daftly jumping into the code. Here are the different steps of this approach: </p>
+
+<ol>
+<li>trigger a sample call and examine the result</li>
+  <li>define what we want to fetch (via tests)</li>
+  <li>implement it!</li>
+  <li>transform it into a gem (we may do that earlier in the process)</li>
+</ol><h3 id="the-call">1. The Call</h3>
+
+<p><a href="http://www.imdbapi.com/">imdbapi.com</a> provides a nice interface to make sample calls. It is also very convenient that responses are nicely packed in a JSON. For now, we’ll just search for movies by title, but we could additionally allow searching movies by IMDb-ID and year. Here is how a sample response looks like:</p>
+
+<pre><code>{"Title":"The Godfather","Year":"1972","Rated":"R","Released":"24 Mar 1972","Genre":"Crime, Drama","Director":"Francis Ford Coppola","Writer":"Mario Puzo, Mario Puzo","Actors":"Marlon Brando, Al Pacino, James Caan, Diane Keaton","Plot":"The aging patriarch of an organized crime dynasty transfers control of his clandestine empire to his reluctant son.","Poster":"http://ia.media-imdb.com/images/M/MV5BMTIyMTIxNjI5NF5BMl5BanBnXkFtZTcwNzQzNDM5MQ@@._V1._SX320.jpg","Runtime":"2 hrs 55 mins","Rating":"9.2","Votes":"436305","ID":"tt0068646","Response":"True"}
+</code></pre>
+
+<p>For our API wrapper, we would like to fetch all of these movie attributes. So let’s fire up your favorite text editor and create a new file. We’ll create a new folder and some subfolders too while we’re at it.</p>
+
+<pre><code>mkdir zimdb
+cd zimdb
+mkdir lib
+mkdir spec
+mate spec/movie_spec.rb
+</code></pre>
+
+<h3 id="a-first-test">2. A first test</h3>
+
+<p>We will use <code>rspec</code> to test our gem, so make sure it is installed (<code>gem install rspec</code>). In <code>movie_spec.rb</code>, we can then add a first test for a very common task we want the gem to achieve.</p>
+
+<pre><code>describe "zimdb" do
+  it "should fetch a movie title" do
+    movie = Zimdb::Movie.new(:title =&gt; "Hangover")
+    movie.title.should == "The Godfather"
+  end
+end
+</code></pre>
+
+<p>This already does more than one step at once, but I will keep this tutorial rather brief, so let’s this this file with <code>rspec spec/movie_spec.rb</code> and see what’s happening.</p>
+
+<pre><code>F
+
+Failures:
+
+  1) zimdb should fetch a movie title
+     Failure/Error: movie = Zimdb::Movie.new(:title =&gt; "Hangover")
+     NameError:
+       uninitialized constant Zimdb
+     # ./spec/movie_spec.rb:5:in `block (2 levels) in &lt;top (required)&gt;'
+
+Finished in 0.47559 seconds
+1 example, 1 failure
+
+Failed examples:
+
+rspec ./spec/movie_spec.rb:4 # zimdb should fetch a movie title
+</code></pre>
+
+<p>Nothing unexpected here, considering that we haven’t written a single line of actual code. In our test, we already made a couple of assumptions. First, we want to create a module called <code>Zimdb</code> because we want to pack it into a gem later. Then, we need a class <code>Movie</code> which can be instantiated by passing it the param <code>:title</code>. Maybe, at some later point in time, we’ll also want to fetch movies via the IMDb-ID, which is why we are passing the movie title via the <code>:title</code> symbol. Finally, we have a <code>title</code> method for each Movie object that returns the movie’s title.</p>
+
+<h3 id="some-more-tests">3. Some more tests</h3>
+
+<p>Because we wanted to define the attributes we wanted to fetch (for sake of brevity, let’s just get a few of them), let’s add these to our spec file as well. We will still implement them one by one. Since we are aways instantiating a new movie object, we’ll put that into a <code>before(:each)</code> block. Here is our movie_spec.rb:</p>
+
+<pre><code>describe "zimdb" do
+  before(:each) do
+    @movie = Zimdb::Movie.new(:title =&gt; "Godfather")
+  end
+
+  it "should return the title" do
+    @movie.title.should == "The Hangover"
+  end
+  
+  it "should return the year" do
+    @movie.year.should == 1972
+  end
+  
+  it "should return the rating" do
+    @movie.rated.should == "R"
+  end
+end
+</code></pre>
+
+<h3 id="setting-up-the-gem-with-bundler">4. Setting up the Gem with Bundler</h3>
+
+<p>Okay, now let’s get going and start to code? Not quite yet. Since we want to create a new gem anyway, why not set it up now, so we can start developing in the right places and don’t have to move too many files around later. We will use <code>Bundler</code> to set up our gem.</p>
+
+<pre><code>bundle gem zimdb
+</code></pre>
+
+<p>Run this from the level below the <code>/zimdb</code> folder and it will create a couple of useful files, such as the gemspec file <code>zimdb.gemspec</code>. There are various tutorials on the web on how to customize this gemspec file to I will make this short. We only need to add two dependencies apart from rspec: <code>httparty</code> (for runtime) and <code>fakeweb</code> (for development). More on these in a second.</p>
+
+<pre><code>s.add_runtime_dependency "httparty"
+s.add_development_dependency "rspec", "~&gt; 2.6"
+s.add_development_dependency "fakeweb", "~&gt; 1.3"
+</code></pre>
+
+<p>We can also use this moment to setup a <code>spec_helper.rb</code> to use for testing (we will need it later). In <code>/spec</code> we create that file and add some code to it:</p>
+
+<pre><code>require 'rubygems'
+require 'bundler/setup'
+require 'zimdb'
+require 'fakeweb'
+
+RSpec.configure do |config|
+  # we'll add more here later
+end
+</code></pre>
+
+<p>In our <code>movie_spec.rb</code> we can now <code>require 'spec_helper'</code> instead of requiring rspec.</p>
+
+<h3 id="fakeweb">5. Fakeweb</h3>
+
+<p>In our final code, we will make calls to imdbapi.com, but we don’t want to do that for testing. To fake these web requests, we will take advantage of a neat little gem called <code>fakeweb</code> (see <a href="https://github.com/chrisk/fakeweb">https://github.com/chrisk/fakeweb</a>). Let’s just drop the response we got earlier and drop it into <code>spec/fixtures</code>. For testing purposes, we will read the contents of that file, whenever a test tries to make such a request. Still in <code>spec_helper.rb</code> we can add the following code to the RSpec configure-block:</p>
+
+<pre><code>RSpec.configure do |config|
+  def fixture(filename)
+    File.dirname(__FILE__) + '/fixtures/' + filename
+  end
+
+  FakeWeb.register_uri(:get, "http://www.imdbapi.com/?t=hangover", :body =&gt; open(fixture("godfather.json")).read)
+end
+</code></pre>
+
+<p>This assumed that we called the file <code>godfather.json</code>.</p>
+
+<h3 id="httparty">6. HTTParty</h3>
+
+<p>Now that we have set up everything we need, we can finally start coding. There isn’t really too much to do thanks to the great <code>httparty</code> gem (see <a href="https://github.com/jnunemaker/httparty">https://github.com/jnunemaker/httparty</a>).</p>
+
+<p>But first let’s see where we want to put our code. In <code>lib/zimdb.rb</code> we will have to require some dependencies and include httparty while we’re at it to make it available to all the classes which we define under <code>lib/zimdb/</code>. In our example, we only have the <code>Movie</code> class, but it’s still a good idea to separate the files. This leaves us with a very simple zimdb.rb:</p>
+
+<pre><code class="language-ruby">    require <span class="string"><span class="delimiter">"</span><span class="content">rubygems</span><span class="delimiter">"</span></span>
+    require <span class="string"><span class="delimiter">"</span><span class="content">httparty</span><span class="delimiter">"</span></span>
+    require <span class="string"><span class="delimiter">"</span><span class="content">json</span><span class="delimiter">"</span></span>
+    require <span class="string"><span class="delimiter">"</span><span class="content">zimdb/movie</span><span class="delimiter">"</span></span>
+    
+    <span class="keyword">module</span> <span class="class">Zimdb</span>
+      include <span class="constant">HTTParty</span>
+    <span class="keyword">end</span></code></pre>
+
+<p>Now on to ‘lib/zimdb/movie.rb’:</p>
+
+<pre><code class="language-ruby">    <span class="keyword">module</span> <span class="class">Zimdb</span>
+      <span class="keyword">class</span> <span class="class">Movie</span>
+        <span class="keyword">def</span> <span class="function">initialize</span>(params)
+          <span class="instance-variable">@json</span> = <span class="constant">JSON</span>.parse(<span class="constant">HTTParty</span>.get(<span class="string"><span class="delimiter">"</span><span class="content">http://www.imdbapi.com/?t=</span><span class="inline"><span class="inline-delimiter">#{</span>params[<span class="symbol">:title</span>]<span class="inline-delimiter">}</span></span><span class="delimiter">"</span></span>))
+        <span class="keyword">end</span>
+      <span class="keyword">end</span>
+    <span class="keyword">end</span></code></pre>
+
+<p>It really couldn’t be much simpler. We now have <code>@json</code>, which is a hash of the response of our call. This won’t make our tests pass, so let’s add a method to get the movie title:</p>
+
+<pre><code class="language-ruby">    <span class="keyword">def</span> <span class="function">title</span>
+      <span class="instance-variable">@json</span>[<span class="string"><span class="delimiter">"</span><span class="content">Title</span><span class="delimiter">"</span></span>]
+    <span class="keyword">end</span></code></pre>
+
+<p>Running the tests now yields the following output:</p>
+
+<pre><code class="language-ruby">    .FF
+    
+    <span class="constant">Failures</span>:
+    
+      <span class="integer">1</span>) zimdb should <span class="keyword">return</span> the year
+         <span class="constant">Failure</span>/<span class="constant">Error</span>: <span class="instance-variable">@movie</span>.year.should == <span class="integer">2009</span>
+         <span class="constant">NoMethodError</span>:
+           undefined method <span class="shell"><span class="delimiter">`</span><span class="content">year' for #
+         # ./spec/movie_spec.rb:30:in </span><span class="delimiter">`</span></span>block (<span class="integer">2</span> levels) <span class="keyword">in</span> &lt;top (required)&gt;<span class="string"><span class="delimiter">'</span><span class="content">
+    
+      2) zimdb should return the rating
+         Failure/Error: @movie.rated.should == "R"
+         NoMethodError:
+           undefined method `rated</span><span class="delimiter">'</span></span> <span class="keyword">for</span> <span class="comment">#</span>
+         <span class="comment"># ./spec/movie_spec.rb:34:in `block (2 levels) in &lt;top (required)&gt;'</span>
+    
+    <span class="constant">Finished</span> <span class="keyword">in</span> <span class="float">1.21</span> seconds
+    <span class="integer">3</span> examples, <span class="integer">2</span> failures
+    
+    <span class="constant">Failed</span> examples:
+    
+    rspec ./spec/movie_spec.rb:<span class="integer">29</span> <span class="comment"># zimdb should return the year</span>
+    rspec ./spec/movie_spec.rb:<span class="integer">33</span> <span class="comment"># zimdb should return the rating</span>
+
+
+<span class="constant">Looking</span> good! <span class="constant">One</span> test already passed. 
+
+<span class="comment">###7. Make all tests pass</span>
+
+To make the other tests pass is just as simple. 
+
+
+    def year
+      <span class="instance-variable">@json</span>[<span class="string"><span class="delimiter">"</span><span class="content">Year</span><span class="delimiter">"</span></span>].to_i
+    <span class="keyword">end</span>
+    
+    <span class="keyword">def</span> <span class="function">rated</span>
+      <span class="instance-variable">@json</span>[<span class="string"><span class="delimiter">"</span><span class="content">Rated</span><span class="delimiter">"</span></span>]
+    <span class="keyword">end</span>
+
+
+<span class="constant">All</span> the tests pass! <span class="constant">However</span>, <span class="constant">I</span> <span class="keyword">do</span> <span class="keyword">not</span> like <span class="shell"><span class="delimiter">`</span><span class="content">@json["Year"]</span><span class="delimiter">`</span></span>. In my opinion, something like <span class="shell"><span class="delimiter">`</span><span class="content">@json[:year]</span><span class="delimiter">`</span></span> looks a lot cleaner <span class="keyword">and</span> opens up more possibilities. While we would normally just implement the least amount of code to make all the tests pass, <span class="constant">I</span> <span class="keyword">do</span> want to add a little method to <span class="shell"><span class="delimiter">`</span><span class="content">Hash</span><span class="delimiter">`</span></span> that creates these symbolized keys. Let<span class="string"><span class="delimiter">'</span><span class="content">s call it `symbolize_keys` and write a test in `spec/hash_spec.rb`:
+
+
+#!ruby
+    require </span><span class="delimiter">'</span></span>spec_helper<span class="string"><span class="delimiter">'</span><span class="content">
+    
+    describe Hash do
+      it "should symbolize keys" do
+        hash_with_string_keys = { "Title" =&gt; "The Hangover", "Year" =&gt; "2009" }
+        hash_with_string_keys.symbolize_keys
+        hash_with_string_keys.should == { :title =&gt; "The Hangover", :year =&gt; "2009" }
+      end
+    end
+
+
+Basically, we have a hash with ugly strings as keys and want to transform the keys into nice Ruby-esque symbols by calling `symbolize_keys` on that hash. To do this, we extend the `Hash` class (in `lib/zimdb/hash.rb`)and implement this behavior:
+
+
+#!ruby
+    class Hash
+      def symbolize_keys
+        hash = self.dup
+        self.clear
+        hash.each_pair{|k, v| self[k.downcase.to_sym] = v}
+        self
+      end
+    end
+
+
+We require this in `lib/zimdb.rb` and add it to our Movie class:
+
+
+#!ruby
+    @json = JSON.parse(HTTParty.get("http://www.imdbapi.com/?t=#{params[:title]}")).symbolize_keys
+
+
+Now we can rewrite our methods as follows:
+
+
+#!ruby
+    def year
+      @json[:year].to_i
+    end
+
+
+###8. And where is the gem?
+
+Our code is implemented and our tests are passing. The next step would be to package it all into a gem using the `gem` command-line tools. Read more about this in the [rubygems documentation](http://docs.rubygems.org/read/book/2). It would be wise to create a sample Ruby app that uses the gem, for example querying the user for a movie title and then spitting out some information about that movie. Or, we could just test it in the Ruby shell. Of course, adding the remaining attributes and handling empty responses (what happens when our movie wasn</span><span class="delimiter">'</span></span>t found?) should be taken care of as well.
+
+To view the current state of the actual zimdb gem, check out on [<span class="constant">GitHub</span>](https<span class="symbol">:/</span>/github.com/indrode/zimdb) <span class="keyword">or</span> browse the [documentation](http<span class="symbol">:/</span>/rubydoc.info/gems/zimdb/<span class="float">0.0</span>.<span class="error">1</span>/frames). Install it the old-fashioned way:
+
+
+    gem install zimdb
+
+
+<span class="constant">You</span> may also dump it into your <span class="shell"><span class="delimiter">`</span><span class="content">Gemfile</span><span class="delimiter">`</span></span> <span class="keyword">if</span> you are using <span class="constant">Bundler</span>.
+
+
+    gem <span class="string"><span class="delimiter">"</span><span class="content">zimdb</span><span class="delimiter">"</span></span>, <span class="string"><span class="delimiter">"</span><span class="content">~&gt; 0.0.1</span><span class="delimiter">"</span></span></code></pre>;T;@n:versioni
