@@ -149,7 +149,8 @@ RSpec.configure do |config|
     File.dirname(__FILE__) + '/fixtures/' + filename
   end
   
-  FakeWeb.register_uri(:get, "http://www.imdbapi.com/?t=hangover", :body => open(fixture("godfather.json")).read)
+  FakeWeb.register_uri(:get, "http://www.imdbapi.com/?t=hangover", 
+                       :body => open(fixture("godfather.json")).read)
 end
 </code></pre>
   
@@ -251,7 +252,8 @@ describe Hash do
   it "should symbolize keys" do
     hash_with_string_keys = { "Title" => "The Hangover", "Year" => "2009" }
     hash_with_string_keys.symbolize_keys
-    hash_with_string_keys.should == { :title => "The Hangover", :year => "2009" }
+    hash_with_string_keys.should == { :title => "The Hangover",
+                                      :year => "2009" }
   end
 end
 </code></pre>
