@@ -4329,7 +4329,7 @@ div.slider-nav span.left {
 	div.panel { border: 1px solid #ccc; };T;
 I"p/* This is for all IE specfific style less than IE9. We hate IE. */
 
-	div.panel { border: 1px solid #ccc; };T;@,"/stylesheets/app/{;{;I"Ébody {
+	div.panel { border: 1px solid #ccc; };T;@,"/stylesheets/app/{;{;I"body {
   background-color:#C6C8C6;
 }
 
@@ -4403,6 +4403,12 @@ pre {
   padding: 10px;
   margin: -5px 0 15px 0;
   word-wrap:break-word;
+}
+
+@media only screen and (max-width: 767px) {
+  pre {
+    font-size: 11px;
+  }
 }
 
 .container {

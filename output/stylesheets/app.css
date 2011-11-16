@@ -74,6 +74,12 @@ pre {
   word-wrap:break-word;
 }
 
+@media only screen and (max-width: 767px) {
+  pre {
+    font-size: 11px;
+  }
+}
+
 .container {
 }
 
