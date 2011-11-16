@@ -38,7 +38,7 @@
     <div class="container">
       <div class="row">
         <div class="twelve columns">
-          <span class="meatspace"><a href="/">meatspace</a></span> <span class="show-on-phones-inline">mobile</span> (<a href="/about">about</a>)
+          <span class="meatspace">&#9992; <a href="/">meatspace</a></span> <span class="show-on-phones-inline">mobile</span> (<a href="/about">about</a>)
         </div>
       </div>
     </div>
@@ -167,7 +167,8 @@ require <span class="string"><span class="delimiter">'</span><span class="conten
     <span class="constant">File</span>.dirname(<span class="predefined-constant">__FILE__</span>) + <span class="string"><span class="delimiter">'</span><span class="content">/fixtures/</span><span class="delimiter">'</span></span> + filename
   <span class="keyword">end</span>
   
-  <span class="constant">FakeWeb</span>.register_uri(<span class="symbol">:get</span>, <span class="string"><span class="delimiter">"</span><span class="content">http://www.imdbapi.com/?t=hangover</span><span class="delimiter">"</span></span>, <span class="symbol">:body</span> =&gt; open(fixture(<span class="string"><span class="delimiter">"</span><span class="content">godfather.json</span><span class="delimiter">"</span></span>)).read)
+  <span class="constant">FakeWeb</span>.register_uri(<span class="symbol">:get</span>, <span class="string"><span class="delimiter">"</span><span class="content">http://www.imdbapi.com/?t=hangover</span><span class="delimiter">"</span></span>, 
+                       <span class="symbol">:body</span> =&gt; open(fixture(<span class="string"><span class="delimiter">"</span><span class="content">godfather.json</span><span class="delimiter">"</span></span>)).read)
 <span class="keyword">end</span></code></pre>
 
 <p>This assumed that we called the file <code>godfather.json</code>.</p>
@@ -251,7 +252,8 @@ describe <span class="constant">Hash</span> <span class="keyword">do</span>
   it <span class="string"><span class="delimiter">"</span><span class="content">should symbolize keys</span><span class="delimiter">"</span></span> <span class="keyword">do</span>
     hash_with_string_keys = { <span class="string"><span class="delimiter">"</span><span class="content">Title</span><span class="delimiter">"</span></span> =&gt; <span class="string"><span class="delimiter">"</span><span class="content">The Hangover</span><span class="delimiter">"</span></span>, <span class="string"><span class="delimiter">"</span><span class="content">Year</span><span class="delimiter">"</span></span> =&gt; <span class="string"><span class="delimiter">"</span><span class="content">2009</span><span class="delimiter">"</span></span> }
     hash_with_string_keys.symbolize_keys
-    hash_with_string_keys.should == { <span class="symbol">:title</span> =&gt; <span class="string"><span class="delimiter">"</span><span class="content">The Hangover</span><span class="delimiter">"</span></span>, <span class="symbol">:year</span> =&gt; <span class="string"><span class="delimiter">"</span><span class="content">2009</span><span class="delimiter">"</span></span> }
+    hash_with_string_keys.should == { <span class="symbol">:title</span> =&gt; <span class="string"><span class="delimiter">"</span><span class="content">The Hangover</span><span class="delimiter">"</span></span>,
+                                      <span class="symbol">:year</span> =&gt; <span class="string"><span class="delimiter">"</span><span class="content">2009</span><span class="delimiter">"</span></span> }
   <span class="keyword">end</span>
 <span class="keyword">end</span></code></pre>
 

@@ -38,7 +38,7 @@
     <div class="container">
       <div class="row">
         <div class="twelve columns">
-          <span class="meatspace"><a href="/">meatspace</a></span> <span class="show-on-phones-inline">mobile</span> (<a href="/about">about</a>)
+          <span class="meatspace">&#9992; <a href="/">meatspace</a></span> <span class="show-on-phones-inline">mobile</span> (<a href="/about">about</a>)
         </div>
       </div>
     </div>
@@ -184,7 +184,8 @@ require &lt;span class="string"&gt;&lt;span class="delimiter"&gt;'&lt;/span&gt;&
     &lt;span class="constant"&gt;File&lt;/span&gt;.dirname(&lt;span class="predefined-constant"&gt;__FILE__&lt;/span&gt;) + &lt;span class="string"&gt;&lt;span class="delimiter"&gt;'&lt;/span&gt;&lt;span class="content"&gt;/fixtures/&lt;/span&gt;&lt;span class="delimiter"&gt;'&lt;/span&gt;&lt;/span&gt; + filename
   &lt;span class="keyword"&gt;end&lt;/span&gt;
   
-  &lt;span class="constant"&gt;FakeWeb&lt;/span&gt;.register_uri(&lt;span class="symbol"&gt;:get&lt;/span&gt;, &lt;span class="string"&gt;&lt;span class="delimiter"&gt;"&lt;/span&gt;&lt;span class="content"&gt;http://www.imdbapi.com/?t=hangover&lt;/span&gt;&lt;span class="delimiter"&gt;"&lt;/span&gt;&lt;/span&gt;, &lt;span class="symbol"&gt;:body&lt;/span&gt; =&amp;gt; open(fixture(&lt;span class="string"&gt;&lt;span class="delimiter"&gt;"&lt;/span&gt;&lt;span class="content"&gt;godfather.json&lt;/span&gt;&lt;span class="delimiter"&gt;"&lt;/span&gt;&lt;/span&gt;)).read)
+  &lt;span class="constant"&gt;FakeWeb&lt;/span&gt;.register_uri(&lt;span class="symbol"&gt;:get&lt;/span&gt;, &lt;span class="string"&gt;&lt;span class="delimiter"&gt;"&lt;/span&gt;&lt;span class="content"&gt;http://www.imdbapi.com/?t=hangover&lt;/span&gt;&lt;span class="delimiter"&gt;"&lt;/span&gt;&lt;/span&gt;, 
+                       &lt;span class="symbol"&gt;:body&lt;/span&gt; =&amp;gt; open(fixture(&lt;span class="string"&gt;&lt;span class="delimiter"&gt;"&lt;/span&gt;&lt;span class="content"&gt;godfather.json&lt;/span&gt;&lt;span class="delimiter"&gt;"&lt;/span&gt;&lt;/span&gt;)).read)
 &lt;span class="keyword"&gt;end&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
 
 &lt;p&gt;This assumed that we called the file &lt;code&gt;godfather.json&lt;/code&gt;.&lt;/p&gt;
@@ -268,7 +269,8 @@ describe &lt;span class="constant"&gt;Hash&lt;/span&gt; &lt;span class="keyword"
   it &lt;span class="string"&gt;&lt;span class="delimiter"&gt;"&lt;/span&gt;&lt;span class="content"&gt;should symbolize keys&lt;/span&gt;&lt;span class="delimiter"&gt;"&lt;/span&gt;&lt;/span&gt; &lt;span class="keyword"&gt;do&lt;/span&gt;
     hash_with_string_keys = { &lt;span class="string"&gt;&lt;span class="delimiter"&gt;"&lt;/span&gt;&lt;span class="content"&gt;Title&lt;/span&gt;&lt;span class="delimiter"&gt;"&lt;/span&gt;&lt;/span&gt; =&amp;gt; &lt;span class="string"&gt;&lt;span class="delimiter"&gt;"&lt;/span&gt;&lt;span class="content"&gt;The Hangover&lt;/span&gt;&lt;span class="delimiter"&gt;"&lt;/span&gt;&lt;/span&gt;, &lt;span class="string"&gt;&lt;span class="delimiter"&gt;"&lt;/span&gt;&lt;span class="content"&gt;Year&lt;/span&gt;&lt;span class="delimiter"&gt;"&lt;/span&gt;&lt;/span&gt; =&amp;gt; &lt;span class="string"&gt;&lt;span class="delimiter"&gt;"&lt;/span&gt;&lt;span class="content"&gt;2009&lt;/span&gt;&lt;span class="delimiter"&gt;"&lt;/span&gt;&lt;/span&gt; }
     hash_with_string_keys.symbolize_keys
-    hash_with_string_keys.should == { &lt;span class="symbol"&gt;:title&lt;/span&gt; =&amp;gt; &lt;span class="string"&gt;&lt;span class="delimiter"&gt;"&lt;/span&gt;&lt;span class="content"&gt;The Hangover&lt;/span&gt;&lt;span class="delimiter"&gt;"&lt;/span&gt;&lt;/span&gt;, &lt;span class="symbol"&gt;:year&lt;/span&gt; =&amp;gt; &lt;span class="string"&gt;&lt;span class="delimiter"&gt;"&lt;/span&gt;&lt;span class="content"&gt;2009&lt;/span&gt;&lt;span class="delimiter"&gt;"&lt;/span&gt;&lt;/span&gt; }
+    hash_with_string_keys.should == { &lt;span class="symbol"&gt;:title&lt;/span&gt; =&amp;gt; &lt;span class="string"&gt;&lt;span class="delimiter"&gt;"&lt;/span&gt;&lt;span class="content"&gt;The Hangover&lt;/span&gt;&lt;span class="delimiter"&gt;"&lt;/span&gt;&lt;/span&gt;,
+                                      &lt;span class="symbol"&gt;:year&lt;/span&gt; =&amp;gt; &lt;span class="string"&gt;&lt;span class="delimiter"&gt;"&lt;/span&gt;&lt;span class="content"&gt;2009&lt;/span&gt;&lt;span class="delimiter"&gt;"&lt;/span&gt;&lt;/span&gt; }
   &lt;span class="keyword"&gt;end&lt;/span&gt;
 &lt;span class="keyword"&gt;end&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
 
