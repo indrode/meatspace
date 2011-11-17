@@ -1,3 +1,4 @@
 nanoc.thor
 output/*
-tmp/*
+tmp/checksums
+tmp/compiled_content
