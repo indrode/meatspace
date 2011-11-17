@@ -25,6 +25,7 @@ ol li {
 
 .meatspace a {
   color:#000;
+  font-weight:normal;
 }
 
 .infoline {
@@ -64,8 +65,8 @@ pre code {
 }
 
 pre {
-  font-family: monospace;
-  font-size: 15px;
+  font-family: ubuntu-mono-1,ubuntu-mono-2,monospace,sans-serif;
+  font-size: 14px;
   line-height: 1.4em;
   display: block;
   color: #fff;
