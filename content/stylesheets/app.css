@@ -92,6 +92,10 @@ pre {
 
 }
 
+.normal-weight {
+  font-weight:normal;
+}
+
 h1 {
   font-family: futura-pt-1,futura-pt-2,sans-serif;
   font-weight:300;
