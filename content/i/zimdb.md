@@ -91,7 +91,7 @@ describe "zimdb" do
   end
   
   it "should return the title" do
-    @movie.title.should == "The Hangover"
+    @movie.title.should == "The Godfather"
   end
   
   it "should return the year" do
@@ -227,7 +227,7 @@ rspec ./spec/movie_spec.rb:33 # zimdb should return the rating
 
 Looking good! One test already passed.
 
-###7. Make all tests pass
+###7. Making all tests pass
 
 To make the other tests pass is just as simple.
 
