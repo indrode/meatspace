@@ -3,9 +3,11 @@
   <!-- container -->
   <div class="container">
     <div class="row">
-      <div class="twelve columns">
+      <div class="eight columns">
         <%= yield %>
-        <div class="infoline"><a href="<%= @item.path %>">Permalink</a> &middot; Written on <%= Date.strptime("#{@item[:created_at]}", "%d.%m.%Y") %></class>
+      </div>
+      <div class="four columns show-on-desktops">
+        <p><a href="<%= @item.path %>">Permalink</a><br />Written by Indro De on <%= Date.strptime("#{@item[:created_at]}", "%d.%m.%Y") %>.</p>
       </div>
     </div>
   </div>

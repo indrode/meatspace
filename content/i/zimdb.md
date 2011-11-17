@@ -6,7 +6,7 @@ kind: article
 
 #An API wrapper in Ruby with HTTParty and Fakeweb
 
-This is a quick tutorial on writing a fully-tested API wrapper in Ruby. As example, I am taking [zimdb](https://github.com/indrode/zimdb), a small gem that I developed the other day. First, I'll cover the (test-driven) implementation of the functionality. To top it off, I'll explain the process of creating a gem that can be used by other developers.
+This is a quick tutorial on writing a fully-tested API wrapper in Ruby. As example, I am taking [zimdb](https://github.com/indrode/zimdb), a small gem that I developed the other day. First, I'll cover the (test-driven) implementation of the functionality. To top it off, I'll quickly touch the process of creating a gem that can be used by other developers.
 
 ##What does ZIMDb do?
 
@@ -49,7 +49,7 @@ We will use `rspec` to test our gem, so make sure it is installed (`gem install 
 #!ruby
 describe "zimdb" do
   it "should fetch a movie title" do
-    movie = Zimdb::Movie.new(:title => "Hangover")
+    movie = Zimdb::Movie.new(:title => "Godfather")
     movie.title.should == "The Godfather"
   end
 end
@@ -64,7 +64,7 @@ F
 Failures:
 
   1) zimdb should fetch a movie title
-     Failure/Error: movie = Zimdb::Movie.new(:title => "Hangover")
+     Failure/Error: movie = Zimdb::Movie.new(:title => "Godfather")
      NameError:
        uninitialized constant Zimdb
      # ./spec/movie_spec.rb:5:in `block (2 levels) in &lt;top (required)&gt;'
@@ -113,7 +113,7 @@ Okay, now let's get going and start to code? Not quite yet. Since we want to cre
 bundle gem zimdb
 </code></pre>
 
-Run this from the level below the `/zimdb` folder and it will create a couple of useful files, such as the gemspec file `zimdb.gemspec`. There are various tutorials on the web on how to customize this gemspec file to I will make this short. We only need to add two dependencies apart from rspec: `httparty` (for runtime) and `fakeweb` (for development). More on these in a second.
+Run this from the level below the `/zimdb` folder and it will create a couple of useful files, such as the gemspec file `zimdb.gemspec`. There are various tutorials on the web on how to customize this gemspec file, therefore I will make this short. We only need to add two dependencies apart from rspec: `httparty` (for runtime) and `fakeweb` (for development). More on these in a second.
 
 <pre><code>
 #!ruby
@@ -126,7 +126,6 @@ We can also use this moment to setup a `spec_helper.rb` to use for testing (we w
 
 <pre><code>
 #!ruby
-require 'rubygems'
 require 'bundler/setup'
 require 'zimdb'
 require 'fakeweb'
@@ -144,17 +143,19 @@ In our final code, we will make calls to imdbapi.com, but we don't want to do th
 
 <pre><code>
 #!ruby
+FakeWeb.allow_net_connect = false
+
 RSpec.configure do |config|
   def fixture(filename)
     File.dirname(__FILE__) + '/fixtures/' + filename
   end
   
-  FakeWeb.register_uri(:get, "http://www.imdbapi.com/?t=hangover", 
-                       :body => open(fixture("godfather.json")).read)
+  FakeWeb.register_uri(:get, "http://www.imdbapi.com/?t=Godfather", 
+                       :body => open(fixture("godfather.json")))
 end
 </code></pre>
   
-This assumed that we called the file `godfather.json`.
+This assumed that we called the file `godfather.json`. Any tests with web requests that are not registered for fakeweb will still be made. To prevent our test suite communicating with the web, we add `FakeWeb.allow_net_connect = false`.
 
 ###6. HTTParty
 
@@ -164,7 +165,6 @@ But first let's see where we want to put our code. In `lib/zimdb.rb` we will hav
 
 <pre><code>
 #!ruby
-require "rubygems"
 require "httparty"
 require "json"
 require "zimdb/movie"
@@ -174,7 +174,7 @@ module Zimdb
 end
 </code></pre>
 
-Now on to `lib/zimdb/movie.rb`:
+Note, that you [should not require rubygems](http://tomayko.com/writings/require-rubygems-antipattern). Now on to `lib/zimdb/movie.rb`:
 
 <pre><code>
 #!ruby
@@ -229,7 +229,7 @@ Looking good! One test already passed.
 
 ###7. Making all tests pass
 
-To make the other tests pass is just as simple.
+We can make the other two tests pass by simply adding the corresponding methods.
 
 <pre><code>
 #!ruby
@@ -250,15 +250,15 @@ require 'spec_helper'
 
 describe Hash do
   it "should symbolize keys" do
-    hash_with_string_keys = { "Title" => "The Hangover", "Year" => "2009" }
-    hash_with_string_keys.symbolize_keys
-    hash_with_string_keys.should == { :title => "The Hangover",
-                                      :year => "2009" }
+    my_hash = { "Title" => "The Hangover", "Year" => "2009" }
+    my_hash.symbolize_keys
+    my_hash.should == { :title => "The Hangover",
+                        :year => "2009" }
   end
 end
 </code></pre>
 
-Basically, we have a hash with ugly strings as keys and want to transform the keys into nice Ruby-esque symbols by calling `symbolize_keys` on that hash. To do this, we extend the `Hash` class (in `lib/zimdb/hash.rb`)and implement this behavior:
+Basically, we have a hash with ugly strings as keys and want to transform those keys into nice Ruby-esque symbols by calling `symbolize_keys` on that hash. To do this, we extend the `Hash` class (in `lib/zimdb/hash.rb`) and implement this behavior:
 
 <pre><code>
 #!ruby
@@ -291,6 +291,14 @@ end
 ###8. And where is the gem?
 
 Our code is implemented and our tests are passing. The next step would be to package it all into a gem using the `gem` command-line tools. Read more about this in the [rubygems documentation](http://docs.rubygems.org/read/book/2). It would be wise to create a sample Ruby app that uses the gem, for example querying the user for a movie title and then spitting out some information about that movie. Or, we could just test it in the Ruby shell. Of course, adding the remaining attributes and handling empty responses (what happens when our movie wasn't found?) should be taken care of as well.
+
+Just for reference, this is how we would build and push the gem to `rubygems`:
+
+<pre><code>
+#!sql
+gem build zimdb.gemspec
+gem push zimdb-0.0.1.gem
+</code></pre>
 
 To view the current state of the actual ZIMDb gem, check it out on [GitHub](https://github.com/indrode/zimdb) or browse the [documentation](http://rubydoc.info/gems/zimdb/0.0.1/frames). As always, install it the old-fashioned way:
 

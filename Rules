@@ -31,6 +31,12 @@ compile '/' do
   layout 'default'
 end
 
+#photo pages
+compile '/p/*' do
+  layout 'photo'
+end
+
+#articles
 compile '/i/*' do
   filter :kramdown
   filter :colorize_syntax,
@@ -51,6 +57,10 @@ route '/feed/*' do
   item.identifier.chop + '.xml'
 end
 
+route '/photos/*' do
+  item.identifier.chop + '.jpg' 
+end
+
 route '/stylesheets/*' do
   item.identifier.chop + '.css' 
 end
@@ -60,6 +70,10 @@ route '/javascripts/*' do
 end
 
 route '/i/*' do
+  item.identifier + 'index.html'
+end
+
+route '/p/*' do
   item.identifier + 'index.html'
 end
 
