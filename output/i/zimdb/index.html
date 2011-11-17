@@ -52,9 +52,9 @@
 
 <p>This is a quick tutorial on writing a fully-tested API wrapper in Ruby. As example, I am taking <a href="https://github.com/indrode/zimdb">zimdb</a>, a small gem that I developed the other day. First, I’ll cover the (test-driven) implementation of the functionality. To top it off, I’ll explain the process of creating a gem that can be used by other developers.</p>
 
-<h2 id="what-does-zimdb-do">What does zimdb do?</h2>
+<h2 id="what-does-zimdb-do">What does ZIMDb do?</h2>
 
-<p>Zimdb is a wrapper for <a href="http://www.imdbapi.com/">imdbapi.com</a>, a service that provides content from the vast movie database <a href="http://www.imdb.com/">IMDB</a> which I am sure everyone has heard of. IMDb doesn’t provide its own open API to developers, so in order to access information, we’ll have to resort to 3rd party providers. Right now, zimdb only fetches information about a single movie and the only way to access information for a specific movie is to search for it by its title. For the scope of this article, that should be all we need.</p>
+<p><strong>ZIMDb</strong> is a wrapper for <a href="http://www.imdbapi.com/">imdbapi.com</a>, a service that provides content from the vast movie database <a href="http://www.imdb.com/">IMDB</a> which I am sure everyone has heard of. IMDb doesn’t provide its own open API to developers, so in order to access information, we’ll have to resort to 3rd party providers. Right now, ZIMDb only fetches information about a single movie and the only way to access information for a specific movie is to search for it by its title. For the scope of this article, that should be all we need.</p>
 
 <h2 id="a-simple-approach">A simple approach</h2>
 
@@ -282,7 +282,7 @@ describe <span class="constant">Hash</span> <span class="keyword">do</span>
 
 <p>Our code is implemented and our tests are passing. The next step would be to package it all into a gem using the <code>gem</code> command-line tools. Read more about this in the <a href="http://docs.rubygems.org/read/book/2">rubygems documentation</a>. It would be wise to create a sample Ruby app that uses the gem, for example querying the user for a movie title and then spitting out some information about that movie. Or, we could just test it in the Ruby shell. Of course, adding the remaining attributes and handling empty responses (what happens when our movie wasn’t found?) should be taken care of as well.</p>
 
-<p>To view the current state of the actual zimdb gem, check it out on <a href="https://github.com/indrode/zimdb">GitHub</a> or browse the <a href="http://rubydoc.info/gems/zimdb/0.0.1/frames">documentation</a>. As always, install it the old-fashioned way:</p>
+<p>To view the current state of the actual ZIMDb gem, check it out on <a href="https://github.com/indrode/zimdb">GitHub</a> or browse the <a href="http://rubydoc.info/gems/zimdb/0.0.1/frames">documentation</a>. As always, install it the old-fashioned way:</p>
 
 <pre><code class="language-sql">gem install zimdb</code></pre>
 

@@ -8,9 +8,9 @@ kind: article
 
 This is a quick tutorial on writing a fully-tested API wrapper in Ruby. As example, I am taking [zimdb](https://github.com/indrode/zimdb), a small gem that I developed the other day. First, I'll cover the (test-driven) implementation of the functionality. To top it off, I'll explain the process of creating a gem that can be used by other developers.
 
-##What does zimdb do?
+##What does ZIMDb do?
 
-Zimdb is a wrapper for [imdbapi.com](http://www.imdbapi.com/), a service that provides content from the vast movie database [IMDB](http://www.imdb.com/) which I am sure everyone has heard of. IMDb doesn't provide its own open API to developers, so in order to access information, we'll have to resort to 3rd party providers. Right now, zimdb only fetches information about a single movie and the only way to access information for a specific movie is to search for it by its title. For the scope of this article, that should be all we need.
+**ZIMDb** is a wrapper for [imdbapi.com](http://www.imdbapi.com/), a service that provides content from the vast movie database [IMDB](http://www.imdb.com/) which I am sure everyone has heard of. IMDb doesn't provide its own open API to developers, so in order to access information, we'll have to resort to 3rd party providers. Right now, ZIMDb only fetches information about a single movie and the only way to access information for a specific movie is to search for it by its title. For the scope of this article, that should be all we need.
 
 ##A simple approach
 
@@ -292,7 +292,7 @@ end
 
 Our code is implemented and our tests are passing. The next step would be to package it all into a gem using the `gem` command-line tools. Read more about this in the [rubygems documentation](http://docs.rubygems.org/read/book/2). It would be wise to create a sample Ruby app that uses the gem, for example querying the user for a movie title and then spitting out some information about that movie. Or, we could just test it in the Ruby shell. Of course, adding the remaining attributes and handling empty responses (what happens when our movie wasn't found?) should be taken care of as well.
 
-To view the current state of the actual zimdb gem, check it out on [GitHub](https://github.com/indrode/zimdb) or browse the [documentation](http://rubydoc.info/gems/zimdb/0.0.1/frames). As always, install it the old-fashioned way:
+To view the current state of the actual ZIMDb gem, check it out on [GitHub](https://github.com/indrode/zimdb) or browse the [documentation](http://rubydoc.info/gems/zimdb/0.0.1/frames). As always, install it the old-fashioned way:
 
 <pre><code>
 #!sql

@@ -15,6 +15,10 @@ body {
   -moz-box-shadow:-2px 2px 2px #999;
 }
 
+ol li {
+  font-family: ff-dagny-web-pro-1,ff-dagny-web-pro-2,sans-serif;
+}
+
 .meatspace {
   color:#000;
 }
