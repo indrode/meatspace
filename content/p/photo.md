@@ -1,3 +1,8 @@
+---
+description: This section contains a collection of photos that I have taken over the time. Soon in a more neatly organized fashion.
+created_at: 18.11.2011
+---
+
 <img src="/photos/20061011085605_img_9912.jpg" alt="" width="710" /><br />
 <img src="/photos/20061015080224_img_0084.jpg" alt="" width="710" /><br />
 <img src="/photos/20061019132554_img_0057.jpg" alt="" width="710" /><br />

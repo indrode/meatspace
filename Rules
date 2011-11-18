@@ -33,6 +33,7 @@ end
 
 #photo pages
 compile '/p/*' do
+  filter :kramdown
   layout 'photo'
 end
 
