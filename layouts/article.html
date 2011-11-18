@@ -7,7 +7,7 @@
         <%= yield %>
       </div>
       <div class="four columns show-on-desktops">
-        <p><a href="<%= @item.path %>">Permalink</a><br />Written by Indro De on <%= Date.strptime("#{@item[:created_at]}", "%d.%m.%Y") %>.</p>
+        <p><a href="<%= @item.path %>">Permalink</a><br />Written by Indro De on <%= Time.parse("#{@item[:created_at]}").strftime("%m/%d/%Y") %>.</p>
       </div>
     </div>
   </div>
