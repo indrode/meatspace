@@ -9,7 +9,7 @@ $(document).ready(function() {
 	/* Remove if you don't need :) */
 	
 	var tabs = $('dl.tabs');
-		tabsContent = $('ul.tabs-content')
+		tabsContent = $('ul.tabs-content');
 	
 	tabs.each(function(i) {
 		//Get all tabs
@@ -17,7 +17,7 @@ $(document).ready(function() {
 		tab.click(function(e) {
 			
 			//Get Location of tab's content
-			var contentLocation = $(this).attr("href")
+			var contentLocation = $(this).attr("href");
 			contentLocation = contentLocation + "Tab";
 			
 			//Let go if not a hashed one
@@ -42,5 +42,9 @@ $(document).ready(function() {
 	/* Remove this and jquery.placeholder.min.js if you don't need :) */
 	
 	$('input, textarea').placeholder();
+	
+  $("img").lazyload({
+     effect: "fadeIn"
+  });
 	
 });
