@@ -3,3 +3,4 @@ output/*
 tmp/checksums
 tmp/compiled_content
 content/photos/*
+assets/*
