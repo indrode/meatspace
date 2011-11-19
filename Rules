@@ -21,6 +21,10 @@ compile '/javascripts/*' do
   # don’t filter or layout
 end
 
+compile '/images/*' do
+  # don’t filter or layout
+end
+
 compile '/feed.xml' do
   filter :erb
 end
@@ -68,6 +72,10 @@ end
 
 route '/javascripts/*' do
   item.identifier.chop + '.js' 
+end
+
+route '/images/*' do
+  item.identifier.chop + '.' + item[:extension]
 end
 
 route '/i/*' do

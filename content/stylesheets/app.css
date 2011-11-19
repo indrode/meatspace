@@ -105,6 +105,22 @@ h1 {
   -webkit-text-shadow: 0px 1px 0px #fff;
 }
 
+h1.meatspace {
+  font-family: futura-pt-1,futura-pt-2,sans-serif;
+  font-weight:600;
+  font-size:55px;
+  color:#505050;
+  text-shadow: 0px 1px 0px #fff;
+  -moz-text-shadow: 0px 1px 0px #fff;
+  -webkit-text-shadow: 0px 1px 0px #fff;
+}
+
+h1.meatspace span {
+  vertical-align: super;
+  font-size:25px;
+  color:#000;
+}
+
 h2 {
   font-family: futura-pt-1,futura-pt-2,sans-serif;
   font-weight:normal;
@@ -133,4 +149,26 @@ h3 {
   -webkit-box-shadow: 1px 1px 5px #999;
   box-shadow: 1px 1px 5px #999;
   background-color:#fff;
+}
+
+#vertgraph {
+    position: relative; 
+}
+#vertgraph ul {
+    margin: 0; 
+    padding: 0; 
+    list-style:none;
+}
+#vertgraph ul li {  
+    position: absolute; 
+    width: 45px; 
+    height: 160px; 
+    bottom: 34px; 
+    padding: 0 !important; 
+    margin: 0 !important; 
+    background-color:#a0a0a0;
+    text-align: center; 
+    font-weight: bold; 
+    color: white; 
+    line-height: 2.5em;
 }
