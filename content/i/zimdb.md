@@ -8,8 +8,6 @@ kind: article
 
 This is a quick tutorial on writing a fully-tested API wrapper in Ruby. As example, I am taking [zimdb](https://github.com/indrode/zimdb), a small gem that I developed the other day. First, I'll cover the (test-driven) implementation of the functionality. To top it off, I'll quickly touch the process of creating a gem that can be used by other developers.
 
-##What does ZIMDb do?
-
 **ZIMDb** is a wrapper for [imdbapi.com](http://www.imdbapi.com/), a service that provides content from the vast movie database [IMDB](http://www.imdb.com/) which I am sure everyone has heard of. IMDb doesn't provide its own open API to developers, so in order to access information, we'll have to resort to 3rd party providers. Right now, ZIMDb only fetches information about a single movie and the only way to access information for a specific movie is to search for it by its title. For the scope of this article, that should be all we need.
 
 ##A simple approach
