@@ -76,7 +76,12 @@ pre {
   -webkit-border-radius: 10px;
   padding: 10px;
   margin: -5px 0 15px 0;
-  word-wrap:break-word;
+  /* http://snipplr.com/view/10979/css-cross-browser-word-wrap/ */
+  white-space: pre-wrap; /* css-3 */
+  white-space: -moz-pre-wrap; /* Mozilla, since 1999 */
+  white-space: -pre-wrap; /* Opera 4-6 */
+  white-space: -o-pre-wrap; /* Opera 7 */
+  word-wrap: break-word; /* Internet Explorer 5.5+ */
 }
 
 @media only screen and (max-width: 767px) {
@@ -113,6 +118,21 @@ h1.meatspace {
   text-shadow: 0px 1px 0px #fff;
   -moz-text-shadow: 0px 1px 0px #fff;
   -webkit-text-shadow: 0px 1px 0px #fff;
+  -webkit-animation-duration: .75s;
+  -webkit-animation-delay: .5s;
+  -webkit-animation-timing-function: ease;
+  -webkit-animation-fill-mode: both;
+  -webkit-animation-name: bounceInRight;
+  -moz-animation-duration: .75s;
+  -moz-animation-delay: .5s;
+  -moz-animation-timing-function: ease;
+  -moz-animation-fill-mode: both;
+  -moz-animation-name: bounceInRight;
+  animation-duration: .75s;
+  animation-delay: .5s;
+  animation-timing-function: ease;
+  animation-fill-mode: both;
+  animation-name: bounceInRight;
 }
 
 h1.meatspace span {
