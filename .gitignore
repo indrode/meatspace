@@ -2,6 +2,7 @@ nanoc.thor
 output/*
 tmp/checksums
 tmp/compiled_content
+tmp/dependencies
+tmp/rule_memory
 content/photos/*
 assets/*
-tmp/*
