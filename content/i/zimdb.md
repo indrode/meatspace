@@ -309,5 +309,5 @@ You may also dump it into your `Gemfile` if you are using Bundler.
 
 <pre><code>
 #!sql
-gem "zimdb", "~> 0.0.1"
+gem "zimdb", "~> 0.0.3"
 </code></pre>

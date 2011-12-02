@@ -37,7 +37,7 @@ end
 
 #photo pages
 compile '/p/*' do
-  filter :kramdown
+  filter :erb
   layout 'photo'
 end
 
