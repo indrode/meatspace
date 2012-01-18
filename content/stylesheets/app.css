@@ -2,6 +2,11 @@ body {
   background-color:#C6C8C6;
 }
 
+#article p {
+  font-size:14px;
+  line-height:24px;
+}
+
 #navigation {
   clear:both;
   background-color:#fff;
