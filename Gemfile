@@ -8,6 +8,7 @@ gem 'coderay'
 gem 'nokogiri'
 gem 'kramdown'
 gem 'exifr'
+gem 'thor'
 
 # nanoc
 gem 'nanoc'
